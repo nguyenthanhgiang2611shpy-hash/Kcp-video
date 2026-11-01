@@ -1,0 +1,10 @@
+{
+  "title": "Thử nghiệm skill vẽ tay",
+  "aspect": "16:9",
+  "style": "ve-tay",
+  "output": "demo_offline",
+  "scenes": [
+    {"text": "Mỗi chuyến xe đường rời nhà máy đều phải được kiểm tra kỹ trước khi giao.", "caption": "Kiểm tra trước khi giao", "image_prompt": "truck at sugar factory"},
+    {"text": "Giá dầu tăng thì cước vận chuyển cũng tăng theo.", "caption": "Giá dầu ↑ → cước ↑", "image_prompt": "fuel pump and price chart", "effect": "drop"}
+  ]
+}

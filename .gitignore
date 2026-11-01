@@ -1,0 +1,4 @@
+.env
+__pycache__/
+video_ve_tay/*/build/
+video_ve_tay/*/preview_*.png
