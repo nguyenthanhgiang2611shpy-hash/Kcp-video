@@ -40,3 +40,7 @@ Xe container bạt 12,26 × 2,35 m, mở mui bạt; bao 50 kg 75 × 50 × 13 cm.
 `Robot_gap_bao_3D_v2.mp4` (~17,5 MB) · `Robot_gap_bao_3D_v2_email.mp4` (~3,8 MB). Dựng: `cd 3d && node render.js ../Robot_gap_bao_3D_v2.mp4` (v1: `PAGE=scene_v1.html`).
 Thay đổi theo góp ý: xe vào đã dỡ bạt · thẻ giải thích LiDAR rồi mới quét · đầu gắp 3 gripper (1 lần 3 bao) ·
 2 robot (đầu xe xếp ra, đuôi xe xếp vào, dồn vào giữa) · xe đầy lùi ra, xe khác vào · thêm góc quay cận.
+
+## Video 3D v3 (58,5 giây, chưa lời) – kiểu robot theo clip 6
+`Robot_gap_bao_3D_v3.mp4` (~16,9 MB) · `Robot_gap_bao_3D_v3_email.mp4` (~3,7 MB). Dựng: `cd 3d && node render.js ../Robot_gap_bao_3D_v3.mp4` (v2: `PAGE=scene_v2.html`).
+Sàn thép cao dọc xe (chân sọc vàng đen), băng tải xanh chạy dưới chân robot; robot đặt trên xe con chạy ray dọc sàn; 2 robot, gắp 3 bao/lần.
