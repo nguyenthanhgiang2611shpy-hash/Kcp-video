@@ -84,11 +84,14 @@ const SECT = 23, LAY = 8, SPLIT = 12;     // robot đầu: đoạn 0-11; robot �
 const secX = s => 0.45 + 0.5 * s;
 const layY = l => BED_Y + BH / 2 + l * BH;
 
-// ---------- sàn thép cao + băng tải chung (theo clip 6) ----------
+// ---------- sàn thép cao + băng tải (theo clip 6) ----------
 const yellow = M(0xf2b705, { roughness: 0.45, metalness: 0.2 }), dark = M(0x2b2f33, { roughness: 0.6 });
-const DECK_Y = 1.6, PX0 = -3.2, PX1 = 15.4, PZ0 = 1.85, PZ1 = 4.75;
-const CZ = 3.6, CY = DECK_Y + 0.45, RAILZ = [2.2, 4.55], RZ = 2.15, BASE_Y = 3.05;
-const L1 = 2.2, L2 = 2.4, SH_A = 0.25, SH_Y = 0.6, G = 0.42, SAFE = 3.45, CAR_L = 2.9;
+const DECK_Y = 1.6, PX0 = -11.0, PX1 = 23.4, PZ0 = 1.85, PZ1 = 5.1;
+const CZ = 3.6, CY = DECK_Y + 0.45, RAILZ = [2.8, 4.4], RZ = CZ, BASE_Y = 3.05;
+const BED_TOP = 2.4, BAG_BED = BED_TOP + BH / 2;      // trạm con lăn dưới cánh tay robot
+const SLOT = [-0.95, -0.95 - SPC, -0.95 - 2 * SPC];   // 3 chỗ bao trên trạm (tính từ đế robot, phía băng dốc)
+const RAMP_TOP = -2.95, RAMP_BOT = -4.5;              // băng dốc đưa bao từ băng tải lên trạm
+const L1 = 2.4, L2 = 2.6, SH_A = 0.25, SH_Y = 0.6, G = 0.42, SAFE = 3.55;
 function stripeTex() {
   const c = document.createElement('canvas'); c.width = 64; c.height = 256; const g = c.getContext('2d');
   for (let i = 0; i < 8; i++) { g.fillStyle = i % 2 ? '#1d1d1d' : '#f2c230'; g.fillRect(0, i * 32, 64, 32); }
@@ -99,25 +102,34 @@ box(PX1 - PX0, 0.35, PZ1 - PZ0, M(0x5d6870, { roughness: 0.8 }), (PX0 + PX1) / 2
 for (let x = PX0 + 0.4; x <= PX1 - 0.3; x += 3.0) for (const z of [PZ0 + 0.35, PZ1 - 0.35])
   box(0.45, DECK_Y - 0.35, 0.45, stripe, x, (DECK_Y - 0.35) / 2, z);
 for (const z of RAILZ) box(PX1 - PX0, 0.1, 0.1, M(0x555b60, { metalness: 0.7 }), (PX0 + PX1) / 2, DECK_Y + 0.05, z);
-box(PX1 - PX0, 0.06, 0.82, M(0x2f7d4a, { roughness: 0.8 }), (PX0 + PX1) / 2, CY - 0.03, CZ);             // băng tải xanh
-for (const dz of [-0.45, 0.45]) box(PX1 - PX0, 0.16, 0.06, M(0x7b8288, { metalness: 0.5 }), (PX0 + PX1) / 2, CY - 0.02, CZ + dz);
-for (let x = PX0 + 0.3; x <= PX1; x += 1.5) for (const dz of [-0.4, 0.4]) box(0.07, 0.42, 0.07, steel, x, DECK_Y + 0.21, CZ + dz);
-// dòng bao chạy trên băng tải (từ cuối sàn về đầu sàn)
-const STREAM_N = 26, STREAM_V = 1.3;
-const stream = Array.from({ length: STREAM_N }, () => newBag());
+// 2 băng tải riêng trên cùng một đường: A từ đầu sàn tới robot đầu xe, B từ cuối sàn tới robot đuôi xe
+const BELTS = [[PX0, 1.4], [11.0, PX1]];
+for (const [x0, x1] of BELTS) {
+  box(x1 - x0, 0.06, 0.82, M(0x2f7d4a, { roughness: 0.8 }), (x0 + x1) / 2, CY - 0.03, CZ);
+  for (const dz of [-0.45, 0.45]) box(x1 - x0, 0.16, 0.06, M(0x7b8288, { metalness: 0.5 }), (x0 + x1) / 2, CY - 0.02, CZ + dz);
+  for (const xe of [x0, x1]) cyl(0.09, 0.84, dark, scene, 'z').position.set(xe, CY - 0.06, CZ);
+  for (let x = x0 + 0.3; x <= x1; x += 1.5) for (const dz of [-0.4, 0.4]) box(0.07, 0.42, 0.07, steel, x, DECK_Y + 0.21, CZ + dz);
+}
 
-// ---------- robot trên xe con chạy dọc sàn, băng tải chạy dưới chân ----------
-function makeRobot(home, off, sections) {
+// ---------- robot: khung xe con trùm lên băng tải, chạy trên ray; bao lên băng dốc vào trạm dưới cánh tay ----------
+function makeRobot(home, off, sections, d) {
   const g = new THREE.Group(); scene.add(g);
+  const car = new THREE.Group(); car.scale.x = d; g.add(car);          // d=+1: băng dốc phía -x; d=-1: đối xứng
   const frame = M(0x8a949c, { metalness: 0.5, roughness: 0.45 });
-  for (const x of [-CAR_L / 2, CAR_L / 2]) for (const z of RAILZ) {
-    box(0.16, BASE_Y - 0.15 - DECK_Y, 0.16, frame, x, (BASE_Y - 0.15 + DECK_Y) / 2, z, g);             // chân khung
-    cyl(0.12, 0.12, dark, g, 'z').position.set(x, DECK_Y + 0.14, z);                                  // bánh xe trên ray
+  const legs = [[0.45, 2.95], [-0.45, 2.95], [-0.7, BED_TOP - 0.1], [-2.9, BED_TOP - 0.1], [-4.4, CY + 0.1]];
+  for (const [x, top] of legs) for (const z of RAILZ) {
+    box(0.15, top - DECK_Y - 0.1, 0.15, frame, x, (top + DECK_Y + 0.1) / 2, z, car);
+    cyl(0.12, 0.12, dark, car, 'z').position.set(x, DECK_Y + 0.15, z);
   }
-  for (const z of RAILZ) box(CAR_L + 0.2, 0.18, 0.18, frame, 0, BASE_Y - 0.15, z, g);                 // dầm dọc
-  for (const x of [-CAR_L / 2, CAR_L / 2]) box(0.18, 0.18, RAILZ[1] - RAILZ[0], frame, x, BASE_Y - 0.15, (RAILZ[0] + RAILZ[1]) / 2, g);
-  for (let x = -1.2; x <= 1.21; x += 0.2) cyl(0.04, 0.8, M(0x6c757c, { metalness: 0.6 }), g, 'z').position.set(x, CY + 0.02, CZ); // con lăn trạm gắp
-  box(1.1, 0.25, 0.9, dark, 0, BASE_Y - 0.1, RZ, g);                                                   // đế robot
+  for (const z of RAILZ) box(5.1, 0.12, 0.12, frame, -2.0, DECK_Y + 0.28, z, car);                  // dầm dọc chân
+  box(1.25, 0.16, RAILZ[1] - RAILZ[0] + 0.3, frame, 0, 2.95, CZ, car);                               // mặt đỡ đế robot
+  for (const z of [CZ - 0.47, CZ + 0.47]) box(2.5, 0.2, 0.06, frame, -1.8, BED_TOP + 0.05, z, car); // thành trạm con lăn
+  for (const z of RAILZ) box(2.4, 0.1, 0.1, frame, -1.8, BED_TOP - 0.1, z, car);
+  for (let x = -0.65; x >= -2.95; x -= 0.18) cyl(0.04, 0.88, M(0x6c757c, { metalness: 0.6 }), car, 'z').position.set(x, BED_TOP - 0.04, CZ);
+  const rl = Math.hypot(RAMP_TOP - RAMP_BOT, BED_TOP - CY), ra = Math.atan2(BED_TOP - CY, RAMP_TOP - RAMP_BOT);
+  const ramp = new THREE.Group(); ramp.position.set((RAMP_TOP + RAMP_BOT) / 2, (BED_TOP + CY) / 2 + 0.02, CZ); ramp.rotation.z = ra; car.add(ramp);
+  box(rl, 0.05, 0.78, M(0x2f7d4a, { roughness: 0.8 }), 0, 0, 0, ramp);                               // băng dốc
+  for (const dz of [-0.44, 0.44]) box(rl, 0.14, 0.05, frame, 0, 0.03, dz, ramp);
   const turret = new THREE.Group(); turret.position.set(0, BASE_Y, RZ); g.add(turret);
   cyl(0.45, 0.3, yellow, turret).position.set(0, 0.15, 0);
   box(0.7, 0.5, 0.6, yellow, 0.05, 0.5, 0, turret);
@@ -146,12 +158,14 @@ function makeRobot(home, off, sections) {
     else T.push(34 + (k - 7) * (12 / (N - 7)));
   }
   const placed = picks.map(() => [0, 1, 2].map(() => { const b = newBag(truck1); b.visible = false; return b; }));
-  const bed = [0, 1, 2].map(() => newBag());       // 3 bao chờ ở trạm gắp
-  return { RZ, CZ, home, off, g, turret, shoulder, elbow, wrist, grip, fingers, picks, N, T, placed, bed };
+  const bed = [0, 1, 2].map(() => newBag());
+  const feed = Array.from({ length: 16 }, () => newBag());
+  return { RZ, CZ, home, off, d, g, turret, shoulder, elbow, wrist, grip, fingers, picks, N, T, placed, bed, feed };
 }
-const robA = makeRobot(-1.3, -1.2, [...Array(SPLIT).keys()]);
-const robB = makeRobot(13.7, 1.2, [...Array(SECT - SPLIT).keys()].map(i => SECT - 1 - i));
+const robA = makeRobot(-1.0, -0.45, [...Array(SPLIT).keys()], 1);
+const robB = makeRobot(13.5, 0.45, [...Array(SECT - SPLIT).keys()].map(i => SECT - 1 - i), -1);
 const ROBOTS = [robA, robB];
+const bedCenter = r => r.rx + r.d * SLOT[1];
 
 function idxAt(r, t) { let k = 0; while (k < r.N - 1 && r.T[k] <= t) k++; return k; }
 const cycStart = (r, k) => (k === 0 ? 16 : r.T[k - 1]);
@@ -165,10 +179,10 @@ function carriageX(r, t) {
 }
 function cyclePose(r, k, u, rx) {
   const pk = r.picks[k];
-  const P = V(rx, CY + BH / 2 + 0.02, r.CZ), Hp = V(rx, SAFE, r.CZ);
+  const bx = rx + r.d * SLOT[1], P = V(bx, BAG_BED + 0.02, r.CZ), Hp = V(bx, SAFE, r.CZ);
   const Tg = V(pk.x, pk.y, 0), Ht = V(pk.x, SAFE + 0.2, 0);
   const pv = k > 0 ? r.picks[k - 1] : null;
-  const L0 = pv ? V(pv.x, SAFE, 0) : V(rx, 3.7, 1.95);
+  const L0 = pv ? V(pv.x, SAFE, 0) : V(rx + r.d * SLOT[1], 3.9, 2.45);
   const keys = [[0, L0, k > 0 ? 1 : 0], [0.2, Hp, 0], [0.3, P, 0], [0.36, P, 0], [0.46, Hp, 0], [0.7, Ht, 1], [0.84, Tg, 1], [0.9, Tg, 1], [1, V(pk.x, SAFE, 0), 1]];
   let i = 0; while (i < keys.length - 2 && u > keys[i + 1][0]) i++;
   const [u0, a, ra] = keys[i], [u1, b, rb] = keys[i + 1]; const e = ss((u - u0) / (u1 - u0));
@@ -229,8 +243,8 @@ const CAMS = [
   [0, t => [V(-1.5, 2.6, -7.6), V(Math.min(truckX(t), 14) + 1.0, 1.8, 0)]],
   [4.8, mv(V(-7.2, 7.4, 6.6), V(-6.6, 7.0, 6.0), V(-1.6, 4.6, 0), V(-1.4, 4.4, 0), 4.8, 9)],
   [9.2, mv(V(-4.5, 9.8, 10.0), V(-2.0, 10.4, 8.8), V(5.0, 1.8, 0), V(5.5, 1.8, 0), 9.2, 16)],
-  [16, mv(V(3.6, 6.0, 9.2), V(2.9, 6.3, 8.4), V(-0.1, 2.7, 2.2), V(0.0, 2.6, 2.0), 16, 26)],
-  [26, mv(V(10.0, 5.2, -8.4), V(10.6, 5.6, -7.8), V(12.3, 2.6, 1.0), V(12.3, 2.5, 1.0), 26, 34)],
+  [16, mv(V(1.6, 6.6, 10.6), V(1.0, 6.8, 10.0), V(-2.0, 2.6, 2.6), V(-1.8, 2.6, 2.4), 16, 26)],
+  [26, mv(V(10.4, 6.4, -8.6), V(11.0, 6.6, -8.0), V(13.6, 2.6, 1.8), V(13.6, 2.5, 1.8), 26, 34)],
   [34, mv(V(5.8, 14.5, 8.5), V(5.8, 12.5, 7.4), V(5.8, 1.2, 0), V(5.8, 1.4, 0), 34, 46)],
   [46, mv(V(16.5, 7.6, -6.5), V(15.8, 7.2, -6.0), V(6.0, 1.9, 0.5), V(6.0, 1.9, 0.5), 46, 49.5)],
   [49.5, mv(V(10, 5.0, -14.5), V(6.0, 5.4, -14.0), V(12, 1.8, 0), V(5.0, 1.8, 0), 49.5, 58.5)],
@@ -249,7 +263,7 @@ function camAt(t) {
 const STEPS = [[0, 4.8, 1, 'Xe vào vị trí (đã dỡ bạt)'], [4.8, 9.2, 2, 'LiDAR là gì?'], [9.2, 16, 3, 'Quét thùng xe bằng LiDAR'],
   [16, 26, 4, 'Robot đầu xe · mỗi lần gắp 3 bao'], [26, 34, 5, 'Robot đuôi xe cùng xếp'],
   [34, 46, 6, 'Hai robot xếp dồn vào giữa'], [46, 58.5, 7, 'Xe đầy lùi ra · xe khác vào']];
-const TAGS = [[13.8, 16, 'Robot đã biết kích thước và vị trí thùng xe'], [16.6, 19.6, 'Bao chạy trên băng tải, ngay dưới chân robot'], [19.8, 23, '3 đầu gắp · 1 lần gắp = 3 bao'], [23.2, 26, 'Chân robot chạy trên ray dọc sàn'],
+const TAGS = [[13.8, 16, 'Robot đã biết kích thước và vị trí thùng xe'], [16.6, 19.6, 'Bao chạy lên băng dốc, vào trạm ngay dưới robot'], [19.8, 23, '3 đầu gắp · 1 lần gắp = 3 bao'], [23.2, 26, 'Chân robot chạy trên ray dọc sàn'],
   [26.6, 30, 'Robot đuôi xếp từ cửa sau vào'], [46.3, 49.5, 'Xe đã đầy'], [50, 53.4, 'Xe lùi ra'], [54, 58.5, 'Xe tiếp theo vào vị trí']];
 const $ = id => document.getElementById(id);
 const stepEl = $('step'), ffEl = $('ff'), card = $('card'), tag = $('tag'), paras = card.querySelectorAll('p');
@@ -291,7 +305,7 @@ window.renderAt = function (t) {
   // --- robot ---
   for (const r of ROBOTS) {
     const rx = carriageX(r, t); let pose, hold = -1;
-    const rest = V(rx, 3.7, 1.95);   // tư thế chờ: ngoài làn xe
+    const rest = V(rx + r.d * SLOT[1], 3.9, 2.45);   // tư thế chờ: trên trạm, ngoài làn xe
     if (t < 16) pose = { pos: rest, rot: 0, close: 0 };
     else if (t >= 46) { const pl = r.picks[r.N - 1]; const k = seg(t, 46, 48); pose = { pos: V(pl.x, SAFE, 0).lerp(rest, k), rot: 1 - k, close: 0 }; }
     else if (t < 34) { const k = idxAt(r, t), u = clamp((t - cycStart(r, k)) / (r.T[k] - cycStart(r, k)));
@@ -307,21 +321,29 @@ window.renderAt = function (t) {
         const p = groupBag(V(pk.x, pk.y + drop, 0), Math.PI / 2, i); b.position.copy(p); b.rotation.set(0, Math.PI / 2, 0); b.visible = true;
       } else b.visible = false;
     }
-    // trạm gắp: 3 bao chờ dưới chân robot; gắp xong thì nhóm mới trượt vào
-    let slide = 0, bedOn = true;
-    if (t >= 16 && t < 34) { const k = idxAt(r, t), u = clamp((t - cycStart(r, k)) / (r.T[k] - cycStart(r, k)));
-      bedOn = u < 0.33 || u > 0.4; slide = u > 0.4 ? 1 - seg(u, 0.4, 0.72) : 0; }
-    r.bed.forEach((b, i) => { b.visible = bedOn && t < 46;
-      b.position.set(rx + (i - 1) * SPC + slide * 2.4, CY + BH / 2 + 0.02, CZ); b.rotation.set(0, 0, 0); });
     r.rx = rx;
+    // trạm con lăn dưới cánh tay: 3 bao; gắp xong, 3 bao mới chạy từ băng tải lên băng dốc vào trạm
+    const slotX = i => rx + r.d * SLOT[2 - i];          // bao 0 vào trước, nằm sâu nhất (gần đế robot)
+    const pathAt = (i, p) => {                          // p: 0 = chân băng dốc, 1 = đúng chỗ trên trạm
+      const xb = rx + r.d * RAMP_BOT, xt = rx + r.d * RAMP_TOP, xs = rx + r.d * SLOT[i];
+      if (p < 0.45) { const k = p / 0.45; return V(lerp(xb, xt, k), lerp(CY, BED_TOP, k) + BH / 2 + 0.02, CZ); }
+      return V(lerp(xt, xs, (p - 0.45) / 0.55), BAG_BED + 0.02, CZ);
+    };
+    let enter = [1, 1, 1];
+    if (t >= 16 && t < 34) { const k = idxAt(r, t), u = clamp((t - cycStart(r, k)) / (r.T[k] - cycStart(r, k)));
+      if (u >= 0.33) enter = [0, 1, 2].map(i => (u - (0.4 + 0.1 * i)) / 0.3); }
+    r.bed.forEach((b, i) => {
+      const p = enter[i]; b.visible = p >= 0 && t < 46;
+      b.position.copy(pathAt(i, clamp(p))); b.rotation.set(0, 0, p > 0 && p < 0.45 ? r.d * Math.atan2(BED_TOP - CY, RAMP_TOP - RAMP_BOT) : 0);
+    });
+    // băng tải cố định: bao chạy từ đầu sàn về phía chân băng dốc
+    const start = r.d > 0 ? PX0 + 0.4 : PX1 - 0.4, stop = rx + r.d * RAMP_BOT;
+    r.feed.forEach((b, j) => {
+      const x = start + r.d * ((t * 1.3 + j * 1.05) % (PX1 - PX0));
+      b.position.set(x, CY + BH / 2 + 0.02, CZ); b.rotation.set(0, 0, 0);
+      b.visible = r.d * (stop - x) > 0.4 && t < 47;
+    });
   }
-  // dòng bao trên băng tải (ẩn khi nằm trong khung xe con)
-  const LEN = PX1 - PX0;
-  stream.forEach((b, j) => {
-    const x = PX1 - 0.3 - ((t * STREAM_V + j * LEN / STREAM_N) % (LEN - 0.4));
-    b.position.set(x, CY + BH / 2 + 0.02, CZ); b.rotation.set(0, 0, 0);
-    b.visible = ROBOTS.every(r => Math.abs(x - r.rx) > CAR_L / 2 + 0.45);
-  });
 
   // --- chữ ---
   const st = STEPS.find(s => t >= s[0] && t < s[1]) || STEPS[STEPS.length - 1];

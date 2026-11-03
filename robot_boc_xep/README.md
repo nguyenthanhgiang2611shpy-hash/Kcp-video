@@ -44,3 +44,10 @@ Thay đổi theo góp ý: xe vào đã dỡ bạt · thẻ giải thích LiDAR r
 ## Video 3D v3 (58,5 giây, chưa lời) – kiểu robot theo clip 6
 `Robot_gap_bao_3D_v3.mp4` (~16,9 MB) · `Robot_gap_bao_3D_v3_email.mp4` (~3,7 MB). Dựng: `cd 3d && node render.js ../Robot_gap_bao_3D_v3.mp4` (v2: `PAGE=scene_v2.html`).
 Sàn thép cao dọc xe (chân sọc vàng đen), băng tải xanh chạy dưới chân robot; robot đặt trên xe con chạy ray dọc sàn; 2 robot, gắp 3 bao/lần.
+
+## Video 3D v4 (58,5 giây, chưa lời)
+`Robot_gap_bao_3D_v4.mp4` · `_email.mp4`. Khung chân robot trùm lên băng tải; bao chạy lên băng dốc gắn theo khung vào trạm con lăn ngay dưới cánh tay robot; mỗi robot một băng tải riêng (robot đầu xe cấp từ đầu sàn, robot đuôi xe cấp từ cuối sàn). v3: `PAGE=scene_v3.html`.
+
+## Video dịch v3 – tiếng Anh, full màn hình
+`Robot_boc_xep_bao_len_xe_v3_EN.mp4` (1280×720, 47 giây) · `_email.mp4`. Script `make_video_v3_en.py`.
+Hình cắt khung 16:9 phủ kín màn hình; phụ đề tiếng Anh theo phụ đề gốc (sửa ngữ pháp nhẹ); bỏ dòng tên công ty.
