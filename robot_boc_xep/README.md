@@ -51,3 +51,6 @@ Sàn thép cao dọc xe (chân sọc vàng đen), băng tải xanh chạy dướ
 ## Video dịch v3 – tiếng Anh, full màn hình
 `Robot_boc_xep_bao_len_xe_v3_EN.mp4` (1280×720, 47 giây) · `_email.mp4`. Script `make_video_v3_en.py`.
 Hình cắt khung 16:9 phủ kín màn hình; phụ đề tiếng Anh theo phụ đề gốc (sửa ngữ pháp nhẹ); bỏ dòng tên công ty.
+
+## Video 3D v5 (58,5 giây, chưa lời)
+`Robot_gap_bao_3D_v5.mp4` · `_email.mp4`. Như v4, nhưng bỏ bảng chữ "LiDAR là gì?" che cảnh quét; thay bằng 4 dòng chữ ngắn ở đáy màn hình, hiện rồi mất lần lượt. v4: `PAGE=scene_v4.html`.
