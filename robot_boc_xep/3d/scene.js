@@ -263,7 +263,11 @@ function camAt(t) {
 const STEPS = [[0, 4.8, 1, 'Xe vào vị trí (đã dỡ bạt)'], [4.8, 9.2, 2, 'LiDAR là gì?'], [9.2, 16, 3, 'Quét thùng xe bằng LiDAR'],
   [16, 26, 4, 'Robot đầu xe · mỗi lần gắp 3 bao'], [26, 34, 5, 'Robot đuôi xe cùng xếp'],
   [34, 46, 6, 'Hai robot xếp dồn vào giữa'], [46, 58.5, 7, 'Xe đầy lùi ra · xe khác vào']];
-const TAGS = [[13.8, 16, 'Robot đã biết kích thước và vị trí thùng xe'], [16.6, 19.6, 'Bao chạy lên băng dốc, vào trạm ngay dưới robot'], [19.8, 23, '3 đầu gắp · 1 lần gắp = 3 bao'], [23.2, 26, 'Chân robot chạy trên ray dọc sàn'],
+const TAGS = [[5.2, 7.0, 'LiDAR là máy quét bằng tia laser'],
+  [7.1, 9.0, 'Máy phát tia laser, tia chạm vào thùng xe rồi dội ngược lại'],
+  [9.1, 11.3, 'Đo thời gian tia quay về, máy biết khoảng cách tới từng điểm'],
+  [11.4, 13.6, 'Quét hàng nghìn điểm mỗi giây, máy dựng được hình 3D thùng xe'],
+  [13.8, 16, 'Robot đã biết kích thước và vị trí thùng xe'], [16.6, 19.6, 'Bao chạy lên băng dốc, vào trạm ngay dưới robot'], [19.8, 23, '3 đầu gắp · 1 lần gắp = 3 bao'], [23.2, 26, 'Chân robot chạy trên ray dọc sàn'],
   [26.6, 30, 'Robot đuôi xếp từ cửa sau vào'], [46.3, 49.5, 'Xe đã đầy'], [50, 53.4, 'Xe lùi ra'], [54, 58.5, 'Xe tiếp theo vào vị trí']];
 const $ = id => document.getElementById(id);
 const stepEl = $('step'), ffEl = $('ff'), card = $('card'), tag = $('tag'), paras = card.querySelectorAll('p');
@@ -350,8 +354,7 @@ window.renderAt = function (t) {
   stepEl.innerHTML = `<b>${st[2]}</b>${st[3]}`;
   stepEl.style.opacity = Math.min(seg(t, st[0], st[0] + 0.4), st[2] === 7 ? 1 : 1 - seg(t, st[1] - 0.25, st[1]));
   ffEl.style.opacity = t >= 34.3 && t < 46 ? 1 : 0;
-  card.style.opacity = Math.min(seg(t, 5.0, 5.5), 1 - seg(t, 12.6, 13.1));
-  [5.6, 6.7, 7.8, 9.6].forEach((a, i) => paras[i].style.opacity = seg(t, a, a + 0.4));
+  card.style.opacity = 0;   // bỏ bảng chữ: thay bằng từng dòng chữ hiện rồi mất ở đáy màn hình
   const tg = TAGS.find(s => t >= s[0] && t < s[1]);
   tag.textContent = tg ? tg[2] : ''; tag.style.opacity = tg ? Math.min(seg(t, tg[0], tg[0] + 0.3), 1 - seg(t, tg[1] - 0.3, tg[1])) : 0;
 
