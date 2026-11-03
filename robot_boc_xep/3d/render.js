@@ -13,7 +13,7 @@ const srv = http.createServer((q, r) => {
   const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   page.on('console', m => console.log('page:', m.text())); page.on('pageerror', e => console.log('ERR', e.message));
-  await page.goto(`http://127.0.0.1:${port}/scene.html`);
+  await page.goto(`http://127.0.0.1:${port}/${process.env.PAGE || 'scene.html'}`);
   await page.waitForFunction('window.ready === true', null, { timeout: 60000 });
   const dur = await page.evaluate('window.DUR');
   if (test) {

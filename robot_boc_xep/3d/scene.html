@@ -4,17 +4,31 @@
   html, body { margin: 0; width: 1280px; height: 720px; overflow: hidden; background: #dfe3e6; }
   canvas { display: block; }
   #step { position: absolute; left: 36px; top: 30px; background: #1d2b3a; color: #f3ecdc;
-          font: bold 26px "DejaVu Sans", sans-serif; padding: 10px 20px; transform: rotate(-1.5deg);
-          transition: none; opacity: 0; }
+          font: bold 26px "DejaVu Sans", sans-serif; padding: 10px 20px; transform: rotate(-1.5deg); opacity: 0; }
   #step b { color: #d9774b; margin-right: 10px; }
   #ff { position: absolute; right: 36px; top: 34px; border: 3px solid #d9774b; color: #d9774b;
         background: rgba(243,236,220,.85); font: bold 22px "DejaVu Sans Mono", monospace;
         padding: 6px 14px; transform: rotate(4deg); opacity: 0; }
+  #card { position: absolute; right: 40px; top: 120px; width: 470px; background: rgba(243,236,220,.94);
+          border-left: 8px solid #d9774b; padding: 22px 26px; color: #1d2b3a; opacity: 0;
+          font: 24px "DejaVu Serif", serif; line-height: 1.38; box-shadow: 0 6px 24px rgba(0,0,0,.18); }
+  #card h2 { margin: 0 0 12px; font: bold 34px "DejaVu Serif", serif; }
+  #card p { margin: 0 0 10px; opacity: 0; }
+  #card p b { color: #d9774b; }
+  #tag { position: absolute; left: 50%; bottom: 70px; transform: translateX(-50%); background: #1d2b3a; color: #f3ecdc;
+         font: bold 24px "DejaVu Sans", sans-serif; padding: 10px 22px; opacity: 0; white-space: nowrap; }
   #foot { position: absolute; left: 36px; right: 36px; bottom: 16px; display: flex; justify-content: space-between;
           font: 14px "DejaVu Sans Mono", monospace; color: #44515c; }
 </style></head>
 <body>
 <div id="step"></div><div id="ff">▶▶ TUA NHANH</div>
+<div id="card"><h2>LiDAR là gì?</h2>
+  <p>Là <b>máy quét bằng tia laser</b>.</p>
+  <p>Máy phát tia laser, tia chạm vào thùng xe rồi <b>dội ngược lại</b>.</p>
+  <p>Đo thời gian tia quay về, máy biết <b>khoảng cách</b> tới điểm đó.</p>
+  <p>Quét hàng nghìn điểm mỗi giây, máy dựng được <b>hình 3D của thùng xe</b>.</p>
+</div>
+<div id="tag"></div>
 <div id="foot"><span>KCP VIỆT NAM · LOGISTICS · ROBOT GẮP BAO CHẤT LÊN XE</span><span>minh họa 3D theo clip nhà sản xuất</span></div>
 <script type="importmap">{ "imports": { "three": "./node_modules/three/build/three.module.js",
   "three/addons/": "./node_modules/three/examples/jsm/" } }</script>
