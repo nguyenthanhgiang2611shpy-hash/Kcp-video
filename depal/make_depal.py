@@ -8,7 +8,7 @@ Nguồn: bản vẽ LA26-PTC-KCP-DEP-301026, Phon-Tech, ngày 20/10/2026 (SCALE:
   - băng tải phía dưới + lưới 3x3 + 1 công nhân = trạm xả tay dự phòng
   - sling rỗng đi đâu, phương tiện đưa sling vào: CHƯA RÕ (ghi trong video)
 Tọa độ thế giới = pixel của ảnh bản vẽ ở 110 dpi (1 px ≈ 23,1 mm).
-Chạy:  python3 make_depal.py            -> render đầy đủ
+Chạy:  python3 make_depal.py            -> render đầy đủ: MỘT video duy nhất, nén sẵn để gửi email (960x540)
        python3 make_depal.py test       -> contact sheet khung mẫu
        python3 make_depal.py frame 12.5 out.png
 """
@@ -1091,7 +1091,8 @@ if __name__ == "__main__":
         n = total_frames()
         print("frames", n, "giây", n / FPS, flush=True)
         p = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
-                              "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-crf", "20",
+                              "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-vf", "scale=960:-2",
+                              "-c:v", "libx264", "-crf", "30", "-preset", "slow",
                               "-pix_fmt", "yuv420p", "-movflags", "+faststart", OUT], stdin=subprocess.PIPE)
         with Pool(4) as pool:
             for i, b in enumerate(pool.imap(render, range(n), chunksize=8)):

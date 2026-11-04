@@ -4,8 +4,8 @@ Nguồn: bản vẽ **LA26-PTC-KCP-DEP-301026**, Phon-Tech, ngày 20/10/2026 (SC
 
 | File | Dùng cho |
 |---|---|
-| `Depal_cach_hoat_dong.mp4` | Video 1280×720, tiếng Việt (phụ đề, không giọng đọc) |
-| `Depal_cach_hoat_dong_email.mp4` | Bản nén gửi email |
+| `Depal_cach_hoat_dong.mp4` | Bản 1280×720 cũ (tạo trước quy tắc mới) |
+| `Depal_cach_hoat_dong_email.mp4` | Bản nén gửi email (960×540, 1,5 MB) |
 | `make_depal.py` | Script dựng lại (Python/PIL + ffmpeg). `python3 make_depal.py test out.png` để xem khung mẫu |
 
 ## Trình tự trong video (11 cảnh)
@@ -38,3 +38,5 @@ Nguồn: bản vẽ **LA26-PTC-KCP-DEP-301026**, Phon-Tech, ngày 20/10/2026 (SC
 - Công suất (bao/giờ), lưu lượng khí nén: chưa có trong bản vẽ
 - Tốc độ băng tải, nhịp robot trong video chỉ để minh họa
 - Số bản vẽ ghi 301026 nhưng ngày vẽ 20/10/2026 và tên file 201026 – cần Phon-Tech xác nhận
+
+Từ 04/11/2026: script chỉ xuất **một** video nén sẵn để gửi email (xem `CLAUDE.md` ở gốc repo).
