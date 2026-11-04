@@ -26,7 +26,7 @@ const srv = http.createServer((q, r) => {
     await browser.close(); srv.close(); return;
   }
   const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
-    '-vf', 'scale=960:-2', '-c:v', 'libx264', '-crf', '30', '-preset', 'slow', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out],
+    '-vf', 'scale=960:-2', '-c:v', 'libx264', '-crf', '35', '-preset', 'slow', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out],
     { stdio: ['pipe', 'inherit', 'inherit'] });
   const n = Math.round(dur * FPS), t0 = Date.now();
   for (let i = 0; i < n; i++) {
