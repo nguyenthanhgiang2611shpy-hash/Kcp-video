@@ -17,7 +17,7 @@ from multiprocessing import Pool
 from PIL import Image, ImageDraw, ImageFont
 
 W, H, SS, FPS = 1280, 720, 2, 25
-OUT = sys.argv[2] if len(sys.argv) > 2 and sys.argv[1] == "full" else "Depal_cach_hoat_dong_v2.mp4"
+OUT = sys.argv[2] if len(sys.argv) > 2 and sys.argv[1] == "full" else "Depal_cach_hoat_dong_v3.mp4"
 
 # ---------- màu ----------
 CREAM = (243, 236, 220); INK = (29, 43, 58); ORANGE = (217, 119, 75)
@@ -28,17 +28,19 @@ PERSON = (196, 104, 124)
 # mỗi thiết bị một màu, dùng nhất quán mọi nơi
 BLUE = (44, 95, 160); PURPLE = (118, 74, 150); BRICK = (176, 64, 48)
 GREEN = (38, 122, 64); GOLD = (176, 128, 10); TEAL = (16, 124, 128)
-NAVY = (29, 43, 58); MAG = (160, 48, 108)
+NAVY = (29, 43, 58); MAG = (160, 48, 108); OLIVE = (96, 104, 20)
+FORK_Y = (222, 168, 44)
 
 EL = {  # mã: (số, tên, loại, tác dụng, màu)
-    "L": (1, "Băng con lăn cấp sling – trái", "băng tải con lăn", "đưa sling đầy vào vị trí xả giữa cell", BLUE),
-    "R": (2, "Băng con lăn cấp sling – phải", "băng tải con lăn", "đưa sling đầy vào, luân phiên với bên trái", PURPLE),
-    "C": (3, "Cell robot – vị trí xả sling", "robot gắp bao", "gắp từng bao trên sling, đặt lên băng ra", BRICK),
-    "S": (4, "Băng tải ra (đoạn thẳng)", "băng tải", "đưa bao ra khỏi cell", GREEN),
-    "K": (5, "Băng cong 90°", "băng tải cong", "đổi hướng bao về phía xe", GOLD),
-    "T": (6, "Băng tải ống lồng", "vươn ra / thụt vào (Phon-Tech xác nhận)", "đưa bao vào thùng, tự rải trái → phải, chất 9 lớp", TEAL),
-    "X": (7, "Thùng xe", "xe container bạt 34T", "nhận 680 bao = 34 tấn, không cần người xếp", NAVY),
-    "M": (8, "Trạm xả tay dự phòng", "băng tải + 1 công nhân", "khi robot dừng: xả tay bao vào line", MAG),
+    "L": (1, "Băng con lăn sling – trái", "băng tải con lăn · 3 vị trí", "nhận 2 sling đầy từ xe nâng, trả sling rỗng ra", BLUE),
+    "R": (2, "Băng con lăn sling – phải", "băng tải con lăn · 3 vị trí", "như bên trái, chạy luân phiên với bên trái", PURPLE),
+    "C": (3, "Cell robot – máy hút chân không", "đầu hút chân không, 3 bao/lần", "hút 1 hàng 3 bao, thả lần lượt từng bao lên băng", BRICK),
+    "V": (4, "Băng tải vệ sinh bao", "băng tải có chổi quét", "quét sạch bụi bẩn trên bao", OLIVE),
+    "S": (5, "Băng tải ra (đoạn thẳng)", "băng tải", "đưa bao ra khỏi cell", GREEN),
+    "K": (6, "Băng cong 90°", "băng tải cong", "đổi hướng bao về phía xe", GOLD),
+    "T": (7, "Băng tải ống lồng", "vươn ra / thụt vào, tối đa 18 m, có cảm biến", "tự rải bao trái → phải, chất 9 lớp, lùi từng hàng", TEAL),
+    "X": (8, "Thùng xe", "xe container bạt 34T", "nhận 680 bao = 34 tấn, không cần người xếp", NAVY),
+    "M": (9, "Trạm xả tay dự phòng", "băng tải + 1 công nhân", "khi robot không chạy: xếp tay bao, đi thẳng qua cell", MAG),
 }
 
 # ---------- số liệu (bản vẽ) ----------
@@ -85,11 +87,12 @@ class Cam:
 
 def cam_lerp(a, b, k): return Cam(lerp(a.cx, b.cx, k), lerp(a.cy, b.cy, k), lerp(a.z, b.z, k))
 
-CAM_FULL = Cam(1000, 712, 0.64)
+CAM_FULL = Cam(1000, 728, 0.6)
 CAM_ROW = Cam(625, 835, 1.7)
-CAM_CELL = Cam(628, 790, 2.6)
+CAM_CELL = Cam(628, 758, 1.9)
 CAM_TRUCK = Cam(1400, 372, 2.7)
 CAM_BOT = Cam(628, 1000, 1.55)
+CAM_FLOW = Cam(560, 835, 1.45)
 
 def LW(w): return max(1, int(round(w * SS)))
 
@@ -113,12 +116,13 @@ def arc_pts(c, r, a0, a1, n=24):
 PATH = {
     "L": [(342, CY), (568, CY)],
     "R": [(908, CY), (692, CY)],
-    "S": [(BELT_X, 735), (BELT_X, 400)],
+    "V": [(BELT_X, 660), (BELT_X, 597)],
+    "S": [(BELT_X, 597), (BELT_X, 400)],
     "K": arc_pts(CURVE_C, CURVE_R, 180, 270),
     "T": [(683, 345), (TELE_END, 345)],
     "M": [(BELT_X, 1050), (BELT_X, 914)],
 }
-OUT_PATH = [PLACE] + PATH["S"][1:] + PATH["K"][1:] + PATH["T"][1:]
+OUT_PATH = [PLACE] + PATH["V"] + PATH["S"][1:] + PATH["K"][1:] + PATH["T"][1:]
 
 def plen(pts): return sum(math.dist(pts[i], pts[i + 1]) for i in range(len(pts) - 1))
 
@@ -144,7 +148,7 @@ def sub_path(pts, k):
         out.append(pts[i + 1]); acc += l
     return out
 
-L_SEG = {k: plen(PATH[k]) for k in ("S", "K", "T")}
+L_SEG = {k: plen(PATH[k]) for k in ("V", "S", "K", "T")}
 L_OUT = plen(OUT_PATH)
 
 # ---------- vẽ cơ bản ----------
@@ -194,9 +198,9 @@ def draw_bag(d, cam, c, a=-math.pi / 2, fill=BAG_TOP, edge=INK, alpha_k=1.0):
 
 def draw_person(d, cam, c, face=0.0, color=PERSON, k=1.0):
     col = mix(CREAM, color, k)
-    sh = rot_rect(c, 10, 22, face)          # vai (khoảng 450 mm)
+    sh = rot_rect(c, 12, 26, face)          # vai (khoảng 450 mm)
     wpoly(d, cam, sh, fill=mix(CREAM, col, 0.35), outline=col, w=1.2)
-    p = cam.P(*c); r = cam.S(4.5)
+    p = cam.P(*c); r = cam.S(5.5)
     d.ellipse([p[0] - r, p[1] - r, p[0] + r, p[1] + r], fill=mix(CREAM, col, 0.6), outline=col, width=LW(1.2))
 
 def hatch(d, cam, b, color=(80, 190, 200)):
@@ -320,25 +324,55 @@ def ik(base, tgt):
             best = p
     return best
 
-def draw_robot(d, cam, tgt, carry=False, suction=0.0, gray=False, ang=-math.pi / 2):
+def draw_robot(d, cam, tgt, carry=False, suction=0.0, gray=False, labels=False):
+    """đầu hút chân không 3 bao (1 hàng ngang 1,5 m); carry = danh sách bao đang hút (0,1,2)"""
     col = mix(BRICK, MUTED, 0.85) if gray else BRICK
+    carry = [0, 1, 2] if carry is True else (list(carry) if carry else [])
+    offs = [-SW / 3, 0.0, SW / 3]
     b = ROBOT_BASE
     el = ik(b, tgt)
-    if carry: draw_bag(d, cam, tgt, ang)
-    # tay robot
     wline(d, cam, [b, el], mix(CREAM, col, 0.85), 7)
     wline(d, cam, [el, tgt], mix(CREAM, col, 0.85), 5)
     wline(d, cam, [b, el, tgt], col, 1.2)
     for p, r in ((b, 9), (el, 5)):
         q = cam.P(*p); rr = cam.S(r)
         d.ellipse([q[0] - rr, q[1] - rr, q[0] + rr, q[1] + rr], fill=mix(CREAM, col, 0.55), outline=col, width=LW(1.4))
-    # đầu gắp hút: khung + 3 cốc hút
-    g = rot_rect(tgt, BL * 0.8, BW * 0.7, ang)
-    wpoly(d, cam, g, outline=col, w=1.6)
-    for j in (-1, 0, 1):
-        q = cam.P(tgt[0] + math.cos(ang) * j * BL * 0.25, tgt[1] + math.sin(ang) * j * BL * 0.25); rr = cam.S(3.2)
-        fc = mix((60, 200, 90), CREAM, 0.0 if suction > 0.5 else 0.7)
-        d.ellipse([q[0] - rr, q[1] - rr, q[0] + rr, q[1] + rr], fill=fc, outline=col, width=LW(1))
+    for j in carry:
+        draw_bag(d, cam, (tgt[0] + offs[j], tgt[1]), -math.pi / 2)
+        if labels:
+            q = cam.P(tgt[0] + offs[j], tgt[1])
+            d.text(q, str(j + 1), font=F("monob", max(9, int(cam.z * 6))), fill=BRICK, anchor="mm")
+    g = rot_rect(tgt, SW * 0.98, BL * 0.6, 0.0)
+    wpoly(d, cam, g, outline=col, w=1.8)
+    for j in range(3):
+        for dy in (-BL * 0.16, BL * 0.16):
+            q = cam.P(tgt[0] + offs[j], tgt[1] + dy); rr = cam.S(3.0)
+            on = suction > 0.5 or j in carry
+            fc = (60, 200, 90) if on else mix((60, 200, 90), CREAM, 0.7)
+            d.ellipse([q[0] - rr, q[1] - rr, q[0] + rr, q[1] + rr], fill=fc, outline=col, width=LW(1))
+
+def draw_forklift(d, cam, c, ang=0.0):
+    """xe nâng nhìn từ trên, càng nâng hướng theo ang"""
+    ca, sa = math.cos(ang), math.sin(ang)
+    def Lp(x, y): return (c[0] + x * ca - y * sa, c[1] + x * sa + y * ca)
+    def R(x0, y0, x1, y1): return [Lp(x0, y0), Lp(x1, y0), Lp(x1, y1), Lp(x0, y1)]
+    for fy in (-14, 10):
+        wpoly(d, cam, R(24, fy, 84, fy + 4), fill=(70, 70, 70))                        # càng nâng
+    wpoly(d, cam, R(18, -24, 24, 24), fill=INK)                                          # khung nâng
+    for wx, wy in ((8, -27), (8, 21), (-30, -27), (-30, 21)):
+        wpoly(d, cam, R(wx, wy, wx + 12, wy + 6), fill=INK)                              # bánh xe
+    wpoly(d, cam, R(-30, -21, 18, 21), fill=FORK_Y, outline=INK, w=1.2)                  # thân
+    wpoly(d, cam, R(-40, -20, -29, 20), fill=mix(INK, FORK_Y, 0.35), outline=INK, w=1)   # đối trọng
+    wpoly(d, cam, R(-12, -7, -2, 7), fill=(60, 60, 60))                                  # ghế lái
+    wpoly(d, cam, R(-16, -19, 12, 19), outline=INK, w=1.5)                               # khung bảo vệ
+    wline(d, cam, [Lp(-16, -19), Lp(12, 19)], INK, 0.8); wline(d, cam, [Lp(-16, 19), Lp(12, -19)], INK, 0.8)
+
+def draw_button(d, cam, p, k):
+    q = cam.P(*p); r = cam.S(4.5)
+    d.ellipse([q[0] - r, q[1] - r, q[0] + r, q[1] + r], fill=(60, 160, 80), outline=INK, width=LW(1))
+    if 0 < k < 1:
+        rr = cam.S(4.5 + 10 * k)
+        d.ellipse([q[0] - rr, q[1] - rr, q[0] + rr, q[1] + rr], outline=mix(RED, CREAM, k), width=LW(2))
 
 # ---------- toàn bộ mặt bằng ----------
 def draw_plant(d, cam, st):
@@ -354,10 +388,20 @@ def draw_plant(d, cam, st):
     for x in (420, 500): wline(d, cam, [(x, 800), (x, 895)], mix(CREAM, EL["L"][4], 0.7), 1.2)
     for x in (757, 834): wline(d, cam, [(x, 800), (x, 895)], mix(CREAM, EL["R"][4], 0.7), 1.2)
     cell(d, cam, K("C"), st.get("robot_gray", False))
-    belt(d, cam, (BELT_X - BELT_HALF, 400, BELT_X + BELT_HALF, 735), EL["S"][4], K("S"))
-    wrect(d, cam, (BELT_X - 17, 597, BELT_X + 17, 658), fill=mix(CREAM, EL["S"][4], 0.08), outline=EL["S"][4], w=1.2)
-    p = cam.P(BELT_X, 627); r = cam.S(6)
-    d.ellipse([p[0] - r, p[1] - r, p[0] + r, p[1] + r], outline=EL["S"][4], width=LW(1))
+    belt(d, cam, (BELT_X - BELT_HALF, 400, BELT_X + BELT_HALF, 597), EL["S"][4], K("S"))
+    belt(d, cam, (BELT_X - BELT_HALF, 660, BELT_X + BELT_HALF, 735), MUTED, 0)          # đoạn nhận bao trong cell
+    for ax, ay, sx in ((606, 684, -1), (650, 684, 1), (606, 712, -1), (650, 712, 1)):    # 4 tay xám (chưa rõ tên)
+        wline(d, cam, [(ax, ay), (ax + sx * 10, ay + 3)], mix(CREAM, MUTED, 0.6), 2)
+        q = cam.P(ax, ay); rr = cam.S(3)
+        d.ellipse([q[0] - rr, q[1] - rr, q[0] + rr, q[1] + rr], outline=mix(CREAM, MUTED, 0.8), width=LW(1))
+    vcol = EL["V"][4]; kv = K("V")
+    wrect(d, cam, (BELT_X - 17, 597, BELT_X + 17, 660), fill=mix(CREAM, vcol, 0.12 + 0.08 * kv), outline=vcol, w=1.4 + 1.4 * kv)
+    ph = st.get("brush", 0.0)
+    for yb in (608, 628, 648):                                                            # chổi quét
+        wline(d, cam, [(BELT_X - 16, yb), (BELT_X + 16, yb)], mix(CREAM, vcol, 0.85), 1.6)
+        for i in range(9):
+            x = BELT_X - 15 + ((i * 3.6 + ph * 18) % 31)
+            wline(d, cam, [(x, yb - 4.5), (x + 1.8, yb + 4.5)], mix(CREAM, vcol, 0.6), 0.8)
     curve(d, cam, EL["K"][4], K("K"))
     tele(d, cam, EL["T"][4], K("T"))
     truck(d, cam, K("X"))
@@ -367,6 +411,10 @@ def draw_plant(d, cam, st):
         draw_sling(d, cam, (629, 1115), st.get("station_n", NBAG), rot=True, k=st.get("station_k", 0.55))
     for p_, f_ in st.get("people", [((462, 781), 0), ((462, 915), 0), ((795, 781), math.pi), ((795, 915), math.pi), ((650, 1068), -math.pi / 2)]):
         draw_person(d, cam, p_, f_)
+    for p_, k_ in st.get("buttons", []):
+        draw_button(d, cam, p_, k_)
+    for p_, a_ in st.get("forklifts", []):
+        draw_forklift(d, cam, p_, a_)
     # sling
     for s in st.get("slings", []):
         draw_sling(d, cam, s[0], s[1], k=s[2] if len(s) > 2 else 1.0, hole=s[3] if len(s) > 3 else None)
@@ -380,7 +428,7 @@ def draw_plant(d, cam, st):
         draw_bag(d, cam, p_, a_)
     if st.get("robot") is not None:
         rb = st["robot"]
-        draw_robot(d, cam, rb[0], rb[1], rb[2], st.get("robot_gray", False))
+        draw_robot(d, cam, rb[0], rb[1], rb[2], st.get("robot_gray", False), labels=st.get("robot_labels", False))
     # vạch chạy dọc băng tải (đầu/cuối)
     for n, kk in st.get("bars", {}).items():
         run_bar(d, cam, n, kk)
@@ -396,7 +444,7 @@ def run_bar(d, cam, n, k):
         return
     pts = PATH[n]
     # lệch ra bên cạnh băng tải
-    off = {"L": (0, -32), "R": (0, -32), "S": (-22, 0), "K": None, "T": (0, -26), "M": (-22, 0)}[n]
+    off = {"L": (0, -32), "R": (0, -32), "V": (-24, 0), "S": (-22, 0), "K": None, "T": (0, -26), "M": (-22, 0)}[n]
     if n == "K":
         pts = arc_pts(CURVE_C, CURVE_R + 22, 180, 270)
     else:
@@ -429,10 +477,10 @@ def corners(d, color=INK):
         d.line([(x, y), (x + sx * ln, y)], fill=color, width=3 * SS)
         d.line([(x, y), (x, y + sy * ln)], fill=color, width=3 * SS)
 
-N_SC = 11
+N_SC = 13
 def footer(d, n, color=INK):
     f = F("mono", 12)
-    d.text((66 * SS, 692 * SS), "KCP VIỆT NAM · LOGISTICS · MÁY DEPAL BAO · bản vẽ Phon-Tech 20/10/2026", font=f, fill=color, anchor="ls")
+    d.text((66 * SS, 692 * SS), "KCP VIỆT NAM · LOGISTICS · MÁY DEPAL BAO · bản vẽ 20/10/2026 · Phon-Tech 04/11/2026", font=f, fill=color, anchor="ls")
     d.text((1214 * SS, 692 * SS), f"minh họa, không theo tỷ lệ · {n}/{N_SC}", font=f, fill=color, anchor="rs")
 
 def chapter(im, label, t, color=INK):
@@ -552,13 +600,15 @@ def sc_title(t, D):
     draw_plant(do, cam, {"slings": default_slings()})
     im = Image.blend(im, over, 0.2); d = ImageDraw.Draw(im)
     k = seg(t, 0.1, 0.7)
-    d.text((W / 2 * SS, 210 * SS), "MÁY DEPAL BAO TỰ ĐỘNG", font=F("serifb", 50), fill=mix(CREAM, INK, k), anchor="mm")
+    d.text((W / 2 * SS, 200 * SS), "MÁY DEPAL BAO TỰ ĐỘNG", font=F("serifb", 50), fill=mix(CREAM, INK, k), anchor="mm")
     k2 = seg(t, 0.5, 1.1)
-    d.text((W / 2 * SS, 278 * SS), "cách hoạt động: từ sling 45 bao tới thùng xe", font=F("serif", 30), fill=mix(CREAM, ORANGE, k2), anchor="mm")
+    d.text((W / 2 * SS, 268 * SS), "cách hoạt động: từ sling 45 bao tới thùng xe", font=F("serif", 30), fill=mix(CREAM, ORANGE, k2), anchor="mm")
     k3 = seg(t, 1.2, 1.7)
-    d.text((W / 2 * SS, 340 * SS), "KCP Phú Yên · bản vẽ LA26-PTC-KCP-DEP-301026 · Phon-Tech · 20/10/2026",
+    d.text((W / 2 * SS, 326 * SS), "KCP Phú Yên · bản vẽ LA26-PTC-KCP-DEP-301026 (20/10/2026)",
            font=F("mono", 15), fill=mix(CREAM, INK, k3), anchor="mm")
-    chips = ["01 · SLING VÀO", "02 · ROBOT GẮP", "03 · BĂNG RA XE", "04 · TỰ CHẤT LÊN XE"]
+    d.text((W / 2 * SS, 352 * SS), "cập nhật theo trao đổi với Phon-Tech ngày 04/11/2026",
+           font=F("mono", 15), fill=mix(CREAM, INK, k3), anchor="mm")
+    chips = ["01 · SLING VÀO – RA", "02 · HÚT 3 BAO", "03 · VỆ SINH, RA XE", "04 · TỰ CHẤT LÊN XE"]
     f = F("monob", 16)
     widths = [d.textlength(s, font=f) / SS + 28 for s in chips]
     x = W / 2 - (sum(widths) + 20 * 3) / 2
@@ -575,39 +625,118 @@ def sc_title(t, D):
 # 2. Tổng quan bố trí
 OV_TAGS = [  # mã, điểm trên thiết bị, lệch nhãn (màn hình)
     ("L", (380, 812), (-10, 95)), ("R", (880, 812), (20, 95)), ("C", (628, 760), (-110, -60)),
-    ("S", (BELT_X, 500), (-70, 0)), ("K", (660, 360), (-60, -45)), ("T", (950, 345), (10, 55)),
-    ("X", (1330, 300), (40, -40)), ("M", (630, 1150), (60, 25)),
+    ("V", (BELT_X + 17, 627), (60, 12)), ("S", (BELT_X, 480), (-70, 0)), ("K", (655, 362), (-75, 22)),
+    ("T", (950, 345), (10, 55)), ("X", (1330, 300), (40, -40)), ("M", (630, 1150), (60, 25)),
 ]
+OV_STEP = 1.0
 def sc_overview(t, D):
     im, d = frame_base()
     cam = CAM_FULL
-    hl = {}; bars = {}
+    hl = {}
     for i, (c, _, _) in enumerate(OV_TAGS):
-        t0 = 1.2 + i * 1.15
-        hl[c] = seg(t, t0, t0 + 0.4) * (1 - seg(t, t0 + 1.1, t0 + 1.5)) * 1.0
+        t0 = 1.2 + i * OV_STEP
+        hl[c] = seg(t, t0, t0 + 0.4) * (1 - seg(t, t0 + 1.0, t0 + 1.4))
     draw_plant(d, cam, {"slings": [(POS_C, NBAG)] + default_slings(), "hl": hl,
-                        "robot": (PLACE, False, 0)})
+                        "robot": (PLACE, False, 0), "brush": t})
     for i, (c, wp, off) in enumerate(OV_TAGS):
-        t0 = 1.2 + i * 1.15
+        t0 = 1.2 + i * OV_STEP
         name_tag(d, cam, c, wp, off, seg(t, t0, t0 + 0.4), 13)
-    # kích thước tổng
-    kd = seg(t, 10.6, 11.2)
+    kd = seg(t, 10.8, 11.4)
     if kd > 0:
         col = mix(CREAM, RED, kd)
-        p0 = cam.P(337, 1185); p1 = cam.P(910, 1185)
+        p0 = cam.P(337, 296); p1 = cam.P(910, 296)
         arrow(d, ((p0[0] + p1[0]) / 2, p0[1]), p0, col, 2, 9); arrow(d, ((p0[0] + p1[0]) / 2, p0[1]), p1, col, 2, 9)
-        tag(d, ((p0[0] + p1[0]) / 2 / SS, p0[1] / SS), "13.258 mm", RED, 13, "mm", kd)
-        q0 = cam.P(250, 323); q1 = cam.P(250, 925)
-        arrow(d, (q0[0], (q0[1] + q1[1]) / 2), q0, col, 2, 9); arrow(d, (q0[0], (q0[1] + q1[1]) / 2), q1, col, 2, 9)
-        tag(d, (q0[0] / SS, (q0[1] + q1[1]) / 2 / SS), "3.954 + 9.950 mm", RED, 12, "mm", kd)
+        tag(d, (cam.scr(450, 296)[0], p0[1] / SS), "13.258 mm", RED, 13, "mm", kd)
     subs(d, t, [(0, 1.2, "Mặt bằng máy depal theo bản vẽ Phon-Tech ngày 20/10/2026"),
-                (1.2, 10.4, "Tám cụm chính, đánh số theo hành trình của bao đường 50 kg"),
-                (10.4, D + 1, "Chiều ngang tổng 13.258 mm – tăng 1.503 mm so với bản cũ 11.755 mm")])
+                (1.2, 10.6, "Chín cụm chính, đánh số theo hành trình của bao đường 50 kg"),
+                (10.6, D + 1, "Chiều ngang tổng 13.258 mm – tăng 1.503 mm so với bản cũ 11.755 mm")])
     chapter(im, "TỔNG QUAN BỐ TRÍ", t)
     corners(d); footer(d, 2)
     return im
 
-# 3. Sling hàng
+# 3. Diện tích chiếm trong kho
+AREA_W = 13258
+AREA_D = (1158 - 323) * MM          # tới mép dưới trạm dự phòng (đo trên bản vẽ)
+STRIP_L = (1132 - 910) * MM         # dải băng ống lồng ra tới đuôi xe (đo trên bản vẽ)
+STRIP_W = (370 - 323) * MM
+A_MAIN = AREA_W * AREA_D / 1e6
+A_STRIP = STRIP_L * STRIP_W / 1e6
+A_TOTAL = A_MAIN + A_STRIP
+def vn1(v, nd=1): return f"{v:.{nd}f}".replace(".", ",")
+def sc_area(t, D):
+    im, d = frame_base()
+    cam = Cam(1000, 748, 0.56)
+    over = Image.new("RGB", im.size, CREAM); do = ImageDraw.Draw(over)
+    draw_plant(do, cam, {"slings": [(POS_C, NBAG)] + default_slings(), "robot": (PLACE, False, 0)})
+    im = Image.blend(im, over, 0.55); d = ImageDraw.Draw(im)
+    # khung chính
+    k1 = lin(t, 0.8, 3.0)
+    pts = [(337, 323), (910, 323), (910, 1158), (337, 1158), (337, 323)]
+    sp = sub_path(pts, k1)
+    if k1 >= 1:
+        ov = Image.new("RGBA", im.size, (0, 0, 0, 0)); dv = ImageDraw.Draw(ov)
+        p0 = cam.P(337, 323); p1 = cam.P(910, 1158)
+        dv.rectangle([p0[0], p0[1], p1[0], p1[1]], fill=ORANGE + (int(40 * seg(t, 3.0, 3.6)),))
+        im.paste(ov, (0, 0), ov); d = ImageDraw.Draw(im)
+    if len(sp) > 1:
+        for i in range(len(sp) - 1):
+            dashed(d, cam.P(*sp[i]), cam.P(*sp[i + 1]), RED, 2.2, 9, 5)
+    # dải ra xe
+    k2 = seg(t, 6.0, 7.0)
+    if k2 > 0:
+        ov = Image.new("RGBA", im.size, (0, 0, 0, 0)); dv = ImageDraw.Draw(ov)
+        p0 = cam.P(910, 323); p1 = cam.P(lerp(910, 1132, k2), 370)
+        dv.rectangle([p0[0], p0[1], p1[0], p1[1]], fill=ORANGE + (60,), outline=RED + (255,), width=2 * SS)
+        im.paste(ov, (0, 0), ov); d = ImageDraw.Draw(im)
+    # kích thước
+    kd = seg(t, 3.0, 3.6)
+    if kd > 0:
+        col = mix(CREAM, RED, kd)
+        p0 = cam.P(337, 290); p1 = cam.P(910, 290)
+        arrow(d, ((p0[0] + p1[0]) / 2, p0[1]), p0, col, 2, 9); arrow(d, ((p0[0] + p1[0]) / 2, p0[1]), p1, col, 2, 9)
+        tag(d, (cam.scr(450, 290)[0], p0[1] / SS), "13.258 mm (bản vẽ)", RED, 12, "mm", kd)
+    kd2 = seg(t, 4.0, 4.6)
+    if kd2 > 0:
+        col = mix(CREAM, RED, kd2)
+        x = 300
+        for (ya, yb, s) in ((323, 925, "3.954 + 9.950 (bản vẽ)"), (925, 1158, f"≈{vn(round((1158 - 925) * MM / 10) * 10)} (ước tính)")):
+            q0 = cam.P(x, ya); q1 = cam.P(x, yb)
+            arrow(d, (q0[0], (q0[1] + q1[1]) / 2), q0, col, 2, 8); arrow(d, (q0[0], (q0[1] + q1[1]) / 2), q1, col, 2, 8)
+            tag(d, (q0[0] / SS - 10, (q0[1] + q1[1]) / 2 / SS), s, RED, 11, "rm", kd2)
+        q0 = cam.P(255, 323); q1 = cam.P(255, 1158)
+    if k2 > 0:
+        p = cam.scr(1021, 323)
+        tag(d, (p[0], p[1] - 14), f"≈ {vn1(STRIP_L / 1000)} m (ước tính)", RED, 11, "mm", k2)
+    # bảng diện tích
+    px, py, pw = 770, 330, 450
+    rows = [(8.0, "monob", 14, "DIỆN TÍCH CHIẾM TRONG KHO", INK),
+            (8.6, "serif", 16, f"Khung chính: {vn1(AREA_W / 1000, 2)} × {vn1(AREA_D / 1000, 2)} m ≈ {A_MAIN:.0f} m²", INK),
+            (9.6, "serif", 16, f"Dải băng ra xe: ≈ {vn1(STRIP_L / 1000)} × {vn1(STRIP_W / 1000)} m ≈ {A_STRIP:.0f} m²", INK),
+            (10.6, "serifb", 22, f"Tổng ≈ {A_TOTAL:.0f} m²", RED),
+            (11.4, "mono", 12, "không tính lối đi xe nâng và chỗ đậu xe", MUTED),
+            (12.6, "serifb", 17, "Điểm cao nhất hệ thống băng tải: 1,5 m", TEAL),
+            (13.4, "mono", 11, "số có dấu ≈: đo trên bản vẽ (SCALE: FREE), ước tính", MUTED),
+            (13.4, "mono", 11, "cao 1,5 m: Phon-Tech xác nhận 04/11/2026", MUTED)]
+    kp = seg(t, 7.6, 8.0)
+    if kp > 0:
+        d.rectangle([px * SS, py * SS, (px + pw) * SS, (py + 262) * SS], fill=mix(CREAM, (255, 252, 244), kp),
+                    outline=mix(CREAM, INK, kp), width=2 * SS)
+        y = py + 16
+        for t0, fn, sz, s, c in rows:
+            kk = seg(t, t0, t0 + 0.4)
+            if kk > 0:
+                d.text(((px + 18) * SS, y * SS), s, font=F(fn, sz), fill=mix(CREAM, c, kk), anchor="lt")
+            y += int(sz * 1.75)
+    subs(d, t, [(0, 3.2, "Phần hệ thống chiếm chỗ trong kho (khung đỏ)"),
+                (3.2, 6.0, f"Khung chính khoảng {vn1(AREA_W / 1000, 1)} × {vn1(AREA_D / 1000, 1)} m, tính cả trạm dự phòng"),
+                (6.0, 10.6, f"Thêm dải băng tải ống lồng ra tới đuôi xe khoảng {vn1(STRIP_L / 1000)} m"),
+                (10.6, 12.6, f"Tổng khoảng {A_TOTAL:.0f} m², chưa tính lối đi xe nâng và chỗ đậu xe"),
+                (12.6, D + 1, "Điểm cao nhất của hệ thống băng tải: 1,5 m")])
+    chapter(im, "DIỆN TÍCH CHIẾM TRONG KHO", t)
+    corners(d); footer(d, 3)
+    return im
+
+# 4. Sling hàng
 def sc_sling(t, D):
     im, d = frame_base()
     chapter(im, "SLING HÀNG ĐẦU VÀO", t)
@@ -659,118 +788,245 @@ def sc_sling(t, D):
     subs(d, t, [(0, 3.6, "Mỗi sling 2.250 × 1.500 mm, xếp 3 × 3 bao mỗi lớp"),
                 (3.6, 6.6, "Xếp 5 lớp chồng lên nhau"),
                 (6.6, D + 1, "Một sling chứa 45 bao 50 kg, tức 2.250 kg đường")])
-    corners(d); footer(d, 3)
-    return im
-
-# 4. Sling vào từ hai bên
-def sc_infeed(t, D):
-    im, d = frame_base()
-    cam = cam_lerp(CAM_FULL, CAM_ROW, seg(t, 0, 1.2))
-    # sling A (trái): xuất hiện ở đầu ngoài -> vị trí chờ -> giữa cell
-    ka = seg(t, 1.3, 1.9)
-    m1 = seg(t, 3.4, 5.6); m2 = seg(t, 6.0, 7.8)
-    xa = lerp(lerp(POS_L[0][0], POS_L[2][0], m1), POS_C[0], m2)
-    slings = [((xa, CY), NBAG, ka)] + default_slings()
-    bars = {"L": lin(t, 3.4, 7.8), "R": lin(t, 8.6, 10.4)}
-    hl = {"L": seg(t, 3.0, 3.4) * (1 - seg(t, 8.0, 8.4)), "R": seg(t, 8.4, 8.8)}
-    draw_plant(d, cam, {"slings": slings, "bars": bars, "hl": hl, "robot": (PLACE, False, 0)})
-    if t > 1.3:
-        p = cam.scr(POS_L[0][0], CY - 70)
-        note(d, (p[0] - 20, p[1] - 10), "đưa sling vào đầu băng: chưa rõ phương tiện", seg(t, 1.6, 2.0) * (1 - seg(t, 6.2, 6.6)), RED, 13, "lm")
-    card(d, "L", 60, 90, 430, seg(t, 3.4, 3.9) * (1 - seg(t, 8.2, 8.5)))
-    card(d, "R", 790, 90, 430, seg(t, 8.5, 9.0))
-    if t > 9.6:
-        p = cam.scr(POS_R[1][0], CY + 70)
-        note(d, (p[0], p[1] + 12), "sling bên phải chờ lượt sau", seg(t, 9.6, 10.0), PURPLE, 13, "mm")
-    subs(d, t, [(0, 3.3, "Sling đầy đặt ở đầu ngoài băng con lăn"),
-                (3.3, 8.2, "Băng con lăn bên trái đưa sling vào vị trí xả giữa cell"),
-                (8.2, D + 1, "Bên phải chờ sẵn – hai bên luân phiên cấp sling")])
-    chapter(im, "(1)(2) SLING VÀO TỪ HAI BÊN", t)
     corners(d); footer(d, 4)
     return im
 
-# 5. Robot gắp
-PICK_ORDER = list(range(9))
-def robot_state(t, t_start, cycles):
-    """trả (đích, mang bao, hút, số bao đã đặt, chỉ số đang gắp, thời điểm đặt các bao)"""
-    acc = t_start; placed = []
-    for i, Tc in enumerate(cycles):
-        slot_i = i % 9
-        layer = i // 9
-        pick = sling_slots(POS_C)[8 - slot_i][0]
-        if t < acc + Tc:
-            u = (t - acc) / Tc
-            if u < 0.35: return (lerp_p(PLACE, pick, ss(u / 0.35)), False, 0, i, None, placed)
-            if u < 0.48: return (pick, False, 1, i, None, placed)
-            if u < 0.88: return (lerp_p(pick, PLACE, ss((u - 0.48) / 0.4)), True, 1, i, 8 - slot_i, placed)
-            return (PLACE, False, 0, i + 1, None, placed + [acc + Tc * 0.88])
-        placed.append(acc + Tc * 0.88)
-        acc += Tc
-    return (PLACE, False, 0, len(cycles), None, placed)
-
 def lerp_p(a, b, k): return (lerp(a[0], b[0], k), lerp(a[1], b[1], k))
 
-CYC5 = [2.0, 1.7, 1.5] + [5.4 / 42] * 42      # 3 bao chậm, 42 bao tua nhanh
-BELT_V = 60.0                                  # px/s – minh họa
+# 5. Luồng sling: xe nâng cấp, bấm nút vào hút, sling rỗng trả ra (Phon-Tech xác nhận 04/11/2026)
+def kx(t, keys):
+    """vị trí theo mốc thời gian [(t, x)], chuyển động mượt giữa hai mốc"""
+    if t <= keys[0][0]: return keys[0][1]
+    for i in range(len(keys) - 1):
+        if t < keys[i + 1][0]:
+            return lerp(keys[i][1], keys[i + 1][1], seg(t, keys[i][0], keys[i + 1][0]))
+    return keys[-1][1]
 
-def belt_bags(t, placed, speed=BELT_V, until=400):
-    out = []
-    for tp in placed:
-        s = (t - tp) * speed
-        if s < 0: continue
-        if PLACE[1] - s < until - 20: continue
-        out.append(((PLACE[0], PLACE[1] - s), -math.pi / 2))
-    # bỏ bao chồng nhau khi tua nhanh
-    res = []
-    for b in out:
-        if all(abs(b[0][1] - r[0][1]) > BL * 1.05 for r in res): res.append(b)
-    return res
+def nbags(t, t0, t1): return int(round(lerp(NBAG, 0, lin(t, t0, t1)) / 3)) * 3
+
+FL_OFF = 57          # tâm xe nâng lùi sau tâm sling (càng nâng ở dưới sling)
+FLOW = {  # sling: mốc vị trí x, khoảng hút (t0, t1), khoảng mờ đi (lấy ra)
+    "A": dict(keys=[(0.5, -40), (2.5, 375), (3.2, 375), (4.6, 536), (10.2, 536), (11.8, 627.5), (15.2, 627.5), (17.0, 723), (22.2, 723), (24.4, 536)],
+              dep=(12.0, 15.0), out=(24.6, 26.0), show=0.5),
+    "B": dict(keys=[(4.4, -40), (6.4, 375), (6.6, 375), (7.6, 455), (10.4, 455), (11.8, 536), (17.7, 536), (19.3, 627.5), (22.2, 627.5), (24.4, 455)],
+              dep=(19.5, 22.0), out=(24.6, 26.0), show=4.4),
+    "R1": dict(keys=[(0, 792), (25.7, 792), (27.5, 627.5), (30.0, 627.5), (31.5, 536), (35.6, 536), (37.5, 723)],
+               dep=(27.6, 30.0), out=(37.7, 39.2), show=0),
+    "R0": dict(keys=[(0, 875), (25.9, 875), (27.5, 723), (31.7, 723), (33.0, 627.5), (35.6, 627.5), (37.5, 792)],
+               dep=(33.1, 35.5), out=(37.7, 39.2), show=0),
+    "A2": dict(keys=[(27.2, -40), (28.7, 375), (28.9, 375), (29.8, 455)], dep=None, out=None, show=27.2),
+    "B2": dict(keys=[(30.4, -40), (31.9, 375)], dep=None, out=None, show=30.4),
+}
+FORK_TRIPS = [("A", 0.5, 2.5, 3.0, 4.2), ("B", 4.4, 6.4, 6.9, 8.0), ("A2", 27.2, 28.7, 29.2, 30.2), ("B2", 30.4, 31.9, 32.4, 33.4)]
+BTN_L, BTN_R = (484, 784), (773, 784)
+PRESS = [(10.0, BTN_L), (17.5, BTN_L), (25.5, BTN_R), (31.5, BTN_R)]
+D_FLOW = 41.0
+
+def flow_state(t):
+    slings = []
+    for name, f in FLOW.items():
+        if t < f["show"]: continue
+        x = kx(t, f["keys"])
+        n = NBAG if f["dep"] is None else nbags(t, *f["dep"])
+        k = 1.0 if f["out"] is None else 1 - seg(t, *f["out"])
+        if k > 0.02: slings.append(((x, CY), n, k))
+    forks = []
+    for name, t0, t1, t2, t3 in FORK_TRIPS:
+        if t0 <= t < t2:
+            forks.append(kx(t, FLOW[name]["keys"]) - FL_OFF)
+        elif t2 <= t < t3:
+            forks.append(lerp(375 - FL_OFF, -160, seg(t, t2, t3)))
+    deps = [f["dep"] for f in FLOW.values() if f["dep"]]
+    rob = PLACE
+    for t0, t1 in deps:
+        if t0 <= t < t1:
+            u = 0.5 - 0.5 * math.cos(2 * math.pi * 1.4 * (t - t0))
+            rob = lerp_p(PLACE, (627.5, CY - 10), u)
+    return slings, forks, rob
+
+def sc_flow(t, D):
+    im, d = frame_base()
+    cam = cam_lerp(CAM_FULL, CAM_FLOW, seg(t, 0, 1.0))
+    slings, forks, rob = flow_state(t)
+    presses = [(BTN, seg(t, tp, tp + 0.8) if tp <= t < tp + 0.9 else 0.0) for tp, BTN in PRESS]
+    hl = {"L": 1.0 if t < 25 else 0.0, "R": 1.0 if t >= 25 else 0.0}
+    draw_plant(d, cam, {"slings": slings, "forklifts": [((x, CY), 0.0) for x in forks], "robot": (rob, False, 0),
+                        "buttons": presses, "hl": hl})
+    for x in forks:
+        p = cam.scr(x - 5, CY - 60)
+        if p[0] > 60: tag(d, p, "XE NÂNG", INK, 12, "mm", 1.0)
+    for tp, btn in PRESS:
+        k = seg(t, tp - 0.2, tp) * (1 - seg(t, tp + 1.2, tp + 1.5))
+        if k > 0:
+            p = cam.scr(btn[0], btn[1] - 14)
+            tag(d, p, "BẤM NÚT", RED, 12, "mm", k)
+    def stag(x, s, col, t0, t1, dy=62):
+        k = seg(t, t0, t0 + 0.3) * (1 - seg(t, t1 - 0.3, t1))
+        if k > 0:
+            p = cam.scr(x, CY + dy); tag(d, p, s, col, 12, "mm", k)
+    stag(536, "chờ hút", BLUE, 12.0, 17.6)
+    stag(723, "rỗng – chờ", PURPLE, 17.0, 22.2)
+    stag(723, "chờ hút", PURPLE, 27.5, 31.6)
+    stag(536, "rỗng – chờ", BLUE, 31.5, 35.6)
+    for t0, t1 in [f["dep"] for f in FLOW.values() if f["dep"]]:
+        k = seg(t, t0, t0 + 0.3) * (1 - seg(t, t1 - 0.2, t1))
+        if k > 0:
+            p = cam.scr(627.5, CY + 62); tag(d, p, "HÚT 45 BAO · TUA NHANH >>", BRICK, 12, "mm", k)
+    # kiểm tra bao trước khi bấm
+    k = seg(t, 7.9, 8.3) * (1 - seg(t, 9.8, 10.1))
+    if k > 0:
+        p = cam.scr(462, 760); note(d, (p[0], p[1] - 10), "kiểm tra: bao ngay ngắn, không rách", k, RED, 13, "mm")
+    # lấy sling rỗng ra
+    for (t0, t1, xs, ylane) in ((24.6, 26.2, (455, 536), 781), (37.7, 39.4, (723, 792), 781)):
+        k = seg(t, t0, t0 + 0.3) * (1 - seg(t, t1 - 0.3, t1))
+        if k > 0:
+            for x in xs:
+                arrow(d, cam.P(x, CY - 30), cam.P(x, ylane + 6), mix(CREAM, RED, k), 2.5, 10)
+            p = cam.scr(sum(xs) / 2, 755); tag(d, (p[0], p[1] - 12), "công nhân lấy sling rỗng ra", RED, 12, "mm", k)
+    card(d, "L", 60, 90, 420, seg(t, 0.6, 1.1) * (1 - seg(t, 8.6, 9.0)))
+    card(d, "R", 800, 90, 420, seg(t, 25.0, 25.5) * (1 - seg(t, 31.0, 31.4)))
+    subs(d, t, [(0, 7.8, "Xe nâng đặt 2 sling đầy lên băng con lăn bên trái"),
+                (7.8, 12.0, "Công nhân kiểm tra bao ngay ngắn, không rách, rồi bấm nút cho sling vào"),
+                (12.0, 15.1, "Máy hút hết 45 bao trên sling thứ nhất"),
+                (15.1, 17.4, "Sling rỗng chuyển sang vị trí chờ bên phải"),
+                (17.4, 22.1, "Bấm nút: sling đầy thứ hai vào, máy hút tiếp"),
+                (22.1, 24.6, "Hút xong, cả 2 sling rỗng trả về bên trái"),
+                (24.6, 27.0, "Công nhân bên trái lấy 2 sling rỗng ra"),
+                (27.0, 33.4, "Bên phải làm giống hệt – lúc này xe nâng nạp 2 sling mới bên trái"),
+                (33.4, 37.6, "Sling rỗng bên phải chờ bên trái, xong sling thứ hai thì cùng trả về bên phải"),
+                (37.6, D + 1, "4 công nhân: kiểm tra bao, bấm đưa sling đầy vào, lấy sling rỗng ra")])
+    chapter(im, "(1)(2) SLING VÀO – SLING RỖNG RA", t)
+    corners(d); footer(d, 5)
+    return im
+
+# 6. Robot hút 3 bao/lần, thả lần lượt từng bao (cần chốt với Phon-Tech sáng 05/11/2026)
+ROW_DX = SW / 3
+BAG_DX = [-ROW_DX, 0.0, ROW_DX]          # 3 bao trong một hàng ngang (dài 1.500 mm)
+def row_y(r): return CY + (r - 1) * SLL / 3
+PH = [("a", 2.9), ("b", 0.9), ("c", 1.7), ("d", 0.6), ("e", 1.6), ("f", 0.6), ("g", 1.6), ("h", 0.6)]
+PH_SUM = sum(v for _, v in PH)
+STEP_OF = {"a": 0, "b": 0, "c": 1, "d": 2, "e": 3, "f": 3, "g": 4, "h": 4}
+
+def pick_cycle(t, t0, T, r):
+    """trả (tâm đầu hút, bao đang mang, hút?, thời điểm thả 3 bao, pha hiện tại, đã nhấc bao chưa)"""
+    sc = T / PH_SUM
+    marks = {}; acc = t0
+    for name, v in PH:
+        marks[name] = (acc, acc + v * sc); acc += v * sc
+    start = (628 - ROW_DX, PLACE[1])
+    pick = (627.5, row_y(r))
+    over = [(628 - dx, PLACE[1]) for dx in BAG_DX]      # tâm đầu hút để bao j nằm trên băng
+    drops = [marks["d"][0], marks["f"][0], marks["h"][0]]
+    if t < t0: return start, [], 0, drops, None, False
+    for name, _ in PH:
+        a, b = marks[name]
+        if t < b:
+            u = seg(t, a, b)
+            if name == "a": return lerp_p(start, pick, u), [], 0, drops, name, False
+            if name == "b": return pick, [], 1, drops, name, u > 0.6
+            if name == "c": return lerp_p(pick, over[0], u), [0, 1, 2], 1, drops, name, True
+            if name == "d": return over[0], [1, 2], 1, drops, name, True
+            if name == "e": return lerp_p(over[0], over[1], seg(t, a + (b - a) * 0.45, b)), [1, 2], 1, drops, name, True
+            if name == "f": return over[1], [2], 1, drops, name, True
+            if name == "g": return lerp_p(over[1], over[2], seg(t, a + (b - a) * 0.45, b)), [2], 1, drops, name, True
+            if name == "h": return over[2], [], 0, drops, name, True
+    return over[2], [], 0, drops, None, True
+
+ROBOT_CYC = [(1.2, 12.0, 0), (13.6, 5.6, 1)]     # (bắt đầu, thời lượng, hàng)
+FF0, FF1 = 19.6, 24.0                            # tua nhanh 13 lần hút còn lại
+D_ROBOT = 28.0
+STEPS = ["Hút 3 bao – 1 hàng ngang dài 1,5 m", "Đưa 3 bao tới đầu băng tải", "Thả bao thứ 1",
+         "Dịch sang, thả bao thứ 2", "Dịch sang, thả bao thứ 3"]
 
 def sc_robot(t, D):
     im, d = frame_base()
-    cam = cam_lerp(CAM_ROW, CAM_CELL, seg(t, 0, 1.0))
-    tgt, carry, suc, done, hole, placed = robot_state(t, 0.8, CYC5)
-    n_left = NBAG - done - (1 if carry else 0)
-    n_left = max(0, n_left)
-    t_empty = 0.8 + sum(CYC5)
-    # sling rỗng -> mờ dần (chưa rõ đi đâu); sling phải vào thay
-    k_out = seg(t, t_empty + 1.6, t_empty + 2.4)
-    mR = seg(t, t_empty + 2.6, t_empty + 4.6)
-    slings = []
-    if k_out < 1: slings.append((POS_C, n_left, 1 - k_out, hole))
-    xr = lerp(POS_R[1][0], POS_C[0], mR)
-    slings += [((xr, CY), NBAG), (POS_R[0], NBAG)]
-    st = {"slings": slings, "robot": (tgt, carry, suc), "bags": belt_bags(t, placed, 60 if t < 6.2 else 140),
-          "bars": {"C": lin(t, 0.6, 2.2), "R": lin(t, t_empty + 2.6, t_empty + 4.6)}, "hl": {"C": 1.0}}
+    cam = cam_lerp(CAM_FLOW, CAM_CELL, seg(t, 0, 1.0))
+    picked = 0; tgt = PLACE; carry = []; suc = 0; step = None; drop_list = []; lifted = False
+    for (t0, T, r) in ROBOT_CYC:
+        g, c, s, drops, ph, lf = pick_cycle(t, t0, T, r)
+        v = 22.0 * 12.0 / T
+        drop_list += [(td, v) for td in drops]
+        if t0 <= t < t0 + T + 0.4:
+            tgt, carry, suc, step, lifted = g, c, s, ph, lf
+        if t >= t0 and lf: picked += 3
+    # tua nhanh
+    if t >= FF0:
+        nff = min(13, int(lin(t, FF0, FF1) * 13 + 1e-6))
+        picked = 6 + nff * 3
+        if t < FF1:
+            u = 0.5 - 0.5 * math.cos(2 * math.pi * 3.0 * (t - FF0))
+            tgt = lerp_p((628, PLACE[1]), (627.5, CY), u); carry = [] ; suc = 0
+            for i in range(int((t - FF0) / 0.11)):
+                drop_list.append((FF0 + i * 0.11, 230.0))
+        else:
+            tgt = PLACE
+    n_left = NBAG - picked
+    bags = []
+    for td, v in drop_list:
+        if t >= td:
+            y = PLACE[1] - (t - td) * v
+            if y > 380: bags.append(((BELT_X, y), -math.pi / 2))
+    st = {"slings": [(POS_C, n_left)] + default_slings(), "robot": (tgt, carry, suc), "bags": bags,
+          "bars": {"C": lin(t, 0.6, 2.2)}, "hl": {"C": 1.0}, "brush": t, "robot_labels": True}
     draw_plant(d, cam, st)
-    card(d, "C", 850, 100, 380, seg(t, 0.8, 1.3) * (1 - seg(t, t_empty + 0.6, t_empty + 1.0)),
-         "gắp 1 bao/lần: theo đường đi bao vẽ trên bản vẽ (To be confirm)")
-    # đồng hồ đếm bao
+    # kích thước 1,5 m của hàng 3 bao
+    if step in ("b", "c"):
+        k = seg(t, ROBOT_CYC[0][0] + 2.0, ROBOT_CYC[0][0] + 2.6) if t < 13 else 1.0
+        p0 = cam.P(tgt[0] - SW / 2, tgt[1] + BL * 0.75); p1 = cam.P(tgt[0] + SW / 2, tgt[1] + BL * 0.75)
+        if k > 0:
+            col = mix(CREAM, RED, k)
+            arrow(d, ((p0[0] + p1[0]) / 2, p0[1]), p0, col, 2, 8); arrow(d, ((p0[0] + p1[0]) / 2, p0[1]), p1, col, 2, 8)
+            tag(d, ((p0[0] + p1[0]) / 2 / SS, p0[1] / SS + 2), "1,5 m · 3 bao", RED, 12, "mm", k)
+    # bảng các bước (chậm, rõ)
+    kp = seg(t, 1.0, 1.4) * (1 - seg(t, FF0 - 0.2, FF0 + 0.2))
+    if kp > 0:
+        px, py, pw = 50, 96, 405
+        d.rectangle([px * SS, py * SS, (px + pw) * SS, (py + 236) * SS], fill=mix(CREAM, (255, 252, 244), kp), outline=mix(CREAM, BRICK, kp), width=2 * SS)
+        d.text(((px + 14) * SS, (py + 12) * SS), "MỘT LẦN HÚT = 3 BAO", font=F("monob", 14), fill=mix(CREAM, BRICK, kp), anchor="lt")
+        cur = STEP_OF.get(step) if step else None
+        for i, s in enumerate(STEPS):
+            y = py + 46 + i * 32
+            on = cur == i
+            done = cur is not None and i < cur
+            col = BRICK if on else (INK if done else MUTED)
+            if on:
+                d.rectangle([(px + 8) * SS, (y - 13) * SS, (px + pw - 8) * SS, (y + 13) * SS], fill=mix(CREAM, BRICK, 0.12 * kp))
+            d.text(((px + 16) * SS, y * SS), f"({i + 1})", font=F("monob", 14), fill=mix(CREAM, col, kp), anchor="lm")
+            d.text(((px + 54) * SS, y * SS), s, font=F("serifb" if on else "serif", 15), fill=mix(CREAM, col, kp), anchor="lm")
+        d.text(((px + 14) * SS, (py + 220) * SS), "thả lần lượt từng bao: chốt với Phon-Tech sáng 05/11/2026",
+               font=F("mono", 10), fill=mix(CREAM, RED, kp), anchor="lm")
+    card(d, "C", 850, 100, 380, seg(t, 0.8, 1.3) * (1 - seg(t, 12.6, 13.0)), "đầu hút chân không · Phon-Tech xác nhận")
+    if t > 13.6 and t < FF0:
+        note(d, (1230, 120), "nhịp thực tế: 12–13,5 giây / 3 bao", seg(t, 13.6, 14.0), BRICK, 13, "rm")
+        note(d, (1230, 148), "(tính từ 40–45 tấn/giờ)", seg(t, 13.6, 14.0), MUTED, 11, "rm")
     f = F("monob", 17)
     d.text((1238 * SS, 62 * SS), f"CÒN {n_left}/45 BAO TRÊN SLING", font=f, fill=INK, anchor="rm")
     x0, x1, y = 1238 - 260, 1238, 80
     d.rectangle([x0 * SS, y * SS, x1 * SS, (y + 6) * SS], fill=mix(CREAM, INK, 0.15))
     d.rectangle([x0 * SS, y * SS, (x0 + (x1 - x0) * n_left / 45) * SS, (y + 6) * SS], fill=BRICK if n_left else ORANGE)
-    if 6.0 < t < t_empty:
-        tag(d, (100, 130), "TUA NHANH >>", INK, 14, "lm", 1.0)
-    if t >= t_empty + 0.6:
-        stamp(im, "SLING RỖNG ĐI ĐÂU: CHƯA RÕ", t - t_empty - 0.6, RED, (250, 140), -4, 18)
-    subs(d, t, [(0, 6.0, "Robot gắp từng bao trên sling, đặt lên đầu băng tải ra"),
-                (6.0, t_empty, "Gắp hết lớp trên mới xuống lớp dưới – 5 lớp, 45 bao"),
-                (t_empty, t_empty + 2.6, "Sling rỗng: bản vẽ chưa thể hiện được đưa đi đâu"),
-                (t_empty + 2.6, D + 1, "Sling bên phải vào thay – hai bên luân phiên")])
-    chapter(im, "(3) ROBOT GẮP BAO", t)
-    corners(d); footer(d, 5)
+    if FF0 <= t < FF1:
+        tag(d, (100, 120), "TUA NHANH >>", INK, 14, "lm", 1.0)
+    c0 = ROBOT_CYC[0][0]; sc0 = ROBOT_CYC[0][1] / PH_SUM
+    m = [c0]
+    for _, v in PH: m.append(m[-1] + v * sc0)
+    subs(d, t, [(0, c0, "Cell robot: đầu hút chân không gắp bao trên sling"),
+                (c0, m[2], "Đầu hút chân không hút 1 hàng 3 bao nằm ngang, dài 1,5 m"),
+                (m[2], m[3], "Đưa cả 3 bao tới đầu băng tải"),
+                (m[3], m[5], "Thả bao thứ 1 xuống băng tải"),
+                (m[5], m[7], "Dịch sang, thả bao thứ 2"),
+                (m[7], ROBOT_CYC[1][0], "Dịch sang, thả bao thứ 3 – băng tải đưa bao đi"),
+                (ROBOT_CYC[1][0], FF0, "Lần hút thứ 2: nhịp thực tế 12–13,5 giây cho 3 bao"),
+                (FF0, FF1, "Lặp lại: 5 lớp × 3 hàng = 15 lần hút, hết 45 bao"),
+                (FF1, D + 1, "Sling rỗng, chờ trả ra theo trình tự luân phiên")])
+    chapter(im, "(3) HÚT 3 BAO – THẢ TỪNG BAO", t)
+    corners(d); footer(d, 6)
     return im
 
-# 6. Hành trình bao trên băng tải
-J = [("S", 0.6, 4.6), ("K", 4.6, 6.6), ("T", 6.6, 13.6)]
+# 7. Hành trình bao: vệ sinh -> băng thẳng -> băng cong -> băng ống lồng
+J = [("V", 0.6, 4.4), ("S", 4.4, 7.6), ("K", 7.6, 9.6), ("T", 9.6, 15.6)]
 def journey_s(t):
-    """quãng đường bao đi trên OUT_PATH"""
-    s0 = math.dist(PLACE, PATH["S"][0]) * 0  # bắt đầu tại điểm đặt
+    lens = {"V": math.dist(PLACE, PATH["V"][1]), "S": L_SEG["S"], "K": L_SEG["K"], "T": L_SEG["T"]}
     off = 0.0
-    base = math.dist(PLACE, (BELT_X, 735))
-    lens = {"S": math.dist(PLACE, PATH["S"][1]), "K": L_SEG["K"], "T": L_SEG["T"]}
     for code, t0, t1 in J:
         if t < t1:
             return off + lens[code] * ss(clamp((t - t0) / (t1 - t0))) if t >= t0 else off
@@ -781,35 +1037,32 @@ def sc_journey(t, D):
     im, d = frame_base()
     s = journey_s(t)
     p, a = ppoint(OUT_PATH, s)
-    z = 2.3 if t < 6.6 else lerp(2.3, 1.7, seg(t, 6.6, 8.0))
-    tgt_cam = Cam(p[0] + (0 if t < 6.6 else 60), p[1] + 40, z)
-    if t < 1.0:
-        cam = cam_lerp(CAM_CELL, tgt_cam, seg(t, 0, 1.0))
-    else:
-        cam = tgt_cam
+    z = 2.3 if t < 9.6 else lerp(2.3, 1.7, seg(t, 9.6, 11.0))
+    tgt_cam = Cam(p[0] + (0 if t < 9.6 else 60), p[1] + 40, z)
+    cam = cam_lerp(CAM_CELL, tgt_cam, seg(t, 0, 1.0)) if t < 1.0 else tgt_cam
     bars = {"C": 1.0}
     for code, t0, t1 in J: bars[code] = lin(t, t0, t1)
     bags = [(p, a)]
-    # bao trước/sau trên băng (minh họa dòng bao)
     for ds_ in (-120, 120, 240):
         s2 = s + ds_
         if 0 < s2 < L_OUT: bags.append(ppoint(OUT_PATH, s2))
     hl = {code: (1.0 if t0 <= t < t1 + 0.3 else 0.0) for code, t0, t1 in J}
-    draw_plant(d, cam, {"slings": [(POS_C, 38)] + default_slings()[1:], "robot": (PLACE, False, 0), "bags": bags,
-                        "bars": bars, "hl": hl})
-    # vòng đánh dấu bao đang theo dõi
+    draw_plant(d, cam, {"slings": [(POS_C, 36)] + default_slings()[1:], "robot": (PLACE, False, 0), "bags": bags,
+                        "bars": bars, "hl": hl, "brush": t * 2.5})
     q = cam.P(*p); r = cam.S(26)
     d.ellipse([q[0] - r, q[1] - r, q[0] + r, q[1] + r], outline=ORANGE, width=LW(2.5))
     for code, t0, t1 in J:
         k = seg(t, t0, t0 + 0.4) * (1 - seg(t, t1 - 0.2, t1 + 0.1))
-        if code == "T" and t > 12.5: k = seg(t, t0, t0 + 0.4)
-        extra = "vươn ra / thụt vào theo hàng đang chất: Phon-Tech xác nhận" if code == "T" else None
+        if code == "T" and t > 14.5: k = seg(t, t0, t0 + 0.4)
+        extra = {"V": "chổi quét bao: Phon-Tech xác nhận 04/11/2026",
+                 "T": "vươn tối đa 18 m · có cảm biến: Phon-Tech xác nhận"}.get(code)
         card(d, code, 820, 90, 400, k, extra)
-    subs(d, t, [(0, 4.6, "Bao ra khỏi cell theo băng tải thẳng"),
-                (4.6, 6.6, "Băng cong 90° đổi hướng bao về phía xe"),
-                (6.6, D + 1, "Băng tải ống lồng đưa bao vào sâu trong thùng xe")])
-    chapter(im, "(4)(5)(6) BAO RA XE", t)
-    corners(d); footer(d, 6)
+    subs(d, t, [(0, 4.4, "Băng tải vệ sinh bao: chổi quét sạch bụi trên bao"),
+                (4.4, 7.6, "Bao ra khỏi cell theo băng tải thẳng"),
+                (7.6, 9.6, "Băng cong 90° đổi hướng bao về phía xe"),
+                (9.6, D + 1, "Băng tải ống lồng đưa bao vào sâu trong thùng xe")])
+    chapter(im, "(4)–(7) VỆ SINH BAO, RA XE", t)
+    corners(d); footer(d, 7)
     return im
 
 # 7. Băng tải ống lồng tự chất bao lên xe (không dùng người)
@@ -857,51 +1110,53 @@ def head_state(t):
             return lerp(face(r), face(r + 1), seg(t, t0 + dur, nxt)), 2, 0, None
     return lerp(face(NROW - 1), TL + 40, seg(t, T_DONE, T_DONE + 1.2)), 2, 0, None
 
-def sc_truck(t, D):
-    im, d = frame_base()
-    chapter(im, "(6)(7) BĂNG ỐNG LỒNG TỰ CHẤT LÊN XE", t)
+def truck_view(d, t, side=True, bad=False):
+    """vẽ thùng xe (nhìn từ trên, và nhìn ngang nếu side) + băng ống lồng + bao đã chất ở thời điểm t của PLAN"""
     col = EL["T"][4]
     y1 = TY0 + TWD * TS
     roof = TFLOOR - TH * TS
     x_rear = txr(TL)
-    # ---- khung thùng: nhìn từ trên ----
     d.text((x_rear * SS, (TY0 - 10) * SS), "NHÌN TỪ TRÊN", font=F("mono", 12), fill=INK, anchor="ls")
     d.rectangle([x_rear * SS, TY0 * SS, TX_FRONT * SS, y1 * SS], fill=mix(CREAM, NAVY, 0.05), outline=NAVY, width=3 * SS)
     cab = [(TX_FRONT, TY0 + 12), (TX_FRONT + 70, TY0 + 12), (TX_FRONT + 92, TY0 + 34), (TX_FRONT + 92, y1 - 34), (TX_FRONT + 70, y1 - 12), (TX_FRONT, y1 - 12)]
     d.polygon([(x * SS, y * SS) for x, y in cab], fill=mix(CREAM, NAVY, 0.14), outline=NAVY, width=2 * SS)
     tag(d, (x_rear, y1 + 16), "cửa sau", MUTED, 11, "lm", 1, bold=False)
     tag(d, (TX_FRONT, y1 + 16), "đầu thùng (sát cabin)", MUTED, 11, "rm", 1, bold=False)
-    # ---- khung thùng: nhìn ngang ----
-    d.text((x_rear * SS, (roof - 10) * SS), "NHÌN NGANG", font=F("mono", 12), fill=INK, anchor="ls")
-    d.rectangle([x_rear * SS, roof * SS, TX_FRONT * SS, TFLOOR * SS], fill=mix(CREAM, NAVY, 0.03), outline=mix(CREAM, NAVY, 0.5), width=SS)
-    d.line([x_rear * SS, TFLOOR * SS, TX_FRONT * SS, TFLOOR * SS], fill=NAVY, width=4 * SS)
-    dashed(d, (x_rear * SS, (TFLOOR - TWALL * TS) * SS), (TX_FRONT * SS, (TFLOOR - TWALL * TS) * SS), mix(CREAM, NAVY, 0.6), 1.5, 8, 6)
-    d.text(((x_rear + 6) * SS, (TFLOOR - TWALL * TS - 4) * SS), "thành 80 cm", font=F("mono", 11), fill=mix(CREAM, NAVY, 0.7), anchor="ls")
-    d.rectangle([TX_FRONT * SS, (TFLOOR - 200 * TS) * SS, (TX_FRONT + 92) * SS, TFLOOR * SS], fill=mix(CREAM, NAVY, 0.14), outline=NAVY, width=2 * SS)
-    # ---- bao đã chất ----
-    total = 0; cur_r = 0
+    if side:
+        d.text((x_rear * SS, (roof - 10) * SS), "NHÌN NGANG", font=F("mono", 12), fill=INK, anchor="ls")
+        d.rectangle([x_rear * SS, roof * SS, TX_FRONT * SS, TFLOOR * SS], fill=mix(CREAM, NAVY, 0.03), outline=mix(CREAM, NAVY, 0.5), width=SS)
+        d.line([x_rear * SS, TFLOOR * SS, TX_FRONT * SS, TFLOOR * SS], fill=NAVY, width=4 * SS)
+        dashed(d, (x_rear * SS, (TFLOOR - TWALL * TS) * SS), (TX_FRONT * SS, (TFLOOR - TWALL * TS) * SS), mix(CREAM, NAVY, 0.6), 1.5, 8, 6)
+        d.text(((x_rear + 6) * SS, (TFLOOR - TWALL * TS - 4) * SS), "thành 80 cm", font=F("mono", 11), fill=mix(CREAM, NAVY, 0.7), anchor="ls")
+        dashed(d, (x_rear * SS, (roof + 30 * TS) * SS), (TX_FRONT * SS, (roof + 30 * TS) * SS), mix(CREAM, RED, 0.5), 1.2, 4, 6)
+        d.text(((x_rear + 6) * SS, (roof + 30 * TS - 4) * SS), "giới hạn chất cao: cách trần 30 cm", font=F("mono", 11), fill=mix(CREAM, RED, 0.7), anchor="ls")
+        d.rectangle([TX_FRONT * SS, (TFLOOR - 200 * TS) * SS, (TX_FRONT + 92) * SS, TFLOOR * SS], fill=mix(CREAM, NAVY, 0.14), outline=NAVY, width=2 * SS)
+    total = 0; cur_r = 0; last = None
     for r, t0, dur, times in PLAN:
         n = sum(1 for x in times if x <= t)
         total += n
         if n: cur_r = r
         xa, xb = txr(RL * (r + 1)), txr(RL * r)
-        for i in range(n):
-            k, c = i // 5, i % 5
-            if k == (n - 1) // 5 or n == len(times):   # top view: chỉ vẽ lớp trên cùng
-                pass
         for c in range(5):
             cnt = sum(1 for i in range(n) if i % 5 == c)
             if cnt:
                 ya = TY0 + c * RW * TS; yb = ya + RW * TS
                 shade = mix(BAG_TOP, BAG_LOW, 0.6 * (1 - cnt / 9))
+                is_last = n > 0 and (n - 1) % 5 == c and r == cur_r
+                if bad and is_last:
+                    last = ((xa + xb) / 2, (ya + yb) / 2)
+                    continue
                 d.rounded_rectangle([(xa + 2) * SS, (ya + 2) * SS, (xb - 2) * SS, (yb - 2) * SS], radius=4 * SS, fill=shade, outline=INK, width=SS)
-        for k in range(row_layers(r)):
-            cnt = sum(1 for i in range(n) if i // 5 == k)
-            if cnt:
-                za = TFLOOR - (k + 1) * RH * TS; zb = TFLOOR - k * RH * TS
-                d.rounded_rectangle([(xa + 2) * SS, (za + 1) * SS, (xb - 2) * SS, (zb - 1) * SS], radius=3 * SS,
-                                    fill=BAG_TOP if cnt == 5 else mix(CREAM, BAG_TOP, 0.6), outline=INK if cnt == 5 else MUTED, width=SS)
-    # ---- băng tải ống lồng + đầu rải ----
+        if side:
+            for k in range(row_layers(r)):
+                cnt = sum(1 for i in range(n) if i // 5 == k)
+                if cnt:
+                    za = TFLOOR - (k + 1) * RH * TS; zb = TFLOOR - k * RH * TS
+                    d.rounded_rectangle([(xa + 2) * SS, (za + 1) * SS, (xb - 2) * SS, (zb - 1) * SS], radius=3 * SS,
+                                        fill=BAG_TOP if cnt == 5 else mix(CREAM, BAG_TOP, 0.6), outline=INK if cnt == 5 else MUTED, width=SS)
+    if bad and last is not None:   # bao đặt lệch: xoay và lệch khỏi ô
+        pts = rot_rect((last[0] - 6, last[1] + 5), RL * TS - 4, RW * TS - 4, math.radians(14))
+        d.polygon([(x * SS, y * SS) for x, y in pts], fill=BAG_TOP, outline=RED, width=3 * SS)
     u, c, k, r_act = head_state(t)
     xh = txr(u)
     yc = TY0 + TWD * TS / 2
@@ -912,20 +1167,37 @@ def sc_truck(t, D):
     yh = TY0 + (c + 0.5) * RW * TS
     d.line([xh * SS, yc * SS, (xh + 12) * SS, yh * SS], fill=col, width=5 * SS)
     d.rectangle([(xh + 4) * SS, (yh - 16) * SS, (xh + 22) * SS, (yh + 16) * SS], fill=col, outline=INK, width=SS)
-    # nhìn ngang: băng nghiêng lên tới đầu rải theo lớp đang chất
     zh = TFLOOR - (k * RH + RH + 6) * TS
-    zin = TFLOOR - 95 * TS
-    pts = [(x_in, zin), (lerp(x_in, xh, 0.45), lerp(zin, zh, 0.45)), (lerp(x_in, xh, 0.75), lerp(zin, zh, 0.75)), (xh, zh)]
-    for (p0, p1), w in zip(zip(pts[:-1], pts[1:]), (12, 10, 8)):
-        d.line([p0[0] * SS, p0[1] * SS, p1[0] * SS, p1[1] * SS], fill=col, width=w * SS)
-    d.rectangle([(xh + 2) * SS, (zh - 8) * SS, (xh + 20) * SS, (zh + 8) * SS], fill=col, outline=INK, width=SS)
-    # bao đang được rải (chỉ ở hàng chậm)
-    if r_act is not None and PLAN[r_act][2] >= 2:
+    if side:
+        zin = TFLOOR - 95 * TS
+        pts = [(x_in, zin), (lerp(x_in, xh, 0.45), lerp(zin, zh, 0.45)), (lerp(x_in, xh, 0.75), lerp(zin, zh, 0.75)), (xh, zh)]
+        for (p0, p1), w in zip(zip(pts[:-1], pts[1:]), (12, 10, 8)):
+            d.line([p0[0] * SS, p0[1] * SS, p1[0] * SS, p1[1] * SS], fill=col, width=w * SS)
+        d.rectangle([(xh + 2) * SS, (zh - 8) * SS, (xh + 20) * SS, (zh + 8) * SS], fill=col, outline=INK, width=SS)
+    if r_act is not None and PLAN[r_act][2] >= 2 and not bad:
         sx0, sx1 = txr(RL * (r_act + 1)), txr(RL * r_act)
         d.rounded_rectangle([(sx0 + 3) * SS, (yh - RW * TS / 2 + 3) * SS, (sx1 - 3) * SS, (yh + RW * TS / 2 - 3) * SS],
                             radius=4 * SS, fill=BAG_TOP, outline=ORANGE, width=2 * SS)
-    # ---- chú thích động ----
-    if r_act == 0 or (PLAN[0][1] + PLAN[0][2] <= t < PLAN[1][1]):
+    return dict(xh=xh, yh=yh, yc=yc, zh=zh, total=total, cur_r=cur_r, r_act=r_act, y1=y1, roof=roof, last=last)
+
+def truck_counter(d, total, cur_r):
+    col = EL["T"][4]
+    f = F("monob", 17)
+    d.text((1238 * SS, 62 * SS), f"ĐÃ CHẤT {total}/680 BAO", font=f, fill=INK, anchor="rm")
+    xa0, xa1 = 1238 - 230, 1238
+    d.rectangle([xa0 * SS, 80 * SS, xa1 * SS, 86 * SS], fill=mix(CREAM, INK, 0.15))
+    d.rectangle([xa0 * SS, 80 * SS, (xa0 + (xa1 - xa0) * total / 680) * SS, 86 * SS], fill=col if total < 680 else ORANGE)
+    d.text((1238 * SS, 104 * SS), f"HÀNG {cur_r + 1}/16", font=F("mono", 13), fill=INK, anchor="rm")
+
+def sc_truck(t, D):
+    im, d = frame_base()
+    chapter(im, "(7)(8) BĂNG ỐNG LỒNG TỰ CHẤT LÊN XE", t)
+    col = EL["T"][4]
+    v = truck_view(d, t)
+    y1, roof = v["y1"], v["roof"]
+    if t < T_START + 0.6:
+        tag(d, (300, v["yc"] - 44), "tầm vươn tối đa 18 m", col, 12, "mm", seg(t, 0.2, 0.6))
+    if v["r_act"] == 0 or (PLAN[0][1] + PLAN[0][2] <= t < PLAN[1][1]):
         kk = seg(t, 2.0, 2.4)
         xL = txr(RL) - 14
         arrow(d, (xL * SS, (TY0 + 6) * SS), (xL * SS, (y1 - 6) * SS), mix(CREAM, RED, kk), 2, 9)
@@ -936,34 +1208,118 @@ def sc_truck(t, D):
         arrow(d, (x9 * SS, TFLOOR * SS), (x9 * SS, (TFLOOR - 117 * TS) * SS), mix(CREAM, RED, kk), 2, 9)
         tag(d, (x9 - 8, TFLOOR - 60 * TS), "9 lớp = 117 cm", RED, 12, "rm", kk)
         ka = seg(t, PLAN[0][1] + PLAN[0][2], PLAN[1][1])
-        tag(d, (txr(RL * 1.5), roof + 26), "← thụt lại 75 cm", col, 12, "mm", ka)
-    # bộ đếm
-    f = F("monob", 17)
-    d.text((1238 * SS, 62 * SS), f"ĐÃ CHẤT {total}/680 BAO", font=f, fill=INK, anchor="rm")
-    xa0, xa1 = 1238 - 230, 1238
-    d.rectangle([xa0 * SS, 80 * SS, xa1 * SS, 86 * SS], fill=mix(CREAM, INK, 0.15))
-    d.rectangle([xa0 * SS, 80 * SS, (xa0 + (xa1 - xa0) * total / 680) * SS, 86 * SS], fill=col if total < 680 else ORANGE)
-    d.text((1238 * SS, 104 * SS), f"HÀNG {cur_r + 1}/16", font=F("mono", 13), fill=INK, anchor="rm")
-    d.text((1238 * SS, 400 * SS), "cơ chế vươn/thụt, tự rải bao: Phon-Tech xác nhận · sơ đồ chất: Trình tự chất bao xe 34T v2 (KCP)",
+        tag(d, (txr(RL * 1.5), roof + 50), "← thụt lại 75 cm", col, 12, "mm", ka)
+    truck_counter(d, v["total"], v["cur_r"])
+    d.text((1238 * SS, 400 * SS), "vươn/thụt, tự rải bao, vươn tối đa 18 m: Phon-Tech · sơ đồ chất: Trình tự chất bao xe 34T v2 (KCP)",
            font=F("mono", 10), fill=MUTED, anchor="rs")
     if t > T_DONE + 0.4:
         stamp(im, "XONG 1 XE · 680 BAO · 34 TẤN", t - T_DONE - 0.4, ORANGE, (W / 2, 362), -3, 20)
-    subs(d, t, [(0, T_START, "Băng tải ống lồng vươn hết cỡ vào sát đầu thùng xe"),
+    subs(d, t, [(0, T_START, "Băng tải ống lồng vươn hết cỡ vào sát đầu thùng xe (tối đa 18 m)"),
                 (T_START, PLAN[0][1] + PLAN[0][2], "Đầu băng tự rải bao từ trái sang phải, đủ 5 bao mới lên lớp trên"),
                 (PLAN[0][1] + PLAN[0][2], PLAN[2][1], "Đủ 9 lớp = 45 bao, băng thụt lại 75 cm để chất hàng tiếp theo"),
                 (PLAN[2][1], T_DONE + 0.4, "Lặp lại tới hàng 16 – không cần người trong thùng xe"),
                 (T_DONE + 0.4, D + 1, "14 hàng × 45 bao + 2 hàng × 25 bao = 680 bao = 34 tấn")])
-    corners(d); footer(d, 7)
+    corners(d); footer(d, 8)
     return im
 
-# 8. Trạm xả tay dự phòng
+# 9. Cảm biến định vị + người ở phòng điều khiển (chậm, rõ)
+D_SENSOR = 27.0
+T_BAD = 15.0
+def sc_sensor(t, D):
+    im, d = frame_base()
+    chapter(im, "(7) CẢM BIẾN VÀ PHÒNG ĐIỀU KHIỂN", t)
+    col = EL["T"][4]
+    tp = T_START + 0.2 + min(t, T_BAD) * 0.18
+    bad = t >= T_BAD
+    v = truck_view(d, tp, side=False, bad=bad)
+    xh, yh, yc, y1 = v["xh"], v["yh"], v["yc"], v["y1"]
+    hx = xh + 13
+    # (A) định vị thùng xe: tia tới 2 vách bên và vách đầu thùng
+    kA = seg(t, 2.0, 2.8)
+    if kA > 0:
+        c = mix(CREAM, col, kA)
+        for (px, py) in ((hx, TY0 + 2), (hx, y1 - 2), (TX_FRONT - 2, yc)):
+            dashed(d, (hx * SS, yh * SS), (px * SS, py * SS), c, 2, 5, 4)
+            r = 5 * SS; d.ellipse([px * SS - r, py * SS - r, px * SS + r, py * SS + r], outline=c, width=2 * SS)
+        tag(d, (hx - 70, TY0 + 18), "(A) định vị thùng xe", col, 13, "rm", kA)
+    # (B) vị trí bao: vùng quét lên ô đang đặt
+    kB = seg(t, 6.0, 6.8)
+    if kB > 0:
+        tx = (txr(RL) + txr(0)) / 2
+        ty = v["last"][1] if v["last"] else yh
+        cB = RED if bad else (40, 150, 70)
+        ov = Image.new("RGBA", im.size, (0, 0, 0, 0)); dv = ImageDraw.Draw(ov)
+        dv.polygon([(hx * SS, yh * SS), ((tx - 14) * SS, (ty - 20) * SS), ((tx + 14) * SS, (ty + 20) * SS)], fill=cB + (int(70 * kB),))
+        im.paste(ov, (0, 0), ov); d = ImageDraw.Draw(im)
+        tag(d, (hx - 70, y1 - 18), "(B) vị trí bao", col, 13, "rm", kB)
+    # bảng chú thích cảm biến (trái dưới)
+    kL = seg(t, 1.0, 1.5)
+    if kL > 0:
+        lx, ly = 60, 372
+        d.text((lx * SS, ly * SS), "CẢM BIẾN TRÊN ĐẦU BĂNG ỐNG LỒNG", font=F("monob", 14), fill=mix(CREAM, col, kL), anchor="lt")
+        d.text((lx * SS, (ly + 34) * SS), "(A) định vị thùng xe: vách bên, vách đầu thùng", font=F("serif", 16), fill=mix(CREAM, INK, kA), anchor="lt")
+        d.text((lx * SS, (ly + 64) * SS), "(B) vị trí bao: bao đặt đúng ô hay lệch", font=F("serif", 16), fill=mix(CREAM, INK, kB), anchor="lt")
+        d.text((lx * SS, (ly + 100) * SS), "nguồn: Phon-Tech xác nhận 04/11/2026", font=F("mono", 11), fill=mix(CREAM, MUTED, kL), anchor="lt")
+    # phòng điều khiển (phải dưới)
+    kC = seg(t, 10.0, 10.6)
+    if kC > 0:
+        bx0, by0, bx1, by1 = 640, 352, 1230, 600
+        d.rectangle([bx0 * SS, by0 * SS, bx1 * SS, by1 * SS], fill=mix(CREAM, (255, 252, 244), kC), outline=mix(CREAM, INK, kC), width=2 * SS)
+        d.text(((bx0 + 14) * SS, (by0 + 12) * SS), "PHÒNG ĐIỀU KHIỂN · 1 người theo dõi", font=F("monob", 14), fill=mix(CREAM, INK, kC), anchor="lt")
+        d.text(((bx0 + 14) * SS, (by0 + 34) * SS), "vị trí phòng: chưa có trên bản vẽ", font=F("mono", 11), fill=mix(CREAM, MUTED, kC), anchor="lt")
+        # màn hình
+        mx0, my0, mx1, my1 = bx0 + 16, by0 + 60, bx0 + 330, by0 + 200
+        d.rectangle([mx0 * SS, my0 * SS, mx1 * SS, my1 * SS], fill=mix(CREAM, (30, 40, 50), kC), outline=INK, width=2 * SS)
+        okc = (90, 200, 110); badc = (240, 90, 80)
+        blink = (int(t * 3) % 2 == 0)
+        lines = [("(A) THÙNG XE", "ĐÚNG", okc), ("(B) VỊ TRÍ BAO", "SAI" if bad else "ĐÚNG", badc if bad else okc)]
+        for i, (a_, b_, cc) in enumerate(lines):
+            yy = my0 + 34 + i * 46
+            d.text(((mx0 + 14) * SS, yy * SS), a_, font=F("monob", 16), fill=mix(CREAM, (230, 230, 230), kC), anchor="lm")
+            if not (bad and i == 1 and not blink):
+                d.text(((mx1 - 14) * SS, yy * SS), b_, font=F("monob", 18), fill=mix(CREAM, cc, kC), anchor="rm")
+        # người điều khiển
+        ox, oy = bx0 + 390, by0 + 140
+        r = 14 * SS
+        d.ellipse([ox * SS - r, (oy - 40) * SS - r, ox * SS + r, (oy - 40) * SS + r], fill=mix(CREAM, PERSON, kC), outline=INK, width=SS)
+        d.rounded_rectangle([(ox - 24) * SS, (oy - 22) * SS, (ox + 24) * SS, (oy + 34) * SS], radius=10 * SS, fill=mix(CREAM, PERSON, 0.6 * kC), outline=INK, width=SS)
+        # nút dừng
+        sx, sy = bx0 + 510, by0 + 140
+        press = seg(t, 19.6, 20.0) * (1 - seg(t, 20.6, 21.0))
+        r = (32 - 4 * press) * SS
+        d.ellipse([sx * SS - r, sy * SS - r, sx * SS + r, sy * SS + r], fill=mix(CREAM, RED, kC), outline=INK, width=2 * SS)
+        d.text((sx * SS, sy * SS), "DỪNG", font=F("monob", 14), fill=CREAM, anchor="mm")
+        if press > 0:
+            rr = (40 + 22 * press) * SS
+            d.ellipse([sx * SS - rr, sy * SS - rr, sx * SS + rr, sy * SS + rr], outline=mix(CREAM, RED, 1 - press * 0.5), width=3 * SS)
+            arrow(d, ((ox + 30) * SS, (oy - 10) * SS), ((sx - 36) * SS, sy * SS), RED, 3, 10)
+        if t >= 20.0:
+            d.text(((bx0 + 14) * SS, (by1 - 16) * SS), "bấm dừng khi cảm biến sai: giả định KCP – cần Phon-Tech xác nhận",
+                   font=F("mono", 11), fill=RED, anchor="ls")
+    if bad and v["last"]:
+        p = v["last"]
+        note(d, (p[0] - 60, p[1] - 44), "bao đặt lệch", seg(t, T_BAD, T_BAD + 0.4), RED, 13, "mm")
+    if t >= 20.0:
+        stamp(im, "DỪNG MÁY", t - 20.0, RED, (330, 548), -4, 22)
+    truck_counter(d, v["total"], v["cur_r"])
+    subs(d, t, [(0, 2.0, "Đầu băng ống lồng có cảm biến – xem chậm từng loại"),
+                (2.0, 6.0, "Cảm biến (A) định vị thùng xe: đo khoảng cách tới vách bên và vách đầu thùng"),
+                (6.0, 10.0, "Cảm biến (B) kiểm tra từng bao đặt đúng ô"),
+                (10.0, T_BAD, "Luôn có 1 người ở phòng điều khiển theo dõi kết quả cảm biến"),
+                (T_BAD, 19.6, "Cảm biến báo sai: bao đặt lệch khỏi ô"),
+                (19.6, 23.5, "Người điều khiển bấm DỪNG máy (giả định KCP, cần Phon-Tech xác nhận)"),
+                (23.5, D + 1, "Xử lý sau khi dừng và vị trí phòng điều khiển: cần chốt với Phon-Tech")])
+    corners(d); footer(d, 9)
+    return im
+
+# 10. Trạm xả tay dự phòng: bao đi thẳng qua cell vào băng tải ra (Phon-Tech xác nhận)
+D_BACKUP = 15.0
 def sc_backup(t, D):
     im, d = frame_base()
-    cam = cam_lerp(CAM_FULL, CAM_BOT, seg(t, 0, 1.2))
+    c1 = cam_lerp(CAM_FULL, CAM_BOT, seg(t, 0, 1.2))
+    cam = cam_lerp(c1, Cam(628, 800, 1.35), seg(t, 7.5, 9.5))
     period = 1.6; t0 = 2.4
-    bags = []
-    n_taken = 0
-    worker = (650, 1068)
+    bags = []; n_taken = 0
     slots = sling_slots((629, 1115), rot=True)
     for i in range(9):
         ta = t0 + i * period
@@ -974,85 +1330,93 @@ def sc_backup(t, D):
         if u < 1:
             bags.append((lerp_p(src, (BELT_X, 1040), u), lerp(0.0, -math.pi / 2, u)))
         else:
-            s = (t - ta - 0.7) * 45
-            y = 1040 - s
-            if y > 918: bags.append(((BELT_X, y), -math.pi / 2))
-    st = {"slings": [(POS_C, 20)] + default_slings(), "robot": ((640, 820), False, 0), "robot_gray": True,
-          "bags": bags, "station_n": NBAG - n_taken, "station_k": 1.0,
+            y = 1040 - (t - ta - 0.7) * 48
+            if y > 390: bags.append(((BELT_X, y), -math.pi / 2))
+    st = {"slings": default_slings(), "robot": ((585, 792), False, 0), "robot_gray": True,
+          "bags": bags, "station_n": NBAG - n_taken, "station_k": 1.0, "brush": t * 2,
           "bars": {"M": lin(t, 2.6, 5.0)}, "hl": {"M": 1.0}}
     draw_plant(d, cam, st)
-    stamp(im, "ROBOT DỪNG", t - 1.0, RED, (300, 540), -4, 18)
-    # đường nối qua cell: chưa rõ
-    kq = seg(t, 6.5, 7.0)
+    if t < 7.6:
+        stamp(im, "ROBOT KHÔNG HOẠT ĐỘNG", t - 1.0, RED, (300, 540), -4, 16)
+    kq = seg(t, 9.5, 10.0)
     if kq > 0:
-        p0 = cam.P(BELT_X + 30, 905); p1 = cam.P(BELT_X + 30, 745)
+        p0 = cam.P(BELT_X + 26, 912); p1 = cam.P(BELT_X + 26, 600)
         dashed(d, p0, p1, mix(CREAM, RED, kq), 2.5, 7, 5)
         arrow(d, (p1[0], p1[1] + 2), (p1[0], p1[1] - 10 * SS), mix(CREAM, RED, kq), 2, 10)
-        note(d, (cam.scr(BELT_X + 40, 945)[0], cam.scr(BELT_X + 40, 945)[1]),
-             "bao đi tiếp qua cell ra băng (4): bản vẽ chưa thể hiện rõ", kq, RED, 12, "lm")
-    card(d, "M", 820, 470, 400, seg(t, 1.6, 2.1), "chức năng dự phòng: đã chốt với Phòng Logistics")
-    subs(d, t, [(0, 2.4, "Khi robot dừng, dùng trạm xả tay dự phòng phía dưới"),
-                (2.4, 6.5, "Công nhân lấy từng bao trên sling, đặt lên băng tải"),
-                (6.5, D + 1, "Băng tải đưa bao về phía cell để vào line ra xe")])
-    chapter(im, "(8) TRẠM XẢ TAY DỰ PHÒNG", t)
-    corners(d); footer(d, 8)
+        p = cam.scr(BELT_X - 40, 728)
+        note(d, p, "đi thẳng qua cell – cùng trục với băng tải ra", kq, RED, 12, "rm")
+        note(d, (p[0], p[1] + 24), "(Phon-Tech xác nhận)", kq, MUTED, 11, "rm")
+    card(d, "M", 820, 470, 400, seg(t, 1.6, 2.1) * (1 - seg(t, 7.3, 7.6)), "1 công nhân · Phon-Tech xác nhận")
+    subs(d, t, [(0, 2.4, "Khi robot không hoạt động: dùng trạm xả tay dự phòng"),
+                (2.4, 7.5, "1 công nhân lấy từng bao trên sling, đặt lên băng tải dự phòng"),
+                (7.5, D + 1, "Bao đi thẳng qua cell vào băng tải ra – vẫn xuất hàng được")])
+    chapter(im, "(9) TRẠM XẢ TAY DỰ PHÒNG", t)
+    corners(d); footer(d, 10)
     return im
 
-# 9. Tóm tắt chức năng
+# 11. Tóm tắt chức năng
 def sc_func(t, D):
     im, d = frame_base()
     chapter(im, "TÓM TẮT CHỨC NĂNG", t)
-    codes = ["L", "R", "C", "S", "K", "T", "X", "M"]
+    codes = ["L", "R", "C", "V", "S", "K", "T", "X", "M"]
     for i, c in enumerate(codes):
-        k = seg(t, 0.5 + i * 1.1, 0.9 + i * 1.1)
+        k = seg(t, 0.5 + i * 1.0, 0.9 + i * 1.0)
         if k <= 0: continue
         no, name, typ, fn, col = EL[c]
-        y = 128 + i * 58 + 8 * (1 - k)
-        d.rectangle([90 * SS, (y - 22) * SS, 1190 * SS, (y + 22) * SS], fill=mix(CREAM, mix(CREAM, col, 0.08), k))
-        d.rectangle([90 * SS, (y - 22) * SS, 98 * SS, (y + 22) * SS], fill=mix(CREAM, col, k))
+        y = 122 + i * 53 + 8 * (1 - k)
+        d.rectangle([90 * SS, (y - 21) * SS, 1190 * SS, (y + 21) * SS], fill=mix(CREAM, mix(CREAM, col, 0.08), k))
+        d.rectangle([90 * SS, (y - 21) * SS, 98 * SS, (y + 21) * SS], fill=mix(CREAM, col, k))
         badge(d, (125, y), no, col, 14, k)
-        d.text((152 * SS, y * SS), name, font=F("serifb", 18), fill=mix(CREAM, col, k), anchor="lm")
-        d.text((560 * SS, y * SS), fn, font=F("serif", 16), fill=mix(CREAM, INK, k), anchor="lm")
-    subs(d, t, [(0, D + 1, "Tám cụm, một dòng chảy: sling vào – robot gắp – băng ra – tự chất lên xe")], y=640)
-    corners(d); footer(d, 9)
+        d.text((152 * SS, y * SS), name, font=F("serifb", 17), fill=mix(CREAM, col, k), anchor="lm")
+        f = F("serif", 15); sz = 15
+        while d.textlength(fn, font=f) > 620 * SS: sz -= 1; f = F("serif", sz)
+        d.text((560 * SS, y * SS), fn, font=f, fill=mix(CREAM, INK, k), anchor="lm")
+    subs(d, t, [(0, D + 1, "Chín cụm, một dòng chảy: sling vào – hút 3 bao – vệ sinh – ra xe – tự chất")], y=640)
+    corners(d); footer(d, 11)
     return im
 
-# 10. Số liệu (mỗi mục ~3,4 s)
+# 12. Số liệu (mỗi mục ~3,4 s)
 STAT_T = 3.4
+assert 40000 // 50 == 800 and 45000 // 50 == 900
+assert abs(45 / 900 * 60 - 3.0) < 1e-9 and abs(45 / 800 * 60 - 3.375) < 1e-9
+assert abs(3 / 900 * 3600 - 12) < 1e-9 and abs(3 / 800 * 3600 - 13.5) < 1e-9
+assert round(34 / 45 * 60) == 45 and round(34 / 40 * 60) == 51
+assert TH - 30 == 185
 STATS = [
-    ("Bao đường", "50 kg", "bản vẽ: 500 × 750 × 150 mm · KCP đo: 500 × 750 × 130 mm", "bag"),
-    ("Sling", "2.250 × 1.500 mm", "3 × 3 bao mỗi lớp", "grid"),
-    ("Số lớp", "5 lớp = 45 bao", "9 bao × 5 lớp", "layers"),
-    ("Chiều cao hàng", "650 – 750 mm", "bản vẽ 5 × 150 = 750 · KCP 5 × 130 = 650 (To be confirm)", "height"),
-    ("Khối lượng", "2.250 kg", "45 × 50 kg · bản vẽ ghi 'sling + hàng' (To be confirm)", "weight"),
-    ("Chất xe 34T", "680 bao = 34 tấn", "5 ngang × 9 lớp = 45 bao/hàng · 14 hàng + 2 hàng × 25 bao", "truckload"),
-    ("Mặt bằng", "13.258 mm ngang", "bản cũ 11.755 mm (+1.503) · sâu 3.954 + 9.950 mm", "plan"),
-    ("Điện", "3 pha 380–440 V, 80 A", "3~380-440 + N + PE, 50 Hz · robot cell và băng tải", "power"),
-    ("Khí nén", "1/2\" · 6 bar", "lưu lượng khí: To be confirm", "air"),
-    ("Công suất", "chưa có số liệu", "bản vẽ chưa ghi bao/giờ – cần hỏi Phon-Tech", "rate"),
+    ("Bao đường", "50 kg", "bản vẽ: 500 × 750 × 150 mm · KCP đo: 500 × 750 × 130 mm", "bag", "kcp"),
+    ("Sling", "2.250 × 1.500 mm", "3 × 3 bao mỗi lớp · 5 lớp = 45 bao", "grid", "dwg"),
+    ("Khối lượng", "2.250 kg", "45 × 50 kg · bản vẽ ghi 'sling + hàng' (To be confirm)", "weight", "dwg"),
+    ("Công suất máy hút", "40–45 tấn/giờ", "= 800–900 bao/giờ", "rate", "pt"),
+    ("Nhịp hút", "3 bao / 12–13,5 giây", "1 sling 45 bao: 3,0–3,4 phút · tính từ 40–45 tấn/giờ", "cycle", "calc"),
+    ("Chất 1 xe 34T", "680 bao · 45–51 phút", "5 ngang × 9 lớp = 45 bao/hàng · 14 hàng + 2 hàng × 25 bao", "truckload", "kcp"),
+    ("Băng tải ống lồng", "vươn tối đa 18 m", "chất cao tới cách trần 30 cm · thùng 34T: tối đa 185 cm", "reach", "pt"),
+    ("Diện tích trong kho", f"≈ {A_TOTAL:.0f} m²", f"{vn1(AREA_W / 1000, 2)} × {vn1(AREA_D / 1000, 2)} m + dải ra xe ≈ {vn1(STRIP_L / 1000)} × {vn1(STRIP_W / 1000)} m (ước tính)", "plan", "dwg"),
+    ("Chiều cao", "cao nhất 1,5 m", "điểm cao nhất của hệ thống băng tải", "height15", "pt"),
+    ("Điện", "3 pha 380–440 V, 80 A", "3~380-440 + N + PE, 50 Hz · robot cell và băng tải", "power", "dwg"),
+    ("Khí nén", "1/2\" · 6 bar", "lưu lượng khí: To be confirm", "air", "dwg"),
 ]
+SRC = {"dwg": "nguồn: bản vẽ LA26-PTC-KCP-DEP-301026 (Phon-Tech, 20/10/2026)",
+       "pt": "nguồn: Phon-Tech xác nhận 04/11/2026",
+       "calc": "tính từ công suất 40–45 tấn/giờ (Phon-Tech)",
+       "kcp": "nguồn: bản vẽ Phon-Tech + KCP: Trình tự chất bao xe 34T v2"}
 def sc_stats(t, D):
     im, d = frame_base()
     chapter(im, "TÓM TẮT SỐ LIỆU", t)
     i = min(len(STATS) - 1, int(t // STAT_T)); tt = t - i * STAT_T
-    title, big, small, kind = STATS[i]
+    title, big, small, kind, src = STATS[i]
     k = seg(tt, 0.05, 0.45)
     d.text((1238 * SS, 62 * SS), f"{i + 1}/{len(STATS)}", font=F("monob", 17), fill=INK, anchor="rm")
-    # thanh tiến độ mục
     for j in range(len(STATS)):
-        x = 960 + j * 30
-        d.rectangle([x * SS, 80 * SS, (x + 24) * SS, 86 * SS], fill=ORANGE if j < i else (INK if j == i else mix(CREAM, INK, 0.15)))
+        x = 1238 - (len(STATS) - j) * 26
+        d.rectangle([x * SS, 80 * SS, (x + 21) * SS, 86 * SS], fill=ORANGE if j < i else (INK if j == i else mix(CREAM, INK, 0.15)))
     d.text((100 * SS, (230 + 8 * (1 - k)) * SS), title.upper(), font=F("monob", 18), fill=mix(CREAM, MUTED, k), anchor="ls")
-    col = RED if kind == "rate" else INK
     f = F("serifb", 40); sz = 40
     while d.textlength(big, font=f) > 560 * SS: sz -= 1; f = F("serifb", sz)
-    d.text((100 * SS, (290 + 8 * (1 - k)) * SS), big, font=f, fill=mix(CREAM, col, k), anchor="ls")
+    d.text((100 * SS, (290 + 8 * (1 - k)) * SS), big, font=f, fill=mix(CREAM, INK, k), anchor="ls")
     f2 = F("mono", 14); sz = 14
     while d.textlength(small, font=f2) > 580 * SS: sz -= 1; f2 = F("mono", sz)
     d.text((100 * SS, 330 * SS), small, font=f2, fill=mix(CREAM, INK, seg(tt, 0.3, 0.7)), anchor="ls")
-    d.text((100 * SS, 560 * SS), "nguồn: bản vẽ LA26-PTC-KCP-DEP-301026 (Phon-Tech, 20/10/2026)" + (" · KCP: Trình tự chất bao xe 34T v2" if kind in ("bag", "height", "truckload") else ""),
-           font=F("mono", 11), fill=mix(CREAM, MUTED, k), anchor="ls")
-    # khung minh họa phải
+    d.text((100 * SS, 560 * SS), SRC[src], font=F("mono", 11), fill=mix(CREAM, MUTED, k), anchor="ls")
     bx0, by0, bx1, by1 = 720, 130, 1190, 590
     d.rectangle([bx0 * SS, by0 * SS, bx1 * SS, by1 * SS], outline=INK, width=2 * SS)
     cx, cy = (bx0 + bx1) / 2, (by0 + by1) / 2
@@ -1069,20 +1433,6 @@ def sc_stats(t, D):
             x = cx - 105 + c * 70; y = cy - 150 + r * 100
             d.rounded_rectangle([x * SS, y * SS, (x + 66) * SS, (y + 96) * SS], radius=10 * SS, fill=BAG_TOP, outline=INK, width=2 * SS)
         tag(d, (cx, cy + 180), f"{n}/9 bao", INK, 14, "mm", 1.0)
-    elif kind == "layers":
-        n = int(a * 5 + 1e-4)
-        for L in range(n):
-            y = cy + 120 - L * 46
-            for c in range(3):
-                d.rounded_rectangle([(cx - 135 + c * 90) * SS, (y - 42) * SS, (cx - 49 + c * 90) * SS, y * SS], radius=12 * SS, fill=BAG_TOP, outline=INK, width=2 * SS)
-        tag(d, (cx, cy + 170), f"{n * 9}/45 bao", INK, 14, "mm", 1.0)
-    elif kind == "height":
-        hh = lerp(0, 300, a)
-        for xx, lab, hv, c in ((cx - 90, "750", hh, MUTED), (cx + 90, "650", hh * 650 / 750, RED)):
-            d.rectangle([(xx - 50) * SS, (cy + 170 - hv) * SS, (xx + 50) * SS, (cy + 170) * SS], fill=mix(CREAM, c, 0.15), outline=c, width=2 * SS)
-            arrow(d, ((xx + 65) * SS, (cy + 170) * SS), ((xx + 65) * SS, (cy + 170 - hv) * SS), c, 2, 9)
-            tag(d, (xx, cy + 195), lab + " mm", c, 13, "mm", a)
-        tag(d, (cx - 90, cy - 170), "bản vẽ", MUTED, 12, "mm", 1); tag(d, (cx + 90, cy - 170), "KCP đo", RED, 12, "mm", 1)
     elif kind == "weight":
         n = int(a * 45 + 1e-4)
         for j in range(45):
@@ -1091,6 +1441,28 @@ def sc_stats(t, D):
             d.rounded_rectangle([x * SS, y * SS, (x + 34) * SS, (y + 44) * SS], radius=6 * SS,
                                 fill=BAG_TOP if j < n else mix(CREAM, INK, 0.05), outline=INK if j < n else mix(CREAM, INK, 0.25), width=SS)
         tag(d, (cx, cy + 170), f"{n} × 50 = {vn(n * 50)} kg", INK, 14, "mm", 1.0)
+    elif kind == "rate":
+        r = 130
+        d.arc([(cx - r) * SS, (cy - r) * SS, (cx + r) * SS, (cy + r) * SS], 150, 390, fill=mix(CREAM, INK, 0.3), width=8 * SS)
+        a0, a1 = 150 + 240 * 40 / 60, 150 + 240 * 45 / 60
+        d.arc([(cx - r) * SS, (cy - r) * SS, (cx + r) * SS, (cy + r) * SS], a0, a1, fill=BRICK, width=14 * SS)
+        for v_ in (0, 20, 40, 60):
+            an = math.radians(150 + 240 * v_ / 60)
+            d.text(((cx + (r + 22) * math.cos(an)) * SS, (cy + (r + 22) * math.sin(an)) * SS), str(v_), font=F("mono", 12), fill=INK, anchor="mm")
+        an = math.radians(150 + 240 * lerp(0, 42.5, a) / 60)
+        d.line([cx * SS, cy * SS, (cx + 100 * math.cos(an)) * SS, (cy + 100 * math.sin(an)) * SS], fill=INK, width=4 * SS)
+        d.text((cx * SS, (cy + 70) * SS), "tấn/giờ", font=F("serif", 18), fill=INK, anchor="mm")
+        tag(d, (cx, cy + 170), "= 800–900 bao/giờ", BRICK, 14, "mm", a)
+    elif kind == "cycle":
+        r = 110
+        d.ellipse([(cx - r) * SS, (cy - 30 - r) * SS, (cx + r) * SS, (cy - 30 + r) * SS], outline=mix(CREAM, INK, 0.4), width=4 * SS)
+        d.arc([(cx - r) * SS, (cy - 30 - r) * SS, (cx + r) * SS, (cy - 30 + r) * SS], -90, -90 + 360 * (tt / STAT_T), fill=BRICK, width=8 * SS)
+        d.text((cx * SS, (cy - 30) * SS), "12–13,5 s", font=F("serifb", 24), fill=INK, anchor="mm")
+        nb = 1 + int(clamp(tt / STAT_T) * 2.999)
+        for j in range(nb):
+            x = cx - 75 + j * 52
+            d.rounded_rectangle([x * SS, (cy + 110) * SS, (x + 46) * SS, (cy + 170) * SS], radius=8 * SS, fill=BAG_TOP, outline=INK, width=2 * SS)
+            d.text(((x + 23) * SS, (cy + 140) * SS), str(j + 1), font=F("monob", 16), fill=BRICK, anchor="mm")
     elif kind == "truckload":
         n = int(a * 16 + 1e-4)
         for r in range(16):
@@ -1100,14 +1472,31 @@ def sc_stats(t, D):
             d.rectangle([x * SS, (cy + 140) * SS, (x + 22) * SS, (cy + 142) * SS], fill=INK)
             if hh: d.rectangle([x * SS, (cy + 140 - hh) * SS, (x + 22) * SS, (cy + 140) * SS], fill=BAG_TOP, outline=INK, width=SS)
         tag(d, (cx, cy + 175), f"{n}/16 hàng · {sum(45 if r < 14 else 25 for r in range(n))} bao", INK, 14, "mm", 1.0)
+    elif kind == "reach":
+        x0 = cx - 200; sc_ = 400 / 18
+        d.rectangle([x0 * SS, (cy - 20) * SS, (x0 + 12.26 * sc_) * SS, (cy + 40) * SS], outline=NAVY, width=2 * SS)
+        tag(d, (x0 + 12.26 * sc_ / 2, cy + 58), "thùng 34T dài 12,26 m", NAVY, 12, "mm", 1)
+        L_ = lerp(1, 18, a)
+        d.rectangle([x0 * SS, (cy - 4) * SS, (x0 + L_ * sc_) * SS, (cy + 24) * SS], fill=mix(CREAM, TEAL, 0.3), outline=TEAL, width=2 * SS)
+        tag(d, (x0 + L_ * sc_, cy - 40), f"{vn1(L_, 0)} m", TEAL, 14, "mm", 1)
+        tag(d, (cx, cy + 150), "chất cao tới: trần − 30 cm", RED, 13, "mm", a)
     elif kind == "plan":
-        w1 = 380 * 11755 / 13258; w2 = 380
-        y = cy - 40
-        d.rectangle([(cx - w1 / 2) * SS, (y - 30) * SS, (cx + w1 / 2) * SS, (y + 30) * SS], outline=MUTED, width=2 * SS)
-        tag(d, (cx, y), "bản cũ 11.755", MUTED, 12, "mm", 1)
-        y2 = cy + 70; ww = lerp(w1, w2, a)
-        d.rectangle([(cx - ww / 2) * SS, (y2 - 30) * SS, (cx + ww / 2) * SS, (y2 + 30) * SS], outline=RED, width=3 * SS)
-        tag(d, (cx, y2), "20/10/2026: 13.258", RED, 12, "mm", 1)
+        w1 = 200; h1 = w1 * AREA_D / AREA_W
+        sc_ = w1 / AREA_W
+        x0 = cx - 160; y0 = cy - h1 / 2 + 10
+        kk = a
+        d.rectangle([x0 * SS, y0 * SS, (x0 + w1 * kk) * SS, (y0 + h1) * SS], fill=mix(CREAM, ORANGE, 0.25), outline=RED, width=2 * SS)
+        if kk >= 1:
+            d.rectangle([(x0 + w1) * SS, y0 * SS, (x0 + w1 + STRIP_L * sc_) * SS, (y0 + max(4, STRIP_W * sc_)) * SS], fill=mix(CREAM, ORANGE, 0.4), outline=RED, width=SS)
+        tag(d, (x0 + w1 / 2, y0 + h1 + 20), f"{vn1(AREA_W / 1000, 2)} m", RED, 12, "mm", a)
+        tag(d, (x0 - 10, y0 + h1 / 2), f"{vn1(AREA_D / 1000, 2)} m", RED, 12, "rm", a)
+    elif kind == "height15":
+        gx = cx - 120; gy = cy + 150; sc_ = 150   # px/m
+        d.line([(gx - 40) * SS, gy * SS, (gx + 300) * SS, gy * SS], fill=INK, width=3 * SS)
+        hh = lerp(0, 1.5, a) * sc_
+        d.rectangle([gx * SS, (gy - hh) * SS, (gx + 200) * SS, (gy - hh + 18) * SS], fill=mix(CREAM, TEAL, 0.3), outline=TEAL, width=2 * SS)
+        arrow(d, ((gx + 240) * SS, gy * SS), ((gx + 240) * SS, (gy - hh) * SS), RED, 2, 9)
+        tag(d, (gx + 250, gy - hh / 2), "1,5 m", RED, 14, "lm", a)
     elif kind == "power":
         for j in range(3):
             kk = seg(tt, 0.2 + j * 0.4, 0.6 + j * 0.4)
@@ -1123,42 +1512,40 @@ def sc_stats(t, D):
         d.line([cx * SS, cy * SS, (cx + 90 * math.cos(ang)) * SS, (cy + 90 * math.sin(ang)) * SS], fill=INK, width=3 * SS)
         d.text((cx * SS, (cy + 60) * SS), "6 bar", font=F("serifb", 26), fill=INK, anchor="mm")
         tag(d, (cx, cy + 170), "lưu lượng: To be confirm", RED, 13, "mm", a)
-    elif kind == "rate":
-        r = 120
-        d.ellipse([(cx - r) * SS, (cy - r) * SS, (cx + r) * SS, (cy + r) * SS], outline=mix(CREAM, INK, 0.4), width=4 * SS)
-        for j in range(12):
-            an = math.radians(j * 30)
-            d.line([(cx + 105 * math.cos(an)) * SS, (cy + 105 * math.sin(an)) * SS, (cx + 118 * math.cos(an)) * SS, (cy + 118 * math.sin(an)) * SS], fill=INK, width=2 * SS)
-        an = math.radians(-90 + 360 * (tt / STAT_T))
-        d.line([cx * SS, cy * SS, (cx + 95 * math.cos(an)) * SS, (cy + 95 * math.sin(an)) * SS], fill=RED, width=4 * SS)
-        d.text((cx * SS, (cy + 50) * SS), "? bao/giờ", font=F("serifb", 26), fill=RED, anchor="mm")
     subs(d, t, [(j * STAT_T, (j + 1) * STAT_T, f"{STATS[j][0]}: {STATS[j][1]}") for j in range(len(STATS))])
-    corners(d); footer(d, 10)
+    corners(d); footer(d, 12)
     return im
 
-# 11. Kết: điểm còn mở
-OPEN = ["Sling rỗng đưa đi đâu?", "Phương tiện đưa sling vào đầu băng?", "Công suất (bao/giờ)?",
-        "Robot gắp 1 hay nhiều bao/lần?", "Bao 130 hay 150 mm? Vỏ sling nặng bao nhiêu?", "Lưu lượng khí nén?",
-        "Đường bao từ trạm dự phòng qua cell?", "Băng ống lồng: tầm vươn tối đa, nhịp rải bao?"]
+# 13. Kết: điểm còn cần chốt
+OPEN = ["Hút 3 bao, thả lần lượt từng bao – chốt sáng 05/11/2026",
+        "Cảm biến sai → người phòng điều khiển bấm dừng? (giả định KCP)",
+        "Vị trí phòng điều khiển; xử lý sau khi dừng máy",
+        "Sàn xe cao thấp khác nhau – KCP kiểm tra, báo Phon-Tech",
+        "Khung xanh có 4 tay xám ở cửa cell là thiết bị gì?",
+        "Bao 130 hay 150 mm? Vỏ sling nặng bao nhiêu?",
+        "Lưu lượng khí nén?",
+        "Kích thước chính thức trạm dự phòng, dải ra xe (đang ước tính)",
+        "Số bản vẽ 301026 / ngày 20/10; báo giá theo bản vẽ mới"]
 def sc_end(t, D):
     im, d = frame_base()
-    d.text((W / 2 * SS, 120 * SS), "Điểm cần Phon-Tech xác nhận", font=F("serifb", 34), fill=mix(CREAM, INK, seg(t, 0.1, 0.6)), anchor="mm")
+    d.text((W / 2 * SS, 112 * SS), "Điểm còn cần chốt với Phon-Tech", font=F("serifb", 32), fill=mix(CREAM, INK, seg(t, 0.1, 0.6)), anchor="mm")
     for i, s in enumerate(OPEN):
         k = seg(t, 0.6 + i * 0.35, 1.0 + i * 0.35)
         if k <= 0: continue
-        y = 180 + i * 48
-        d.rectangle([250 * SS, (y - 20) * SS, 1030 * SS, (y + 20) * SS], fill=mix(CREAM, (255, 246, 230), k), outline=mix(CREAM, RED, k), width=SS)
-        d.text((270 * SS, y * SS), f"({i + 1})", font=F("monob", 15), fill=mix(CREAM, RED, k), anchor="lm")
-        d.text((320 * SS, y * SS), s, font=F("serif", 18), fill=mix(CREAM, INK, k), anchor="lm")
-    stamp(im, "CHƯA CẬP NHẬT BÁO GIÁ THEO BẢN VẼ MỚI", t - 3.6, ORANGE, (W / 2, 590), -3, 16)
-    corners(d); footer(d, 11)
+        y = 168 + i * 46
+        d.rectangle([210 * SS, (y - 19) * SS, 1070 * SS, (y + 19) * SS], fill=mix(CREAM, (255, 246, 230), k), outline=mix(CREAM, RED, k), width=SS)
+        d.text((230 * SS, y * SS), f"({i + 1})", font=F("monob", 15), fill=mix(CREAM, RED, k), anchor="lm")
+        d.text((280 * SS, y * SS), s, font=F("serif", 17), fill=mix(CREAM, INK, k), anchor="lm")
+    corners(d); footer(d, 13)
     return im
 
-SCENES = [("title", 5.0, sc_title), ("overview", 13.0, sc_overview), ("sling", 10.5, sc_sling),
-          ("infeed", 11.5, sc_infeed), ("robot", 16.5, sc_robot), ("journey", 14.5, sc_journey),
-          ("truck", 24.0, sc_truck), ("backup", 11.5, sc_backup), ("func", 11.0, sc_func),
-          ("stats", STAT_T * len(STATS), sc_stats), ("end", 7.0, sc_end)]
+SCENES = [("title", 5.0, sc_title), ("overview", 14.0, sc_overview), ("area", 16.0, sc_area),
+          ("sling", 10.5, sc_sling), ("flow", D_FLOW, sc_flow), ("robot", D_ROBOT, sc_robot),
+          ("journey", 17.0, sc_journey), ("truck", 24.0, sc_truck), ("sensor", D_SENSOR, sc_sensor),
+          ("backup", D_BACKUP, sc_backup), ("func", 12.0, sc_func),
+          ("stats", STAT_T * len(STATS), sc_stats), ("end", 7.5, sc_end)]
 assert len(SCENES) == N_SC
+
 XF = 8
 
 def render(i_frame):
