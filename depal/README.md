@@ -5,9 +5,6 @@ Nguồn: bản vẽ **LA26-PTC-KCP-DEP-301026**, Phon-Tech, ngày 20/10/2026 (SC
 | File | Dùng cho |
 |---|---|
 | `Depal_cach_hoat_dong_v2.mp4` | **Bản mới nhất** – một file nén gửi email (960×540): băng ống lồng tự chất lên xe, không dùng người |
-| `Depal_cach_hoat_dong.mp4` | v1 1280×720 (xếp tay 2 công nhân – đã thay) |
-| `Depal_cach_hoat_dong_email.mp4` | v1 bản nén (đã thay) |
-| `make_depal_v1.py` | Script v1 (giữ lại) |
 | `make_depal.py` | Script v2 dựng lại (Python/PIL + ffmpeg). `python3 make_depal.py test out.png` để xem khung mẫu |
 
 ## Trình tự trong video (11 cảnh)
@@ -24,7 +21,7 @@ Nguồn: bản vẽ **LA26-PTC-KCP-DEP-301026**, Phon-Tech, ngày 20/10/2026 (SC
 11. Điểm cần Phon-Tech xác nhận
 
 ## Đã chốt với Phòng Logistics
-- Thùng xe (04/11/2026, Phon-Tech xác nhận): băng tải ống lồng vươn ra/thụt vào, tự rải bao, chất 9 lớp, không dùng người – thay cho "2 công nhân xếp tay" ở v1
+- Thùng xe (04/11/2026, Phon-Tech xác nhận): băng tải ống lồng vươn ra/thụt vào, tự rải bao, chất 9 lớp, không dùng người
 - Sơ đồ chất xe: theo Trình tự chất bao xe 34T v2 (KCP); rải hết lớp mới lên lớp
 - Công nhân khu depal: giữ nguyên theo bản vẽ
 - Sling vào từ hai bên, luân phiên
