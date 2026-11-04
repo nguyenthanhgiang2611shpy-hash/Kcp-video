@@ -9,6 +9,8 @@ cập nhật theo trao đổi với Phon-Tech ngày 04/11/2026.
 | `Depal_cach_hoat_dong_v2.mp4` | Bản trước (giữ lại theo quy tắc giữ bản cũ) |
 | `Depal_3D_minh_hoa.mp4` | **Minh họa 3D** (một file nén gửi email, ~2 phút 35 giây) – dựng bằng three.js trong `3d/` |
 | `3d/scene.js`, `3d/render.js` | Script cảnh 3D; chạy `cd 3d && npm install && node render.js ../Depal_3D_minh_hoa.mp4` (thử khung: `node render.js out_dir test 12 60`) |
+| `Depal_3D_va_so_do.mp4` | **Kết hợp 3D + motion graphic 2D** (một file nén gửi email, 3 phút 15 giây) |
+| `make_hybrid.py` | Script ghép: đoạn 3D (render `3d/` với `HQ=1 T0= T1=`, `Q=clean=1` cho màn hình chia đôi) + cảnh 2D của `make_depal.py`; chạy `HY=thư_mục_đoạn_3D python3 make_hybrid.py` |
 | `make_depal.py` | Script dựng v3 (Python/PIL + ffmpeg). `python3 make_depal.py test out.png` để xem khung mẫu |
 | `Cau_hoi_Phon-Tech.md` | Danh sách câu hỏi và trả lời của Phon-Tech |
 
@@ -60,3 +62,8 @@ băng vệ sinh → ra xe · băng ống lồng tự chất 680 bao · cảm bi�
 
 Giả định chỉ có trong bản 3D (ghi trên hình): băng con lăn sling cao 0,45 m, băng nhận bao 0,9 m rồi lên 1,5 m;
 sàn xe 1,3 m; robot là cánh tay 6 trục có đầu hút; phòng điều khiển đặt cạnh băng ống lồng; thùng xe đã bỏ bạt để nhìn vào trong.
+
+## Video kết hợp (Depal_3D_va_so_do.mp4)
+Tiêu đề 2D → tổng quan 3D → diện tích 2D → luồng sling (chia đôi: 3D trái, sơ đồ 2D phải, chạy đồng bộ) → hút 3 bao 3D →
+vệ sinh/ra xe 3D → chất xe (chia đôi: 3D trái, mặt cắt hàng đang chất 2D phải) → cảm biến 3D → trạm dự phòng 3D → số liệu 2D → điểm cần chốt 2D.
+Các cảnh 3D có sơ đồ 2D thu nhỏ ở góc phải dưới, chấm đỏ = vị trí đang xem. Đoạn 3D render lại ra file trung gian (không lưu trong repo).
