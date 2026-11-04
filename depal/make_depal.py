@@ -2,7 +2,7 @@
 """Video: Cách hoạt động của máy DEPAL bao tự động (Phon-Tech) – KCP Phú Yên.
 Nguồn: bản vẽ LA26-PTC-KCP-DEP-301026, Phon-Tech, ngày 20/10/2026 (SCALE: FREE).
 Đã chốt với Phòng Logistics:
-  - thùng xe: 2 công nhân xếp tay
+  - thùng xe: băng tải ống lồng vươn ra/thụt vào, tự rải bao trái→phải, chất 9 lớp; không dùng người (Phon-Tech xác nhận, 04/11/2026)
   - công nhân khu depal: giữ nguyên theo bản vẽ
   - sling vào từ hai bên, luân phiên
   - băng tải phía dưới + lưới 3x3 + 1 công nhân = trạm xả tay dự phòng
@@ -17,7 +17,7 @@ from multiprocessing import Pool
 from PIL import Image, ImageDraw, ImageFont
 
 W, H, SS, FPS = 1280, 720, 2, 25
-OUT = sys.argv[2] if len(sys.argv) > 2 and sys.argv[1] == "full" else "Depal_cach_hoat_dong.mp4"
+OUT = sys.argv[2] if len(sys.argv) > 2 and sys.argv[1] == "full" else "Depal_cach_hoat_dong_v2.mp4"
 
 # ---------- màu ----------
 CREAM = (243, 236, 220); INK = (29, 43, 58); ORANGE = (217, 119, 75)
@@ -36,8 +36,8 @@ EL = {  # mã: (số, tên, loại, tác dụng, màu)
     "C": (3, "Cell robot – vị trí xả sling", "robot gắp bao", "gắp từng bao trên sling, đặt lên băng ra", BRICK),
     "S": (4, "Băng tải ra (đoạn thẳng)", "băng tải", "đưa bao ra khỏi cell", GREEN),
     "K": (5, "Băng cong 90°", "băng tải cong", "đổi hướng bao về phía xe", GOLD),
-    "T": (6, "Băng tải ống lồng", "nhiều đoạn lồng nhau (suy luận từ hình)", "đưa bao vào sâu trong thùng xe", TEAL),
-    "X": (7, "Thùng xe", "2 công nhân xếp tay", "nhận bao ở đầu băng và xếp lên thùng", NAVY),
+    "T": (6, "Băng tải ống lồng", "vươn ra / thụt vào (Phon-Tech xác nhận)", "đưa bao vào thùng, tự rải trái → phải, chất 9 lớp", TEAL),
+    "X": (7, "Thùng xe", "xe container bạt 34T", "nhận 680 bao = 34 tấn, không cần người xếp", NAVY),
     "M": (8, "Trạm xả tay dự phòng", "băng tải + 1 công nhân", "khi robot dừng: xả tay bao vào line", MAG),
 }
 
@@ -558,7 +558,7 @@ def sc_title(t, D):
     k3 = seg(t, 1.2, 1.7)
     d.text((W / 2 * SS, 340 * SS), "KCP Phú Yên · bản vẽ LA26-PTC-KCP-DEP-301026 · Phon-Tech · 20/10/2026",
            font=F("mono", 15), fill=mix(CREAM, INK, k3), anchor="mm")
-    chips = ["01 · SLING VÀO", "02 · ROBOT GẮP", "03 · BĂNG RA XE", "04 · XẾP TAY"]
+    chips = ["01 · SLING VÀO", "02 · ROBOT GẮP", "03 · BĂNG RA XE", "04 · TỰ CHẤT LÊN XE"]
     f = F("monob", 16)
     widths = [d.textlength(s, font=f) / SS + 28 for s in chips]
     x = W / 2 - (sum(widths) + 20 * 3) / 2
@@ -752,7 +752,7 @@ def sc_robot(t, D):
     d.rectangle([x0 * SS, y * SS, x1 * SS, (y + 6) * SS], fill=mix(CREAM, INK, 0.15))
     d.rectangle([x0 * SS, y * SS, (x0 + (x1 - x0) * n_left / 45) * SS, (y + 6) * SS], fill=BRICK if n_left else ORANGE)
     if 6.0 < t < t_empty:
-        tag(d, (100, 130), "TUA NHANH ▶▶", INK, 14, "lm", 1.0)
+        tag(d, (100, 130), "TUA NHANH >>", INK, 14, "lm", 1.0)
     if t >= t_empty + 0.6:
         stamp(im, "SLING RỖNG ĐI ĐÂU: CHƯA RÕ", t - t_empty - 0.6, RED, (250, 140), -4, 18)
     subs(d, t, [(0, 6.0, "Robot gắp từng bao trên sling, đặt lên đầu băng tải ra"),
@@ -803,7 +803,7 @@ def sc_journey(t, D):
     for code, t0, t1 in J:
         k = seg(t, t0, t0 + 0.4) * (1 - seg(t, t1 - 0.2, t1 + 0.1))
         if code == "T" and t > 12.5: k = seg(t, t0, t0 + 0.4)
-        extra = "lồng nhau / rút ra-vào: suy luận từ hình 3 đoạn trên bản vẽ" if code == "T" else None
+        extra = "vươn ra / thụt vào theo hàng đang chất: Phon-Tech xác nhận" if code == "T" else None
         card(d, code, 820, 90, 400, k, extra)
     subs(d, t, [(0, 4.6, "Bao ra khỏi cell theo băng tải thẳng"),
                 (4.6, 6.6, "Băng cong 90° đổi hướng bao về phía xe"),
@@ -812,44 +812,147 @@ def sc_journey(t, D):
     corners(d); footer(d, 6)
     return im
 
-# 7. Trong thùng xe
-TB_SLOTS = [(1522, 293 + 10.4 + i * 20.6) for i in range(5)]   # 5 bao ngang thùng, trục dài dọc thùng
+# 7. Băng tải ống lồng tự chất bao lên xe (không dùng người)
+# Thùng xe container bạt 34T (KCP – Trình tự chất bao xe 34T v2): 1.226 × 235 × 215 cm, thành 80 cm
+# bao 75 × 50 × 13 cm, 5 bao ngang ép còn 47 cm; 14 hàng × 45 bao (9 lớp) + 2 hàng × 25 bao (5 lớp)
+TL, TWD, TH, TWALL = 1226, 235, 215, 80
+RL, RW, RH = 75, 47, 13
+NROW, FULLR = 16, 14
+def row_layers(r): return 9 if r < FULLR else 5
+assert sum(5 * row_layers(r) for r in range(NROW)) == 680 and 680 * 50 == 34000
+assert 5 * RW == TWD and 9 * RH == 117 and TL - NROW * RL == 26
+TS = 0.80                    # px/cm trên màn hình
+TX_FRONT = 1130              # vách đầu thùng (sát cabin)
+TY0 = 118                    # mép trên hình nhìn từ trên
+TFLOOR = 585                 # sàn ở hình nhìn ngang
+def txr(u): return TX_FRONT - u * TS          # u = cm tính từ vách đầu thùng
+T_START = 1.6
+
+def load_plan():
+    plan = []; t = T_START
+    for r in range(NROW):
+        n = 5 * row_layers(r)
+        if r == 0:
+            times = [t + 0.5 * (i + 1) for i in range(5)] + [t + 2.5 + 0.125 * (i + 1) for i in range(n - 5)]; dur = 7.5
+        else:
+            dur = 2.4 if r == 1 else 0.36
+            times = [t + dur * (i + 1) / n for i in range(n)]
+        plan.append((r, t, dur, times))
+        t += dur + (1.5 if r == 0 else (0.5 if r == 1 else 0.12))
+    return plan, t
+PLAN, T_DONE = load_plan()
+
+def head_state(t):
+    """vị trí đầu rải: (u cm, cột, lớp, hàng đang chất hoặc None)"""
+    face = lambda r: RL * (r + 1) + 10
+    if t < T_START:
+        return lerp(TL + 40, face(0), seg(t, 0.2, 1.4)), 2, 0, None
+    for i, (r, t0, dur, times) in enumerate(PLAN):
+        if t0 <= t < t0 + dur:
+            n_done = sum(1 for x in times if x <= t)
+            j = min(n_done, len(times) - 1)
+            return face(r), j % 5, j // 5, r
+        nxt = PLAN[i + 1][1] if i + 1 < len(PLAN) else None
+        if nxt is not None and t0 + dur <= t < nxt:
+            return lerp(face(r), face(r + 1), seg(t, t0 + dur, nxt)), 2, 0, None
+    return lerp(face(NROW - 1), TL + 40, seg(t, T_DONE, T_DONE + 1.2)), 2, 0, None
+
 def sc_truck(t, D):
     im, d = frame_base()
-    cam = CAM_TRUCK
-    # bao tới đầu băng mỗi 1,1 s; công nhân nhận và đặt vào ô
-    period = 1.1; t0 = 0.6
-    bags = []; tb = []
-    n_arr = int(max(0, (t - t0)) // period) + 1 if t > t0 else 0
-    people = [((1500, 312), math.pi / 2), ((1500, 378), -math.pi / 2)]
-    for i in range(14):
-        ta = t0 + i * period            # thời điểm bao chạm đầu băng
-        # trên băng
-        s = (t - (ta - 2.5)) * 70
-        if 0 <= s < 2.5 * 70:
-            x = TELE_END - 2.5 * 70 + s
-            if x > 1300: bags.append(((x, 345), 0.0))
-        # công nhân mang từ đầu băng tới ô
-        if t >= ta:
-            slot = TB_SLOTS[i % 5]
-            u = seg(t, ta, ta + 0.8)
-            if u < 1:
-                bags.append((lerp_p((TELE_END - 4, 345), slot, u), 0.0))
-            else:
-                tb.append((slot, 0.0, i // 5))
-    layer = max([b[2] for b in tb], default=-1)
-    shown = {}
-    for slot, a, L in tb: shown[slot] = (slot, a, L)
-    truck_bags = [(v[0], v[1]) for v in shown.values()]
-    draw_plant(d, cam, {"slings": default_slings(), "robot": (PLACE, False, 0), "bags": bags,
-                        "truck_bags": truck_bags, "truck_people": people,
-                        "bars": {"S": 1, "K": 1, "T": 1, "C": 1, "X": lin(t, 0.4, 2.0)}, "hl": {"X": 1.0}})
-    if layer >= 0:
-        tag(d, cam.scr(1522, 420), f"đang xếp lớp {layer + 1}", NAVY, 13, "mm", 1.0)
-    card(d, "X", 60, 470, 470, seg(t, 0.6, 1.1), "2 công nhân xếp tay: đã chốt với Phòng Logistics")
-    subs(d, t, [(0, 4.5, "Trong thùng xe, 2 công nhân nhận bao ở đầu băng ống lồng"),
-                (4.5, D + 1, "Công nhân xếp tay từng lớp lên thùng xe")])
-    chapter(im, "(7) XẾP TAY TRONG THÙNG XE", t)
+    chapter(im, "(6)(7) BĂNG ỐNG LỒNG TỰ CHẤT LÊN XE", t)
+    col = EL["T"][4]
+    y1 = TY0 + TWD * TS
+    roof = TFLOOR - TH * TS
+    x_rear = txr(TL)
+    # ---- khung thùng: nhìn từ trên ----
+    d.text((x_rear * SS, (TY0 - 10) * SS), "NHÌN TỪ TRÊN", font=F("mono", 12), fill=INK, anchor="ls")
+    d.rectangle([x_rear * SS, TY0 * SS, TX_FRONT * SS, y1 * SS], fill=mix(CREAM, NAVY, 0.05), outline=NAVY, width=3 * SS)
+    cab = [(TX_FRONT, TY0 + 12), (TX_FRONT + 70, TY0 + 12), (TX_FRONT + 92, TY0 + 34), (TX_FRONT + 92, y1 - 34), (TX_FRONT + 70, y1 - 12), (TX_FRONT, y1 - 12)]
+    d.polygon([(x * SS, y * SS) for x, y in cab], fill=mix(CREAM, NAVY, 0.14), outline=NAVY, width=2 * SS)
+    tag(d, (x_rear, y1 + 16), "cửa sau", MUTED, 11, "lm", 1, bold=False)
+    tag(d, (TX_FRONT, y1 + 16), "đầu thùng (sát cabin)", MUTED, 11, "rm", 1, bold=False)
+    # ---- khung thùng: nhìn ngang ----
+    d.text((x_rear * SS, (roof - 10) * SS), "NHÌN NGANG", font=F("mono", 12), fill=INK, anchor="ls")
+    d.rectangle([x_rear * SS, roof * SS, TX_FRONT * SS, TFLOOR * SS], fill=mix(CREAM, NAVY, 0.03), outline=mix(CREAM, NAVY, 0.5), width=SS)
+    d.line([x_rear * SS, TFLOOR * SS, TX_FRONT * SS, TFLOOR * SS], fill=NAVY, width=4 * SS)
+    dashed(d, (x_rear * SS, (TFLOOR - TWALL * TS) * SS), (TX_FRONT * SS, (TFLOOR - TWALL * TS) * SS), mix(CREAM, NAVY, 0.6), 1.5, 8, 6)
+    d.text(((x_rear + 6) * SS, (TFLOOR - TWALL * TS - 4) * SS), "thành 80 cm", font=F("mono", 11), fill=mix(CREAM, NAVY, 0.7), anchor="ls")
+    d.rectangle([TX_FRONT * SS, (TFLOOR - 200 * TS) * SS, (TX_FRONT + 92) * SS, TFLOOR * SS], fill=mix(CREAM, NAVY, 0.14), outline=NAVY, width=2 * SS)
+    # ---- bao đã chất ----
+    total = 0; cur_r = 0
+    for r, t0, dur, times in PLAN:
+        n = sum(1 for x in times if x <= t)
+        total += n
+        if n: cur_r = r
+        xa, xb = txr(RL * (r + 1)), txr(RL * r)
+        for i in range(n):
+            k, c = i // 5, i % 5
+            if k == (n - 1) // 5 or n == len(times):   # top view: chỉ vẽ lớp trên cùng
+                pass
+        for c in range(5):
+            cnt = sum(1 for i in range(n) if i % 5 == c)
+            if cnt:
+                ya = TY0 + c * RW * TS; yb = ya + RW * TS
+                shade = mix(BAG_TOP, BAG_LOW, 0.6 * (1 - cnt / 9))
+                d.rounded_rectangle([(xa + 2) * SS, (ya + 2) * SS, (xb - 2) * SS, (yb - 2) * SS], radius=4 * SS, fill=shade, outline=INK, width=SS)
+        for k in range(row_layers(r)):
+            cnt = sum(1 for i in range(n) if i // 5 == k)
+            if cnt:
+                za = TFLOOR - (k + 1) * RH * TS; zb = TFLOOR - k * RH * TS
+                d.rounded_rectangle([(xa + 2) * SS, (za + 1) * SS, (xb - 2) * SS, (zb - 1) * SS], radius=3 * SS,
+                                    fill=BAG_TOP if cnt == 5 else mix(CREAM, BAG_TOP, 0.6), outline=INK if cnt == 5 else MUTED, width=SS)
+    # ---- băng tải ống lồng + đầu rải ----
+    u, c, k, r_act = head_state(t)
+    xh = txr(u)
+    yc = TY0 + TWD * TS / 2
+    x_in = 44
+    segs = [(x_in, lerp(x_in, xh, 0.45), 28), (lerp(x_in, xh, 0.43), lerp(x_in, xh, 0.75), 24), (lerp(x_in, xh, 0.73), xh, 20)]
+    for xa, xb, hw in segs:
+        d.rectangle([xa * SS, (yc - hw) * SS, xb * SS, (yc + hw) * SS], fill=mix(CREAM, col, 0.22), outline=col, width=2 * SS)
+    yh = TY0 + (c + 0.5) * RW * TS
+    d.line([xh * SS, yc * SS, (xh + 12) * SS, yh * SS], fill=col, width=5 * SS)
+    d.rectangle([(xh + 4) * SS, (yh - 16) * SS, (xh + 22) * SS, (yh + 16) * SS], fill=col, outline=INK, width=SS)
+    # nhìn ngang: băng nghiêng lên tới đầu rải theo lớp đang chất
+    zh = TFLOOR - (k * RH + RH + 6) * TS
+    zin = TFLOOR - 95 * TS
+    pts = [(x_in, zin), (lerp(x_in, xh, 0.45), lerp(zin, zh, 0.45)), (lerp(x_in, xh, 0.75), lerp(zin, zh, 0.75)), (xh, zh)]
+    for (p0, p1), w in zip(zip(pts[:-1], pts[1:]), (12, 10, 8)):
+        d.line([p0[0] * SS, p0[1] * SS, p1[0] * SS, p1[1] * SS], fill=col, width=w * SS)
+    d.rectangle([(xh + 2) * SS, (zh - 8) * SS, (xh + 20) * SS, (zh + 8) * SS], fill=col, outline=INK, width=SS)
+    # bao đang được rải (chỉ ở hàng chậm)
+    if r_act is not None and PLAN[r_act][2] >= 2:
+        sx0, sx1 = txr(RL * (r_act + 1)), txr(RL * r_act)
+        d.rounded_rectangle([(sx0 + 3) * SS, (yh - RW * TS / 2 + 3) * SS, (sx1 - 3) * SS, (yh + RW * TS / 2 - 3) * SS],
+                            radius=4 * SS, fill=BAG_TOP, outline=ORANGE, width=2 * SS)
+    # ---- chú thích động ----
+    if r_act == 0 or (PLAN[0][1] + PLAN[0][2] <= t < PLAN[1][1]):
+        kk = seg(t, 2.0, 2.4)
+        xL = txr(RL) - 14
+        arrow(d, (xL * SS, (TY0 + 6) * SS), (xL * SS, (y1 - 6) * SS), mix(CREAM, RED, kk), 2, 9)
+        tag(d, (xL - 8, TY0 + 30), "trái → phải", RED, 12, "rm", kk)
+    if PLAN[0][1] + PLAN[0][2] - 0.3 <= t < PLAN[1][1] + 0.2:
+        kk = seg(t, PLAN[0][1] + PLAN[0][2] - 0.3, PLAN[0][1] + PLAN[0][2])
+        x9 = txr(RL) - 30
+        arrow(d, (x9 * SS, TFLOOR * SS), (x9 * SS, (TFLOOR - 117 * TS) * SS), mix(CREAM, RED, kk), 2, 9)
+        tag(d, (x9 - 8, TFLOOR - 60 * TS), "9 lớp = 117 cm", RED, 12, "rm", kk)
+        ka = seg(t, PLAN[0][1] + PLAN[0][2], PLAN[1][1])
+        tag(d, (txr(RL * 1.5), roof + 26), "← thụt lại 75 cm", col, 12, "mm", ka)
+    # bộ đếm
+    f = F("monob", 17)
+    d.text((1238 * SS, 62 * SS), f"ĐÃ CHẤT {total}/680 BAO", font=f, fill=INK, anchor="rm")
+    xa0, xa1 = 1238 - 230, 1238
+    d.rectangle([xa0 * SS, 80 * SS, xa1 * SS, 86 * SS], fill=mix(CREAM, INK, 0.15))
+    d.rectangle([xa0 * SS, 80 * SS, (xa0 + (xa1 - xa0) * total / 680) * SS, 86 * SS], fill=col if total < 680 else ORANGE)
+    d.text((1238 * SS, 104 * SS), f"HÀNG {cur_r + 1}/16", font=F("mono", 13), fill=INK, anchor="rm")
+    d.text((1238 * SS, 400 * SS), "cơ chế vươn/thụt, tự rải bao: Phon-Tech xác nhận · sơ đồ chất: Trình tự chất bao xe 34T v2 (KCP)",
+           font=F("mono", 10), fill=MUTED, anchor="rs")
+    if t > T_DONE + 0.4:
+        stamp(im, "XONG 1 XE · 680 BAO · 34 TẤN", t - T_DONE - 0.4, ORANGE, (W / 2, 362), -3, 20)
+    subs(d, t, [(0, T_START, "Băng tải ống lồng vươn hết cỡ vào sát đầu thùng xe"),
+                (T_START, PLAN[0][1] + PLAN[0][2], "Đầu băng tự rải bao từ trái sang phải, đủ 5 bao mới lên lớp trên"),
+                (PLAN[0][1] + PLAN[0][2], PLAN[2][1], "Đủ 9 lớp = 45 bao, băng thụt lại 75 cm để chất hàng tiếp theo"),
+                (PLAN[2][1], T_DONE + 0.4, "Lặp lại tới hàng 16 – không cần người trong thùng xe"),
+                (T_DONE + 0.4, D + 1, "14 hàng × 45 bao + 2 hàng × 25 bao = 680 bao = 34 tấn")])
     corners(d); footer(d, 7)
     return im
 
@@ -910,7 +1013,7 @@ def sc_func(t, D):
         badge(d, (125, y), no, col, 14, k)
         d.text((152 * SS, y * SS), name, font=F("serifb", 18), fill=mix(CREAM, col, k), anchor="lm")
         d.text((560 * SS, y * SS), fn, font=F("serif", 16), fill=mix(CREAM, INK, k), anchor="lm")
-    subs(d, t, [(0, D + 1, "Tám cụm, một dòng chảy: sling vào – robot gắp – băng ra – xếp tay")], y=640)
+    subs(d, t, [(0, D + 1, "Tám cụm, một dòng chảy: sling vào – robot gắp – băng ra – tự chất lên xe")], y=640)
     corners(d); footer(d, 9)
     return im
 
@@ -922,6 +1025,7 @@ STATS = [
     ("Số lớp", "5 lớp = 45 bao", "9 bao × 5 lớp", "layers"),
     ("Chiều cao hàng", "650 – 750 mm", "bản vẽ 5 × 150 = 750 · KCP 5 × 130 = 650 (To be confirm)", "height"),
     ("Khối lượng", "2.250 kg", "45 × 50 kg · bản vẽ ghi 'sling + hàng' (To be confirm)", "weight"),
+    ("Chất xe 34T", "680 bao = 34 tấn", "5 ngang × 9 lớp = 45 bao/hàng · 14 hàng + 2 hàng × 25 bao", "truckload"),
     ("Mặt bằng", "13.258 mm ngang", "bản cũ 11.755 mm (+1.503) · sâu 3.954 + 9.950 mm", "plan"),
     ("Điện", "3 pha 380–440 V, 80 A", "3~380-440 + N + PE, 50 Hz · robot cell và băng tải", "power"),
     ("Khí nén", "1/2\" · 6 bar", "lưu lượng khí: To be confirm", "air"),
@@ -946,7 +1050,7 @@ def sc_stats(t, D):
     f2 = F("mono", 14); sz = 14
     while d.textlength(small, font=f2) > 580 * SS: sz -= 1; f2 = F("mono", sz)
     d.text((100 * SS, 330 * SS), small, font=f2, fill=mix(CREAM, INK, seg(tt, 0.3, 0.7)), anchor="ls")
-    d.text((100 * SS, 560 * SS), "nguồn: bản vẽ LA26-PTC-KCP-DEP-301026 (Phon-Tech, 20/10/2026)" + (" · KCP: Trình tự chất bao xe 34T v2" if kind in ("bag", "height") else ""),
+    d.text((100 * SS, 560 * SS), "nguồn: bản vẽ LA26-PTC-KCP-DEP-301026 (Phon-Tech, 20/10/2026)" + (" · KCP: Trình tự chất bao xe 34T v2" if kind in ("bag", "height", "truckload") else ""),
            font=F("mono", 11), fill=mix(CREAM, MUTED, k), anchor="ls")
     # khung minh họa phải
     bx0, by0, bx1, by1 = 720, 130, 1190, 590
@@ -987,6 +1091,15 @@ def sc_stats(t, D):
             d.rounded_rectangle([x * SS, y * SS, (x + 34) * SS, (y + 44) * SS], radius=6 * SS,
                                 fill=BAG_TOP if j < n else mix(CREAM, INK, 0.05), outline=INK if j < n else mix(CREAM, INK, 0.25), width=SS)
         tag(d, (cx, cy + 170), f"{n} × 50 = {vn(n * 50)} kg", INK, 14, "mm", 1.0)
+    elif kind == "truckload":
+        n = int(a * 16 + 1e-4)
+        for r in range(16):
+            nl = 9 if r < 14 else 5
+            x = cx + 200 - (r + 1) * 25
+            hh = nl * 16 if r < n else 0
+            d.rectangle([x * SS, (cy + 140) * SS, (x + 22) * SS, (cy + 142) * SS], fill=INK)
+            if hh: d.rectangle([x * SS, (cy + 140 - hh) * SS, (x + 22) * SS, (cy + 140) * SS], fill=BAG_TOP, outline=INK, width=SS)
+        tag(d, (cx, cy + 175), f"{n}/16 hàng · {sum(45 if r < 14 else 25 for r in range(n))} bao", INK, 14, "mm", 1.0)
     elif kind == "plan":
         w1 = 380 * 11755 / 13258; w2 = 380
         y = cy - 40
@@ -1026,14 +1139,14 @@ def sc_stats(t, D):
 # 11. Kết: điểm còn mở
 OPEN = ["Sling rỗng đưa đi đâu?", "Phương tiện đưa sling vào đầu băng?", "Công suất (bao/giờ)?",
         "Robot gắp 1 hay nhiều bao/lần?", "Bao 130 hay 150 mm? Vỏ sling nặng bao nhiêu?", "Lưu lượng khí nén?",
-        "Đường bao từ trạm dự phòng qua cell?"]
+        "Đường bao từ trạm dự phòng qua cell?", "Băng ống lồng: tầm vươn tối đa, nhịp rải bao?"]
 def sc_end(t, D):
     im, d = frame_base()
     d.text((W / 2 * SS, 120 * SS), "Điểm cần Phon-Tech xác nhận", font=F("serifb", 34), fill=mix(CREAM, INK, seg(t, 0.1, 0.6)), anchor="mm")
     for i, s in enumerate(OPEN):
         k = seg(t, 0.6 + i * 0.35, 1.0 + i * 0.35)
         if k <= 0: continue
-        y = 190 + i * 52
+        y = 180 + i * 48
         d.rectangle([250 * SS, (y - 20) * SS, 1030 * SS, (y + 20) * SS], fill=mix(CREAM, (255, 246, 230), k), outline=mix(CREAM, RED, k), width=SS)
         d.text((270 * SS, y * SS), f"({i + 1})", font=F("monob", 15), fill=mix(CREAM, RED, k), anchor="lm")
         d.text((320 * SS, y * SS), s, font=F("serif", 18), fill=mix(CREAM, INK, k), anchor="lm")
@@ -1043,7 +1156,7 @@ def sc_end(t, D):
 
 SCENES = [("title", 5.0, sc_title), ("overview", 13.0, sc_overview), ("sling", 10.5, sc_sling),
           ("infeed", 11.5, sc_infeed), ("robot", 16.5, sc_robot), ("journey", 14.5, sc_journey),
-          ("truck", 9.5, sc_truck), ("backup", 11.5, sc_backup), ("func", 11.0, sc_func),
+          ("truck", 24.0, sc_truck), ("backup", 11.5, sc_backup), ("func", 11.0, sc_func),
           ("stats", STAT_T * len(STATS), sc_stats), ("end", 7.0, sc_end)]
 assert len(SCENES) == N_SC
 XF = 8

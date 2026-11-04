@@ -4,9 +4,11 @@ Nguồn: bản vẽ **LA26-PTC-KCP-DEP-301026**, Phon-Tech, ngày 20/10/2026 (SC
 
 | File | Dùng cho |
 |---|---|
-| `Depal_cach_hoat_dong.mp4` | Bản 1280×720 cũ (tạo trước quy tắc mới) |
-| `Depal_cach_hoat_dong_email.mp4` | Bản nén gửi email (960×540, 1,5 MB) |
-| `make_depal.py` | Script dựng lại (Python/PIL + ffmpeg). `python3 make_depal.py test out.png` để xem khung mẫu |
+| `Depal_cach_hoat_dong_v2.mp4` | **Bản mới nhất** – một file nén gửi email (960×540): băng ống lồng tự chất lên xe, không dùng người |
+| `Depal_cach_hoat_dong.mp4` | v1 1280×720 (xếp tay 2 công nhân – đã thay) |
+| `Depal_cach_hoat_dong_email.mp4` | v1 bản nén (đã thay) |
+| `make_depal_v1.py` | Script v1 (giữ lại) |
+| `make_depal.py` | Script v2 dựng lại (Python/PIL + ffmpeg). `python3 make_depal.py test out.png` để xem khung mẫu |
 
 ## Trình tự trong video (11 cảnh)
 1. Mở đầu
@@ -15,14 +17,15 @@ Nguồn: bản vẽ **LA26-PTC-KCP-DEP-301026**, Phon-Tech, ngày 20/10/2026 (SC
 4. (1)(2) Sling vào từ hai bên, luân phiên
 5. (3) Robot gắp từng bao, đặt lên băng ra; sling rỗng → chưa rõ đi đâu
 6. (4)(5)(6) Băng tải thẳng → băng cong 90° → băng tải ống lồng vào xe
-7. (7) Trong thùng xe: 2 công nhân xếp tay
+7. (6)(7) Băng tải ống lồng vươn hết cỡ vào sát đầu thùng, tự rải bao trái → phải, hết lớp mới lên lớp, đủ 9 lớp = 45 bao thì thụt lại 75 cm; 14 hàng × 45 + 2 hàng × 25 = 680 bao = 34 tấn; không dùng người
 8. (8) Trạm xả tay dự phòng khi robot dừng
 9. Tóm tắt chức năng
-10. Tóm tắt số liệu (9 mục)
+10. Tóm tắt số liệu (10 mục)
 11. Điểm cần Phon-Tech xác nhận
 
 ## Đã chốt với Phòng Logistics
-- Thùng xe: 2 công nhân xếp tay
+- Thùng xe (04/11/2026, Phon-Tech xác nhận): băng tải ống lồng vươn ra/thụt vào, tự rải bao, chất 9 lớp, không dùng người – thay cho "2 công nhân xếp tay" ở v1
+- Sơ đồ chất xe: theo Trình tự chất bao xe 34T v2 (KCP); rải hết lớp mới lên lớp
 - Công nhân khu depal: giữ nguyên theo bản vẽ
 - Sling vào từ hai bên, luân phiên
 - Băng tải phía dưới + lưới 3×3 + 1 công nhân = trạm xả tay dự phòng
@@ -31,7 +34,6 @@ Nguồn: bản vẽ **LA26-PTC-KCP-DEP-301026**, Phon-Tech, ngày 20/10/2026 (SC
 - Sling rỗng đưa đi đâu: chưa rõ
 - Phương tiện đưa sling đầy vào đầu băng con lăn: chưa rõ
 - Robot gắp 1 bao/lần: suy từ đường đi bao vẽ trên bản vẽ (To be confirm)
-- Băng tải ống lồng: suy từ hình 3 đoạn lồng nhau trên bản vẽ
 - Đường bao từ trạm dự phòng qua cell ra băng (4): bản vẽ chưa thể hiện rõ
 - Chiều dày bao: bản vẽ 150 mm, KCP đo 130 mm (Trình tự chất bao xe 34T v2) → chiều cao 5 lớp 750 / 650 mm
 - "Sling + hàng = 2.250 kg" trên bản vẽ, trong khi 45 × 50 kg = 2.250 kg chưa tính vỏ sling
