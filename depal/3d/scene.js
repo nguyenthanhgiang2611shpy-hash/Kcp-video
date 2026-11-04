@@ -7,6 +7,8 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 const W = 1280, H = 720;
+const CLEAN = new URLSearchParams(location.search).get('clean') === '1';   // bỏ chữ phủ (để ghép chia đôi màn hình)
+if (CLEAN) document.querySelectorAll('.corner, #foot').forEach(e => e.style.display = 'none');
 const SCN = [['overview', 14], ['area', 11], ['flow', 27], ['pick', 20], ['journey', 14],
              ['truck', 24], ['sensor', 21], ['backup', 12], ['summary', 12]];
 const SC = {}; let acc = 0;
@@ -821,6 +823,7 @@ window.renderAt = (T) => {
   for (const [n] of SCN) { const [a, d] = SC[n]; if (T < a + d) { name = n; break; } }
   const [a, d] = SC[name];
   FN[name](T - a, d);
+  if (CLEAN) for (const id in ui) ui[id].style.opacity = 0;
   bags.count = nb; bags.instanceMatrix.needsUpdate = true;
   renderer.render(scene, camera);
 };

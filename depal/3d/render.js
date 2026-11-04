@@ -15,7 +15,7 @@ const srv = http.createServer((q, r) => {
   const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   page.on('console', m => console.log('page:', m.text())); page.on('pageerror', e => console.log('ERR', e.message));
-  await page.goto(`http://127.0.0.1:${port}/scene.html`);
+  await page.goto(`http://127.0.0.1:${port}/scene.html${process.env.Q ? '?' + process.env.Q : ''}`);
   await page.waitForFunction('window.ready === true', null, { timeout: 120000 });
   const dur = await page.evaluate('window.DUR');
   if (test) {
@@ -25,13 +25,16 @@ const srv = http.createServer((q, r) => {
       await page.screenshot({ path: path.join(out, `t_${t}.png`) }); }
     await browser.close(); srv.close(); return;
   }
+  // HQ=1: bản trung gian 1280x720 chất lượng cao (để ghép); T0/T1: chỉ render đoạn [T0, T1) giây
+  const enc = process.env.HQ ? ['-c:v', 'libx264', '-crf', '14', '-preset', 'fast']
+    : ['-vf', 'scale=960:-2', '-c:v', 'libx264', '-crf', '35', '-preset', 'slow'];
   const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
-    '-vf', 'scale=960:-2', '-c:v', 'libx264', '-crf', '35', '-preset', 'slow', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out],
-    { stdio: ['pipe', 'inherit', 'inherit'] });
-  const n = Math.round(dur * FPS), t0 = Date.now();
-  for (let i = 0; i < n; i++) {
+    ...enc, '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out], { stdio: ['pipe', 'inherit', 'inherit'] });
+  const T0 = Number(process.env.T0 || 0), T1 = Number(process.env.T1 || dur);
+  const i0 = Math.round(T0 * FPS), n = Math.round(T1 * FPS), t0 = Date.now();
+  for (let i = i0; i < n; i++) {
     await page.evaluate(`renderAt(${i / FPS})`);
-    const buf = await page.screenshot({ type: 'jpeg', quality: 92 });
+    const buf = await page.screenshot({ type: 'jpeg', quality: process.env.HQ ? 97 : 92 });
     if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));
     if (i % 250 === 0) console.log(`frame ${i}/${n} ${((Date.now() - t0) / 1000).toFixed(0)}s`);
   }
