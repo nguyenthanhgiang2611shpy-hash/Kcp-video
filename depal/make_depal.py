@@ -878,14 +878,14 @@ def sc_backup(t, D):
           "bags": bags, "station_n": NBAG - n_taken, "station_k": 1.0,
           "bars": {"M": lin(t, 2.6, 5.0)}, "hl": {"M": 1.0}}
     draw_plant(d, cam, st)
-    stamp(im, "ROBOT DỪNG", t - 1.0, RED, (900, 150), -4, 18)
+    stamp(im, "ROBOT DỪNG", t - 1.0, RED, (300, 540), -4, 18)
     # đường nối qua cell: chưa rõ
     kq = seg(t, 6.5, 7.0)
     if kq > 0:
         p0 = cam.P(BELT_X + 30, 905); p1 = cam.P(BELT_X + 30, 745)
         dashed(d, p0, p1, mix(CREAM, RED, kq), 2.5, 7, 5)
         arrow(d, (p1[0], p1[1] + 2), (p1[0], p1[1] - 10 * SS), mix(CREAM, RED, kq), 2, 10)
-        note(d, (cam.scr(BELT_X + 45, 800)[0], cam.scr(BELT_X + 45, 800)[1]),
+        note(d, (cam.scr(BELT_X + 40, 945)[0], cam.scr(BELT_X + 40, 945)[1]),
              "bao đi tiếp qua cell ra băng (4): bản vẽ chưa thể hiện rõ", kq, RED, 12, "lm")
     card(d, "M", 820, 470, 400, seg(t, 1.6, 2.1), "chức năng dự phòng: đã chốt với Phòng Logistics")
     subs(d, t, [(0, 2.4, "Khi robot dừng, dùng trạm xả tay dự phòng phía dưới"),
