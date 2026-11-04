@@ -7,6 +7,8 @@ cập nhật theo trao đổi với Phon-Tech ngày 04/11/2026.
 |---|---|
 | `Depal_cach_hoat_dong_v3.mp4` | **Bản mới nhất** – một file nén gửi email (960×540) |
 | `Depal_cach_hoat_dong_v2.mp4` | Bản trước (giữ lại theo quy tắc giữ bản cũ) |
+| `Depal_3D_minh_hoa.mp4` | **Minh họa 3D** (một file nén gửi email, ~2 phút 35 giây) – dựng bằng three.js trong `3d/` |
+| `3d/scene.js`, `3d/render.js` | Script cảnh 3D; chạy `cd 3d && npm install && node render.js ../Depal_3D_minh_hoa.mp4` (thử khung: `node render.js out_dir test 12 60`) |
 | `make_depal.py` | Script dựng v3 (Python/PIL + ffmpeg). `python3 make_depal.py test out.png` để xem khung mẫu |
 | `Cau_hoi_Phon-Tech.md` | Danh sách câu hỏi và trả lời của Phon-Tech |
 
@@ -51,3 +53,10 @@ cập nhật theo trao đổi với Phon-Tech ngày 04/11/2026.
 - Kích thước chính thức phần trạm dự phòng và dải ra xe (video đang ước tính)
 - Số bản vẽ 301026 / ngày 20/10/2026; báo giá theo bản vẽ mới
 - Tốc độ băng tải trong video chỉ để minh họa
+
+## Video 3D (Depal_3D_minh_hoa.mp4)
+9 cảnh: tổng quan (9 cụm) · diện tích trong kho · luồng sling với xe nâng + nút bấm · hút 3 bao thả từng bao (chậm, bảng 5 bước) ·
+băng vệ sinh → ra xe · băng ống lồng tự chất 680 bao · cảm biến (A)(B) + phòng điều khiển + bấm dừng · trạm dự phòng · tóm tắt.
+
+Giả định chỉ có trong bản 3D (ghi trên hình): băng con lăn sling cao 0,45 m, băng nhận bao 0,9 m rồi lên 1,5 m;
+sàn xe 1,3 m; robot là cánh tay 6 trục có đầu hút; phòng điều khiển đặt cạnh băng ống lồng; thùng xe đã bỏ bạt để nhìn vào trong.
