@@ -63,7 +63,14 @@ Mốc thời gian:
 1:18  Bước 7 – Bấm Save. Số Load Req dùng để cân xe vào ở bước sau.
 
 Lưu ý: Phần cân (Weigh Bridge Weightment Detail) do cầu cân tự điền khi cân."""),
+    (33, 33, 'Trang33_kiem_tra_xe_2_nguoi.mp4', 6.8,
+     """Hình động: nhân viên bảo vệ đi từ đuôi xe tới, nhân viên cầu cân đi từ đầu xe tới, cùng giám sát xe trước khi cân.
+
+Trước khi cân xe vào phải có nhân viên phòng bảo vệ và nhân viên cầu cân cùng kiểm tra. Không cân khi bánh xe dính bùn, sàn xe ướt hoặc nước đọng trên bạt trần xe, hoặc xe không đậu giữa cầu cân. Bùn và nước làm sai xác xe, xe lệch làm sai số cân."""),
 ]
+
+# Slide giữ chế độ chạy lặp lại như bản gốc (không tắt lặp)
+GIU_LAP = {33}
 
 # Slide thay bằng ảnh thiết kế mới: {số slide gốc: file ảnh}
 THAY_ANH = {}
@@ -93,7 +100,8 @@ def main(src, out, chi_giu=None):
         for ctn in s._element.iter(NS + 'cTn'):
             if ctn.get('id') == '4':
                 ctn.set('dur', str(int(giay * 1000)))
-            ctn.attrib.pop('repeatCount', None)  # chạy 1 lần, dừng ở khung cuối
+            if dau not in GIU_LAP:
+                ctn.attrib.pop('repeatCount', None)  # chạy 1 lần, dừng ở khung cuối
         s.notes_slide.notes_text_frame.text = ghichu
         xoa += ids[dau:cuoi]
     xoa += [ids[so - 1] for so in BO_SLIDE]
