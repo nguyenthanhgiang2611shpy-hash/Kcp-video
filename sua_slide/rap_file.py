@@ -50,6 +50,19 @@ Mốc thời gian:
 1:47  Bước 10 – Bấm Lưu. Lần sau tìm lại tài xế bằng mã hoặc tên.
 
 Lưu ý: Ảnh chân dung chụp trực tiếp tại cầu cân bằng webcam, không dùng ảnh tài xế gửi qua điện thoại. Tài xế đã có trên hệ thống thì tìm theo mã hoặc tên và kiểm tra lại thông tin. CCCD và GPLX trên slide là bản mẫu, tên và số là giả."""),
+    (26, 32, 'Loading_request_7_buoc_cham.mp4', 91.3,
+     """[Video tự chạy – 7 bước trong 1 slide, khoảng 1 phút 31 giây] Video phát chậm, mỗi bước dừng khoảng 4 giây để giải thích. Muốn dừng lâu hơn: bấm vào video (hoặc phím Space) để tạm dừng, bấm lần nữa để chạy tiếp.
+
+Mốc thời gian:
+0:00  Bước 1 – Mở Loading Request: menu Sales Order and Despatch → Loading Request.
+0:11  Bước 2 – Order No: chọn đúng số PO nội bộ của KCP, kiểm tra Balance còn đủ hàng.
+0:25  Bước 3 – Kho xuất: Store From = 01 là kho KCP Sơn Hòa; kho ngoài chọn 48, 49 hoặc 50.
+0:37  Bước 4 – Vận tải, xe, tài xế: Trpt Code → Truck No → Truck Driver; xe và tài xế phải đã đăng ký TMS.
+0:52  Bước 5 – Số lượng: 17 tấn = 340 bao (50 kg/bao).
+1:03  Bước 6 – Chọn lô theo FIFO: lô nhập trước xuất trước (ví dụ lô 278, 05/07/2026).
+1:18  Bước 7 – Bấm Save. Số Load Req dùng để cân xe vào ở bước sau.
+
+Lưu ý: Phần cân (Weigh Bridge Weightment Detail) do cầu cân tự điền khi cân."""),
 ]
 
 # Slide thay bằng ảnh thiết kế mới: {số slide gốc: file ảnh}
