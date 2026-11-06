@@ -14,6 +14,20 @@ NS = '{http://schemas.openxmlformats.org/presentationml/2006/main}'
 # (slide đầu, slide cuối, video ghép, thời lượng giây, ghi chú người trình bày)
 # slide đầu = slide cuối: chỉ thay video của 1 slide, không gộp.
 GOP = [
+    (2, 2, 'Trang02_toan_bo_quy_trinh_cham.mp4', 145.2,
+     """[Video tự chạy 1 lần, khoảng 2 phút 25 giây, phủ toàn trang; hết video thì đứng yên] Video phát chậm 2 lần, mỗi bước dừng khoảng 3 giây. Giai đoạn đang nói được khoanh đỏ trong danh sách bên phải; giai đoạn đã nói vẫn giữ vòng đỏ tới cuối. Bấm vào video (hoặc phím Space) để tạm dừng khi cần giải thích thêm – vòng đỏ dừng theo video.
+
+Mốc thời gian:
+0:00  Giai đoạn 1 – Trước khi cân (khoanh đỏ ô 1)
+      0:00 Bước 1 Xe đến bãi đậu xe KCP · 0:12 Bước 2 Đăng ký tài ở cổng bảo vệ · 0:26 Bước 3 Làm phiếu tại cầu cân · 0:42 Bước 4 Nhập thông tin lên TMS · 0:55 Bước 5 Bảo vệ mở xe trên hệ thống
+1:09  Giai đoạn 2 – Cân vào và bốc hàng (khoanh thêm ô 2)
+      1:09 Bước 6 Kiểm tra trước khi cân xe vào · 1:25 Bước 7 Cân xe vào, so với lần cân đầu · 1:41 Bước 8 Vào kho bốc hàng
+1:53  Giai đoạn 3 – Cân ra (khoanh thêm ô 3)
+      1:53 Bước 9 Cân xe ra: Net = Gross – Tare, đối chiếu tờ duyệt dư cân
+2:10  Giai đoạn 4 – Chứng từ và ra cổng (khoanh thêm ô 4)
+      2:10 Bước 10 Đủ bộ chứng từ xuất hàng: DC → hợp đồng vận chuyển → COA
+
+Các slide sau đi chi tiết từng bước."""),
     (5, 5, 'Trang05_giay_to_cham.mp4', 27.3,
      """[Video tự chạy 1 lần, khoảng 27 giây, đủ 4 giấy tờ thì đứng yên – không lặp lại]
 0:00 Đăng kiểm xe – 0:06 Cà vẹt xe – 0:11 CCCD – 0:14 Bằng lái (GPLX) – 0:19 hai form nhập TMS, đủ dấu tích ở 0:25.
@@ -69,6 +83,9 @@ Lưu ý: Phần cân (Weigh Bridge Weightment Detail) do cầu cân tự điền
 Trước khi cân xe vào phải có nhân viên phòng bảo vệ và nhân viên cầu cân cùng kiểm tra. Không cân khi bánh xe dính bùn, sàn xe ướt hoặc nước đọng trên bạt trần xe, hoặc xe không đậu giữa cầu cân. Bùn và nước làm sai xác xe, xe lệch làm sai số cân."""),
 ]
 
+# Slide có video phủ toàn trang: {số slide gốc: ảnh hiện trước khi video chạy}
+TOAN_TRANG = {2: 'Trang02_poster.jpg'}
+
 # Slide giữ chế độ chạy lặp lại như bản gốc (không tắt lặp)
 GIU_LAP = {33}
 
@@ -103,6 +120,14 @@ def main(src, out, chi_giu=None):
             if dau not in GIU_LAP:
                 ctn.attrib.pop('repeatCount', None)  # chạy 1 lần, dừng ở khung cuối
         s.notes_slide.notes_text_frame.text = ghichu
+        if dau in TOAN_TRANG:
+            for sh in s.shapes:
+                if sh.shape_type == 16:  # MEDIA
+                    sh.left, sh.top = 0, 0
+                    sh.width, sh.height = p.slide_width, p.slide_height
+                    blip = sh._element.find('.//' + '{http://schemas.openxmlformats.org/drawingml/2006/main}blip')
+                    rid = blip.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed')
+                    s.part.related_part(rid)._blob = open(os.path.join(HERE, TOAN_TRANG[dau]), 'rb').read()
         xoa += ids[dau:cuoi]
     xoa += [ids[so - 1] for so in BO_SLIDE]
     if chi_giu is not None:
