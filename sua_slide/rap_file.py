@@ -14,25 +14,20 @@ NS = '{http://schemas.openxmlformats.org/presentationml/2006/main}'
 # (slide đầu, slide cuối, video ghép, thời lượng giây, ghi chú người trình bày)
 # slide đầu = slide cuối: chỉ thay video của 1 slide, không gộp.
 GOP = [
-    (2, 2, 'Trang02_toan_bo_quy_trinh_cham.mp4', 145.2,
-     """[Video tự chạy 1 lần, khoảng 2 phút 25 giây, phủ toàn trang; hết video thì đứng yên] Video phát chậm 2 lần, mỗi bước dừng khoảng 3 giây. Giai đoạn đang nói được khoanh đỏ trong danh sách bên phải; giai đoạn đã nói vẫn giữ vòng đỏ tới cuối. Bấm vào video (hoặc phím Space) để tạm dừng khi cần giải thích thêm – vòng đỏ dừng theo video.
+    (2, 2, 'Trang02_toan_bo_quy_trinh_cham.mp4', 220.8,
+     """[Video tự chạy 1 lần, khoảng 3 phút 41 giây, phủ toàn trang; hết video thì đứng yên] Video phát chậm 3 lần, mỗi bước dừng khoảng 5 giây. Giai đoạn đang nói được khoanh đỏ trong danh sách bên phải; giai đoạn đã nói vẫn giữ vòng đỏ tới cuối. Bấm vào video (hoặc phím Space) để tạm dừng khi cần giải thích thêm – vòng đỏ dừng theo video.
 
 Mốc thời gian:
 0:00  Giai đoạn 1 – Trước khi cân (khoanh đỏ ô 1)
-      0:00 Bước 1 Xe đến bãi đậu xe KCP · 0:12 Bước 2 Đăng ký tài ở cổng bảo vệ · 0:26 Bước 3 Làm phiếu tại cầu cân · 0:42 Bước 4 Nhập thông tin lên TMS · 0:55 Bước 5 Bảo vệ mở xe trên hệ thống
-1:09  Giai đoạn 2 – Cân vào và bốc hàng (khoanh thêm ô 2)
-      1:09 Bước 6 Kiểm tra trước khi cân xe vào · 1:25 Bước 7 Cân xe vào, so với lần cân đầu · 1:41 Bước 8 Vào kho bốc hàng
-1:53  Giai đoạn 3 – Cân ra (khoanh thêm ô 3)
-      1:53 Bước 9 Cân xe ra: Net = Gross – Tare, đối chiếu tờ duyệt dư cân
-2:10  Giai đoạn 4 – Chứng từ và ra cổng (khoanh thêm ô 4)
-      2:10 Bước 10 Đủ bộ chứng từ xuất hàng: DC → hợp đồng vận chuyển → COA
+      0:00 Bước 1 Xe đến bãi đậu xe KCP · 0:19 Bước 2 Đăng ký tài ở cổng bảo vệ · 0:40 Bước 3 Làm phiếu tại cầu cân · 1:05 Bước 4 Nhập thông tin lên TMS · 1:25 Bước 5 Bảo vệ mở xe trên hệ thống
+1:46  Giai đoạn 2 – Cân vào và bốc hàng (khoanh thêm ô 2)
+      1:46 Bước 6 Kiểm tra trước khi cân xe vào · 2:10 Bước 7 Cân xe vào, so với lần cân đầu · 2:35 Bước 8 Vào kho bốc hàng
+2:53  Giai đoạn 3 – Cân ra (khoanh thêm ô 3)
+      2:53 Bước 9 Cân xe ra: Net = Gross – Tare, đối chiếu tờ duyệt dư cân
+3:20  Giai đoạn 4 – Chứng từ và ra cổng (khoanh thêm ô 4)
+      3:20 Bước 10 Đủ bộ chứng từ xuất hàng: DC → hợp đồng vận chuyển → COA
 
 Các slide sau đi chi tiết từng bước."""),
-    (5, 5, 'Trang05_giay_to_cham.mp4', 27.3,
-     """[Video tự chạy 1 lần, khoảng 27 giây, đủ 4 giấy tờ thì đứng yên – không lặp lại]
-0:00 Đăng kiểm xe – 0:06 Cà vẹt xe – 0:11 CCCD – 0:14 Bằng lái (GPLX) – 0:19 hai form nhập TMS, đủ dấu tích ở 0:25.
-
-Tài xế lên cầu cân làm phiếu, mang theo 4 giấy tờ: đăng kiểm xe, cà vẹt xe, CCCD và bằng lái (GPLX). Đăng kiểm và cà vẹt dùng để nhập form Đăng ký xe vận chuyển đường (trang 6). CCCD và bằng lái dùng để nhập form Đăng ký tài xế (trang 7); ảnh chân dung chụp tại cầu cân bằng webcam. Xe hoặc tài xế đã có trên hệ thống thì chỉ cần kiểm tra thông tin còn đúng không. Cà vẹt, CCCD và bằng lái trên slide là bản mẫu."""),
     (6, 14, 'Dang_ky_xe_9_buoc_cham.mp4', 110.2,
      """[Video tự chạy – 9 bước trong 1 slide, khoảng 1 phút 50 giây] Video phát chậm, mỗi bước dừng khoảng 4 giây để giải thích. Muốn dừng lâu hơn: bấm vào video (hoặc phím Space) để tạm dừng, bấm lần nữa để chạy tiếp.
 
@@ -90,7 +85,9 @@ TOAN_TRANG = {2: 'Trang02_poster.jpg'}
 GIU_LAP = {33}
 
 # Slide thay bằng ảnh thiết kế mới: {số slide gốc: file ảnh}
-THAY_ANH = {}
+THAY_ANH = {
+    2: 'Trang02_nen.jpg',  # tiêu đề mới, bỏ dòng 'Video không có tiếng'
+}
 
 # Slide gốc bỏ hẳn khỏi bộ slide cuối cùng
 BO_SLIDE = [3]

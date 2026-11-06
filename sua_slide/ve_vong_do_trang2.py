@@ -7,7 +7,7 @@ W, H, FPS = 1600, 900, 30
 VX, VY, VW, VH, R = 107, 249, 907, 510, 18          # khung video trên nền
 BOXES = [(1052, 297, 1495, 352), (1052, 368, 1495, 422),
          (1052, 437, 1495, 491), (1052, 506, 1495, 560)]
-PHASE_START = [0.0, 69.33, 113.27, 130.33]          # giây: bắt đầu giai đoạn 1..4
+PHASE_START = [float(x) for x in sys.argv[4].split(",")]  # giây: bắt đầu giai đoạn 1..4
 DRAW_TIME = 0.8                                      # thời gian vẽ vòng đỏ
 RED, PAD, STROKE, SS = (220, 38, 38, 255), 5, 4, 3
 

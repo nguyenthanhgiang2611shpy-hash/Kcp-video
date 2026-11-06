@@ -17,4 +17,4 @@
 | 15–24 | Gộp 10 bước đăng ký tài xế thành 1 trang; cùng tốc độ chậm (~2 phút) | OK | `Trang_15-24_dang_ky_tai_xe.pptx` |
 | 26–32 | Gộp 7 bước Loading Request thành 1 trang; video chậm 2 lần, dừng ~4 giây mỗi bước (~1 phút 31 giây) | OK | `Trang_26-32_loading_request.pptx` |
 | 33 (số in "10") | Thêm 2 người giám sát: bảo vệ đi từ đuôi xe tới, NV cầu cân đi từ đầu xe tới; giữ chạy lặp như gốc | OK | `Trang_33_kiem_tra_xe.pptx` |
-| 2 | Video chậm 2 lần, dừng 3 giây mỗi bước (~2 phút 25 giây), phủ toàn trang; khoanh đỏ giai đoạn đang nói, giữ vòng đỏ tới cuối; chạy 1 lần rồi dừng | Chờ duyệt | `Trang_02_toan_bo_quy_trinh.pptx` |
+| 2 | Tiêu đề đổi thành "Quy trình xuất một xe đường tại cầu cân", bỏ dòng "Video không có tiếng…"; video chậm 3 lần, dừng 5 giây mỗi bước (~3 phút 41 giây), phủ toàn trang; khoanh đỏ giai đoạn đang nói, giữ tới cuối; chạy 1 lần rồi dừng | Chờ duyệt | `Trang_02_toan_bo_quy_trinh.pptx` |
