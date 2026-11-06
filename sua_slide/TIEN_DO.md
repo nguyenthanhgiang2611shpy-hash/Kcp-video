@@ -16,4 +16,4 @@
 | 6–14 | Gộp 9 bước đăng ký xe thành 1 trang; video chậm 2 lần, dừng ~4 giây mỗi bước (~1 phút 50 giây) | OK | `Trang_06-14_dang_ky_xe.pptx` |
 | 15–24 | Gộp 10 bước đăng ký tài xế thành 1 trang; cùng tốc độ chậm (~2 phút) | OK | `Trang_15-24_dang_ky_tai_xe.pptx` |
 | 26–32 | Gộp 7 bước Loading Request thành 1 trang; video chậm 2 lần, dừng ~4 giây mỗi bước (~1 phút 31 giây) | OK | `Trang_26-32_loading_request.pptx` |
-| 33 (số in "10") | Thêm 2 người giám sát: bảo vệ đi từ đuôi xe tới, NV cầu cân đi từ đầu xe tới; giữ chạy lặp như gốc | Chờ duyệt | `Trang_33_kiem_tra_xe.pptx` |
+| 33 (số in "10") | Thêm 2 người giám sát: bảo vệ đi từ đuôi xe tới, NV cầu cân đi từ đầu xe tới; giữ chạy lặp như gốc | OK | `Trang_33_kiem_tra_xe.pptx` |
