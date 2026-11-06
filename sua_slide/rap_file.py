@@ -1,6 +1,7 @@
 """Ráp file hoàn chỉnh: áp các slide đã sửa lên bản gốc 42 slide.
 
-Cách chạy:  python3 rap_file.py <file_goc.pptx> <file_ra.pptx>
+Ráp cả bộ:  python3 rap_file.py <file_goc.pptx> <file_ra.pptx>
+Lưu 1 trang: python3 rap_file.py <file_goc.pptx> <file_ra.pptx> <số slide gốc>
 Số slide trong GOP tính theo bản gốc 42 slide.
 """
 import os
@@ -51,7 +52,8 @@ THAY_ANH = {
 }
 
 
-def main(src, out):
+def main(src, out, chi_giu=None):
+    """chi_giu: số slide gốc cần giữ lại một mình (lưu 1 trang); None = ráp cả bộ."""
     p = Presentation(src)
     slides = list(p.slides)
     ids = list(p.slides._sldIdLst)
@@ -73,6 +75,8 @@ def main(src, out):
                 ctn.set('dur', str(int(giay * 1000)))
         s.notes_slide.notes_text_frame.text = ghichu
         xoa += ids[dau:cuoi]
+    if chi_giu is not None:
+        xoa = [sid for i, sid in enumerate(ids) if i != chi_giu - 1]
     for sid in xoa:
         p.part.drop_rel(sid.rId)
         p.slides._sldIdLst.remove(sid)
@@ -81,4 +85,5 @@ def main(src, out):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2])
+    # Lưu 1 trang:  python3 rap_file.py <goc.pptx> <ra.pptx> <số slide gốc>
+    main(sys.argv[1], sys.argv[2], int(sys.argv[3]) if len(sys.argv) > 3 else None)

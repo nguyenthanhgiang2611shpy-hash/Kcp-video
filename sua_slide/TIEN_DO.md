@@ -2,13 +2,15 @@
 
 - File gốc: `Quy_trinh_xuat_mot_xe_duong_tai_cau_can_NHO.pptx` (42 slide)
 - Số slide luôn tính theo **bản gốc 42 slide**.
-- Cách làm: người dùng gọi slide nào thì chỉ sửa slide đó; khi người dùng nói "ok" mới chuyển slide khác.
-- Ráp file: `python3 sua_slide/rap_file.py <file_goc.pptx> <file_ra.pptx>` (danh sách slide đã sửa nằm trong script).
-- Bản xem thử mới nhất: `sua_slide/BAN_XEM_THU.pptx`.
-- File hoàn chỉnh cuối cùng: giữ nguyên các slide không sửa như bản gốc, thay slide đã sửa vào đúng chỗ.
+- Cách làm:
+  - Người dùng gọi trang nào thì chỉ sửa đúng trang đó, chỉ gửi đúng trang đó.
+  - Người dùng nói "ok" thì lưu riêng **một trang đó** thành file `Trang_<số>_....pptx` (file chỉ có 1 trang).
+  - **Không** ráp cả bộ, **không** gửi cả bộ slide, trừ khi người dùng yêu cầu ráp.
+- Lưu 1 trang: `python3 sua_slide/rap_file.py <file_goc.pptx> <file_ra.pptx> <số slide gốc>`
+- Ráp cả bộ (chỉ khi được yêu cầu): `python3 sua_slide/rap_file.py <file_goc.pptx> <file_ra.pptx>`
 
-| Slide gốc | Nội dung sửa | Trạng thái | Tài nguyên |
+| Slide gốc | Nội dung sửa | Trạng thái | File 1 trang |
 |---|---|---|---|
-| 3 | Thiết kế lại trên Canva: 4 giai đoạn bằng hình ảnh, ít chữ; giữ ghi chú cũ (thiết kế Canva DAHaJvmsdZo) | Chờ duyệt | `sua_slide/Slide03_tong_quan_canva.jpg` |
-| 6–14 | Gộp 9 bước đăng ký xe thành 1 slide; video phát chậm 2 lần, dừng ~4 giây sau mỗi bước (~1 phút 50 giây); ghi chú có mốc thời gian | OK | `sua_slide/Dang_ky_xe_9_buoc_cham.mp4` |
-| 15–24 | Gộp 10 bước đăng ký tài xế thành 1 slide; cùng tốc độ chậm như slide 6 (~2 phút); ghi chú có mốc thời gian | OK | `sua_slide/Dang_ky_tai_xe_10_buoc_cham.mp4` |
+| 3 | Thiết kế lại trên Canva: 4 giai đoạn bằng hình ảnh, ít chữ; giữ ghi chú cũ (Canva DAHaJvmsdZo) | Chờ duyệt | `Trang_03_tong_quan.pptx` |
+| 6–14 | Gộp 9 bước đăng ký xe thành 1 trang; video chậm 2 lần, dừng ~4 giây mỗi bước (~1 phút 50 giây) | OK | `Trang_06-14_dang_ky_xe.pptx` |
+| 15–24 | Gộp 10 bước đăng ký tài xế thành 1 trang; cùng tốc độ chậm (~2 phút) | OK | `Trang_15-24_dang_ky_tai_xe.pptx` |
