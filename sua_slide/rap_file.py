@@ -12,7 +12,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 NS = '{http://schemas.openxmlformats.org/presentationml/2006/main}'
 
 # (slide đầu, slide cuối, video ghép, thời lượng giây, ghi chú người trình bày)
+# slide đầu = slide cuối: chỉ thay video của 1 slide, không gộp.
 GOP = [
+    (5, 5, 'Trang05_giay_to_cham.mp4', 27.3,
+     """[Video tự chạy 1 lần, khoảng 27 giây, đủ 4 giấy tờ thì đứng yên – không lặp lại]
+0:00 Đăng kiểm xe – 0:06 Cà vẹt xe – 0:11 CCCD – 0:14 Bằng lái (GPLX) – 0:19 hai form nhập TMS, đủ dấu tích ở 0:25.
+
+Tài xế lên cầu cân làm phiếu, mang theo 4 giấy tờ: đăng kiểm xe, cà vẹt xe, CCCD và bằng lái (GPLX). Đăng kiểm và cà vẹt dùng để nhập form Đăng ký xe vận chuyển đường (trang 6). CCCD và bằng lái dùng để nhập form Đăng ký tài xế (trang 7); ảnh chân dung chụp tại cầu cân bằng webcam. Xe hoặc tài xế đã có trên hệ thống thì chỉ cần kiểm tra thông tin còn đúng không. Cà vẹt, CCCD và bằng lái trên slide là bản mẫu."""),
     (6, 14, 'Dang_ky_xe_9_buoc_cham.mp4', 110.2,
      """[Video tự chạy – 9 bước trong 1 slide, khoảng 1 phút 50 giây] Video phát chậm, mỗi bước dừng khoảng 4 giây để giải thích. Muốn dừng lâu hơn: bấm vào video (hoặc phím Space) để tạm dừng, bấm lần nữa để chạy tiếp.
 
@@ -73,6 +79,7 @@ def main(src, out, chi_giu=None):
         for ctn in s._element.iter(NS + 'cTn'):
             if ctn.get('id') == '4':
                 ctn.set('dur', str(int(giay * 1000)))
+            ctn.attrib.pop('repeatCount', None)  # chạy 1 lần, dừng ở khung cuối
         s.notes_slide.notes_text_frame.text = ghichu
         xoa += ids[dau:cuoi]
     if chi_giu is not None:
