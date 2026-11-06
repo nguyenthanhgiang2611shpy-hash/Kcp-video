@@ -11,7 +11,7 @@
 
 | Slide gốc | Nội dung sửa | Trạng thái | File 1 trang |
 |---|---|---|---|
-| 3 | Thiết kế lại trên Canva: 4 giai đoạn bằng hình ảnh, ít chữ; giữ ghi chú cũ (Canva DAHaJvmsdZo) | Chờ duyệt | `Trang_03_tong_quan.pptx` |
+| 3 | Bỏ hẳn trang 3 (sơ đồ tổng quan) khỏi bộ slide cuối cùng | OK – bỏ | (không có) |
 | 5 | Giấy tờ hiện chậm (chậm 3 lần), mỗi giấy tờ dừng 2 giây; đủ hết thì đứng yên, không lặp lại (~27 giây) | OK | `Trang_05_giay_to.pptx` |
 | 6–14 | Gộp 9 bước đăng ký xe thành 1 trang; video chậm 2 lần, dừng ~4 giây mỗi bước (~1 phút 50 giây) | OK | `Trang_06-14_dang_ky_xe.pptx` |
 | 15–24 | Gộp 10 bước đăng ký tài xế thành 1 trang; cùng tốc độ chậm (~2 phút) | OK | `Trang_15-24_dang_ky_tai_xe.pptx` |

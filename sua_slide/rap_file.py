@@ -53,9 +53,10 @@ Lưu ý: Ảnh chân dung chụp trực tiếp tại cầu cân bằng webcam, k
 ]
 
 # Slide thay bằng ảnh thiết kế mới: {số slide gốc: file ảnh}
-THAY_ANH = {
-    3: 'Slide03_tong_quan_canva.jpg',  # thiết kế lại trên Canva (DAHaJvmsdZo)
-}
+THAY_ANH = {}
+
+# Slide gốc bỏ hẳn khỏi bộ slide cuối cùng
+BO_SLIDE = [3]
 
 
 def main(src, out, chi_giu=None):
@@ -82,6 +83,7 @@ def main(src, out, chi_giu=None):
             ctn.attrib.pop('repeatCount', None)  # chạy 1 lần, dừng ở khung cuối
         s.notes_slide.notes_text_frame.text = ghichu
         xoa += ids[dau:cuoi]
+    xoa += [ids[so - 1] for so in BO_SLIDE]
     if chi_giu is not None:
         xoa = [sid for i, sid in enumerate(ids) if i != chi_giu - 1]
     for sid in xoa:
