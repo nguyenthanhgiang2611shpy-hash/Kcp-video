@@ -28,6 +28,11 @@ Mốc thời gian:
       3:20 Bước 10 Đủ bộ chứng từ xuất hàng: DC → hợp đồng vận chuyển → COA
 
 Các slide sau đi chi tiết từng bước."""),
+    (5, 5, 'Trang05_giay_to_cham.mp4', 27.3,
+     """[Video tự chạy 1 lần, khoảng 27 giây, đủ 4 giấy tờ thì đứng yên – không lặp lại]
+0:00 Đăng kiểm xe – 0:06 Cà vẹt xe – 0:11 CCCD – 0:14 Bằng lái (GPLX) – 0:19 hai form nhập TMS, đủ dấu tích ở 0:25.
+
+Tài xế lên cầu cân làm phiếu, mang theo 4 giấy tờ: đăng kiểm xe, cà vẹt xe, CCCD và bằng lái (GPLX). Đăng kiểm và cà vẹt dùng để nhập form Đăng ký xe vận chuyển đường (trang 6). CCCD và bằng lái dùng để nhập form Đăng ký tài xế (trang 7); ảnh chân dung chụp tại cầu cân bằng webcam. Xe hoặc tài xế đã có trên hệ thống thì chỉ cần kiểm tra thông tin còn đúng không. Cà vẹt, CCCD và bằng lái trên slide là bản mẫu."""),
     (6, 14, 'Dang_ky_xe_9_buoc_cham.mp4', 110.2,
      """[Video tự chạy – 9 bước trong 1 slide, khoảng 1 phút 50 giây] Video phát chậm, mỗi bước dừng khoảng 4 giây để giải thích. Muốn dừng lâu hơn: bấm vào video (hoặc phím Space) để tạm dừng, bấm lần nữa để chạy tiếp.
 
