@@ -45,11 +45,22 @@ Mốc thời gian:
 Lưu ý: Ảnh chân dung chụp trực tiếp tại cầu cân bằng webcam, không dùng ảnh tài xế gửi qua điện thoại. Tài xế đã có trên hệ thống thì tìm theo mã hoặc tên và kiểm tra lại thông tin. CCCD và GPLX trên slide là bản mẫu, tên và số là giả."""),
 ]
 
+# Slide thay bằng ảnh thiết kế mới: {số slide gốc: file ảnh}
+THAY_ANH = {
+    3: 'Slide03_tong_quan_canva.jpg',  # thiết kế lại trên Canva (DAHaJvmsdZo)
+}
+
 
 def main(src, out):
     p = Presentation(src)
     slides = list(p.slides)
     ids = list(p.slides._sldIdLst)
+    for so, anh in THAY_ANH.items():
+        s = slides[so - 1]
+        blob = open(os.path.join(HERE, anh), 'rb').read()
+        for rel in s.part.rels.values():
+            if rel.reltype.endswith('/image'):
+                rel.target_part._blob = blob
     xoa = []
     for dau, cuoi, video, giay, ghichu in GOP:
         s = slides[dau - 1]

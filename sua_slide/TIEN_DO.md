@@ -9,5 +9,6 @@
 
 | Slide gốc | Nội dung sửa | Trạng thái | Tài nguyên |
 |---|---|---|---|
+| 3 | Thiết kế lại trên Canva: 4 giai đoạn bằng hình ảnh, ít chữ; giữ ghi chú cũ (thiết kế Canva DAHaJvmsdZo) | Chờ duyệt | `sua_slide/Slide03_tong_quan_canva.jpg` |
 | 6–14 | Gộp 9 bước đăng ký xe thành 1 slide; video phát chậm 2 lần, dừng ~4 giây sau mỗi bước (~1 phút 50 giây); ghi chú có mốc thời gian | OK | `sua_slide/Dang_ky_xe_9_buoc_cham.mp4` |
-| 15–24 | Gộp 10 bước đăng ký tài xế thành 1 slide; cùng tốc độ chậm như slide 6 (~2 phút); ghi chú có mốc thời gian | Chờ duyệt | `sua_slide/Dang_ky_tai_xe_10_buoc_cham.mp4` |
+| 15–24 | Gộp 10 bước đăng ký tài xế thành 1 slide; cùng tốc độ chậm như slide 6 (~2 phút); ghi chú có mốc thời gian | OK | `sua_slide/Dang_ky_tai_xe_10_buoc_cham.mp4` |
