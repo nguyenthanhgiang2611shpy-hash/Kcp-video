@@ -37,3 +37,6 @@
 - Lời thuyết trình: `tai_lieu/loi_thuyet_trinh.json` → file Word `tai_lieu/Loi_thuyet_trinh.docx` (node tai_lieu/tao_loi_thuyet_trinh.js) và ghi vào đầu ghi chú từng trang (python3 sua_slide/them_loi_vao_ghi_chu.py), chạy sau `hoan_thien.py`.
 - `hoan_thien.py`: đánh lại số trang 03–18 (do bỏ trang 3), đổi "(trang 6)/(trang 7)" thành "(trang 5)/(trang 6)" trong video và ghi chú trang giấy tờ, nén video (H.264, 1280 px) và ảnh.
 - Phông Nunito lấy từ gói npm `@fontsource/nunito`, gộp các bộ latin + latin-ext + vietnamese bằng fontTools.
+
+## Việc chờ làm
+- Khi người dùng **chốt bản final**: làm thêm 1 bản **TỰ CHẠY** (tự chuyển trang: trang có video chuyển sau khi video xong, trang tĩnh chuyển theo thời lượng trong lời thuyết trình). Giữ nguyên bản final bấm chuột để thuyết trình.
