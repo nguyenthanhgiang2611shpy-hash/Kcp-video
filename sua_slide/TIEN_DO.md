@@ -29,6 +29,15 @@
 | 38 (số in "14") | Dòng ② trong video: "Kho + Process kiểm tra và xác nhận" (bỏ "ký"); ghi chú sửa theo | OK | (trong bản FINAL) |
 | 42 (số in "18") | Khung "Dư vượt cột (2)": "→ kiểm tra và xác nhận" (bỏ "ký"); ghi chú sửa theo | OK | (trong bản FINAL) |
 
+| 6–14 (trang 5 final) – thêm Chuyển tiếp | Sau khi Lưu, bấm **Chuyển tiếp** để người quản lý duyệt xe; toast "Đã chuyển tiếp – chờ quản lý duyệt"; video ~1 phút 55 giây | OK | `Trang_06-14_dang_ky_xe.pptx` |
+| 15–24 (trang 6 final) | Mã tài xế tự hiện (DR6816) khi bấm Thêm mới; dòng giải thích bước 2 "Mã tài xế: hệ thống tự cấp khi bấm Thêm mới" | OK | `Trang_15-24_dang_ky_tai_xe.pptx` |
+| 35 (trang 11 final) | "Mức cho phép" → "Cân lần đầu 16.900" (hình động, khung ví dụ, ảnh chờ, ghi chú) | OK | `Trang_35_can_lan_dau.pptx` |
+| 37 (trang 13 final) | Dòng 2: "Chọn đúng số xe cần cân ra, bấm nút cân ra, rồi Save." | OK | `Trang_37_can_xe_ra.pptx` |
+| 38 (trang 14 final) | Kim dư cân 126 → 175 kg thì dừng (700 bao × 0,18 kg = 126 kg), rồi vẫn chạy tới 210 kg; ảnh chờ có nội dung | OK | `Trang_38_kim_126_175.pptx` |
+| 39 (trang 15 final) | Mẫu phiếu bỏ chữ ký tay, giữ chữ in | OK | `Trang_39_bo_chu_ky.pptx` |
+| 4, 25, 33, 35, 37, 38, 39, 41 (trang 3, 7, 9, 11, 13, 14, 15, 17 final) | Hình động ngắn chạy **đúng 2 lần rồi dừng** (`LAP_2_LAN`) | OK | `Trang_04_…`, `Trang_25_…`, `Trang_33_…`, `Trang_41_…` và các file trên |
+| Ghi chú + lời thuyết trình | Tạm dừng video: **Alt + P** hoặc bấm vào video (không dùng Space); cập nhật lời các trang 5, 6, 11, 13, 14 | OK | `tai_lieu/Loi_thuyet_trinh.docx` |
+
 ## Bản FINAL
 - File: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` (18 trang, ~7,5 MB, gửi email được, có lời thuyết trình trong ghi chú).
 - Cách tạo:
