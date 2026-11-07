@@ -10,6 +10,8 @@ from pptx import Presentation
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 NS = '{http://schemas.openxmlformats.org/presentationml/2006/main}'
+A = '{http://schemas.openxmlformats.org/drawingml/2006/main}'
+R = '{http://schemas.openxmlformats.org/officeDocument/2006/relationships}'
 
 # (slide đầu, slide cuối, video ghép, thời lượng giây, ghi chú người trình bày)
 # slide đầu = slide cuối: chỉ thay video của 1 slide, không gộp.
@@ -81,16 +83,26 @@ Lưu ý: Phần cân (Weigh Bridge Weightment Detail) do cầu cân tự điền
      """Hình động: nhân viên bảo vệ đi từ đuôi xe tới, nhân viên cầu cân đi từ đầu xe tới, cùng giám sát xe trước khi cân.
 
 Trước khi cân xe vào phải có nhân viên phòng bảo vệ và nhân viên cầu cân cùng kiểm tra. Không cân khi bánh xe dính bùn, sàn xe ướt hoặc nước đọng trên bạt trần xe, hoặc xe không đậu giữa cầu cân. Bùn và nước làm sai xác xe, xe lệch làm sai số cân."""),
+    (39, 39, 'Trang39_kho_process_xac_nhan.mp4', 8.0,
+     """Khi dư cân vượt cột (2) của tờ trình: nhân viên cầu cân không được làm DC. Gửi email báo Kho và bộ phận Process, ghi số xe và số dư. Kho và Process kiểm tra và xác nhận. Có đủ xác nhận thì lưu số cân và nhờ IT hoặc Kế toán trưởng làm DC. Phiếu này nằm cuối tờ trình ngày 31/01/2012."""),
 ]
 
 # Slide có video phủ toàn trang: {số slide gốc: ảnh hiện trước khi video chạy}
 TOAN_TRANG = {2: 'Trang02_poster.jpg'}
 
+# Ảnh chờ của video (hiện trước khi video chạy): {số slide gốc: ảnh}
+POSTER = {39: 'Trang39_poster.jpg'}
+
 # Slide giữ chế độ chạy lặp lại như bản gốc (không tắt lặp)
-GIU_LAP = {33}
+GIU_LAP = {33, 39}
 
 # Slide thay bằng ảnh thiết kế mới: {số slide gốc: file ảnh}
+TINH = {
+    1: 'Trang01_tieu_de.jpg',  # trang 1: ảnh tĩnh tiêu đề đã vẽ xong, bỏ video (hiện chữ ngay)
+}
+
 THAY_ANH = {
+    39: 'Trang39_nen.jpg',  # trang 15 bản final: dòng 2 chỉ ghi Kho và Process kiểm tra và xác nhận
     2: 'Trang02_nen.jpg',  # tiêu đề mới, bỏ dòng 'Video không có tiếng'
 }
 
@@ -106,9 +118,21 @@ def main(src, out, chi_giu=None):
     for so, anh in THAY_ANH.items():
         s = slides[so - 1]
         blob = open(os.path.join(HERE, anh), 'rb').read()
-        for rel in s.part.rels.values():
-            if rel.reltype.endswith('/image'):
-                rel.target_part._blob = blob
+        nen = s.shapes[0]._element.find('.//' + A + 'blip').get(R + 'embed')  # ảnh nền = hình đầu tiên
+        s.part.related_part(nen)._blob = blob
+    for so, anh in TINH.items():
+        s = slides[so - 1]
+        nen = s.shapes[0]._element.find('.//' + A + 'blip').get(R + 'embed')
+        s.part.related_part(nen)._blob = open(os.path.join(HERE, anh), 'rb').read()
+        for sh in list(s.shapes):
+            if sh.shape_type == 16:  # bỏ video
+                sh._element.getparent().remove(sh._element)
+        tm = s._element.find(NS + 'timing')
+        if tm is not None:
+            s._element.remove(tm)
+        for rid, rel in list(s.part.rels.items()):
+            if 'media' in rel.reltype or rel.reltype.endswith('/video'):
+                s.part.drop_rel(rid)
     xoa = []
     for dau, cuoi, video, giay, ghichu in GOP:
         s = slides[dau - 1]
@@ -122,6 +146,11 @@ def main(src, out, chi_giu=None):
             if dau not in GIU_LAP:
                 ctn.attrib.pop('repeatCount', None)  # chạy 1 lần, dừng ở khung cuối
         s.notes_slide.notes_text_frame.text = ghichu
+        if dau in POSTER:
+            for sh in s.shapes:
+                if sh.shape_type == 16:
+                    rid = sh._element.find('.//' + A + 'blip').get(R + 'embed')
+                    s.part.related_part(rid)._blob = open(os.path.join(HERE, POSTER[dau]), 'rb').read()
         if dau in TOAN_TRANG:
             for sh in s.shapes:
                 if sh.shape_type == 16:  # MEDIA

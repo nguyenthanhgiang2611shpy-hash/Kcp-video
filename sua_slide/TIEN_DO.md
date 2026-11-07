@@ -18,6 +18,8 @@
 | 26–32 | Gộp 7 bước Loading Request thành 1 trang; video chậm 2 lần, dừng ~4 giây mỗi bước (~1 phút 31 giây) | OK | `Trang_26-32_loading_request.pptx` |
 | 33 (số in "10") | Thêm 2 người giám sát: bảo vệ đi từ đuôi xe tới, NV cầu cân đi từ đầu xe tới; giữ chạy lặp như gốc | OK | `Trang_33_kiem_tra_xe.pptx` |
 | 2 | Tiêu đề đổi thành "Quy trình xuất một xe đường tại cầu cân", bỏ dòng "Video không có tiếng…"; video chậm 3 lần, dừng 5 giây mỗi bước (~3 phút 41 giây), phủ toàn trang; khoanh đỏ giai đoạn đang nói, giữ tới cuối; chạy 1 lần rồi dừng ; bước 3 thêm thẻ 'Bằng lái' và chữ ', bằng lái' | OK | `Trang_02_toan_bo_quy_trinh.pptx` |
+| 1 | Ảnh tĩnh tiêu đề đã vẽ xong, bỏ video vẽ bằng bút (trước đây trang trống tới khi bấm, cuối video còn lật sang trang 2 bản cũ) | OK | (trong bản FINAL) |
+| 39 (số in "15") | Dòng 2 chỉ ghi "Kho và Process kiểm tra và xác nhận."; nhãn trong video đổi thành "Kho xác nhận", "Process xác nhận"; ghi chú cập nhật | OK | (trong bản FINAL) |
 
 ## Bản FINAL
 - File: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` (18 trang, ~9 MB, gửi email được).
