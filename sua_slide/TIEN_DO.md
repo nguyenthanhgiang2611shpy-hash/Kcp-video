@@ -27,9 +27,10 @@
 | 6–14 (trang 5 final) – sửa bước 4 | Loại xe: danh sách Trailer / Normal Truck, xe ví dụ chọn Normal Truck; dòng giải thích "Container bạt chọn Trailer · 4 chân trở xuống chọn Normal Truck"; ghi chú: chọn Trailer thì nhập thêm Rơ moóc | OK | `Trang_06-14_dang_ky_xe.pptx` |
 
 ## Bản FINAL
-- File: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` (18 trang, ~8,4 MB, gửi email được).
+- File: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` (18 trang, ~7,5 MB, gửi email được, có lời thuyết trình trong ghi chú).
 - Cách tạo:
   1. `python3 sua_slide/rap_file.py <file_goc.pptx> full_raw.pptx`
   2. `python3 sua_slide/hoan_thien.py full_raw.pptx Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx <thư mục phông Nunito>`
+- Lời thuyết trình: `tai_lieu/loi_thuyet_trinh.json` → file Word `tai_lieu/Loi_thuyet_trinh.docx` (node tai_lieu/tao_loi_thuyet_trinh.js) và ghi vào đầu ghi chú từng trang (python3 sua_slide/them_loi_vao_ghi_chu.py), chạy sau `hoan_thien.py`.
 - `hoan_thien.py`: đánh lại số trang 03–18 (do bỏ trang 3), đổi "(trang 6)/(trang 7)" thành "(trang 5)/(trang 6)" trong video và ghi chú trang giấy tờ, nén video (H.264, 1280 px) và ảnh.
 - Phông Nunito lấy từ gói npm `@fontsource/nunito`, gộp các bộ latin + latin-ext + vietnamese bằng fontTools.
