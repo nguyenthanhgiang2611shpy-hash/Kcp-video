@@ -39,7 +39,7 @@ def renumber(im, n):
     d.text((NUM_RIGHT, NUM_BASE), f'{n:02d}', font=F_NUM, fill=ink, anchor='rs')
     return im
 
-def save_jpg(im, path, q=78):
+def save_jpg(im, path, q=70):
     im.convert('RGB').save(path, 'JPEG', quality=q, optimize=True, progressive=False)
 
 def encode(src, dst, width, overlay=None, frame_fn=None):
@@ -48,8 +48,9 @@ def encode(src, dst, width, overlay=None, frame_fn=None):
         'stream=width,height', '-of', 'csv=p=0', src]).decode().strip().split(','))
     out_w = min(width, w) // 2 * 2
     out_h = int(round(h * out_w / w / 2)) * 2
-    enc_args = ['-c:v', 'libx264', '-profile:v', 'main', '-preset', 'slow', '-crf', '31', '-pix_fmt', 'yuv420p',
-                '-r', '30', '-movflags', '+faststart', '-an', dst]
+    # nén mạnh nhất mà chữ trên phần mềm vẫn đọc được (crf 36, tune animation, khung khoá cách xa)
+    enc_args = ['-c:v', 'libx264', '-profile:v', 'main', '-preset', 'veryslow', '-tune', 'animation', '-crf', '36',
+                '-g', '600', '-pix_fmt', 'yuv420p', '-r', '30', '-movflags', '+faststart', '-an', dst]
     if frame_fn is None:
         vf = f'scale={out_w}:{out_h}:flags=lanczos'
         cmd = ['ffmpeg', '-v', 'error', '-y', '-i', src]

@@ -40,4 +40,4 @@ Nội dung chính: bộ slide đào tạo "Quy trình xuất một xe đường 
 - Hoàn thiện (đánh lại số trang, sửa tham chiếu trang, nén): `python3 sua_slide/hoan_thien.py full_raw.pptx FINAL.pptx <thư mục phông Nunito>`.
 - Lời thuyết trình: `tai_lieu/loi_thuyet_trinh.json` → `node tai_lieu/tao_loi_thuyet_trinh.js ...` (file Word) và `python3 sua_slide/them_loi_vao_ghi_chu.py tai_lieu/loi_thuyet_trinh.json FINAL.pptx FINAL.pptx` (ghi vào ghi chú).
 - Phông Nunito: gói npm `@fontsource/nunito`, gộp bộ latin + latin-ext + vietnamese bằng fontTools.
-- Bản final: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` ở thư mục gốc repo.
+- Bản final: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` ở thư mục gốc repo (đã chốt). Bản tự chạy: `python3 sua_slide/tao_ban_tu_chay.py <FINAL> tai_lieu/loi_thuyet_trinh.json Quy_trinh_xuat_xe_duong_tai_cau_can_TU_CHAY.pptx`.

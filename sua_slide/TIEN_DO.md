@@ -38,14 +38,17 @@
 | 4, 25, 33, 35, 37, 38, 39, 41 (trang 3, 7, 9, 11, 13, 14, 15, 17 final) | Hình động ngắn chạy **đúng 2 lần rồi dừng** (`LAP_2_LAN`) | OK | `Trang_04_…`, `Trang_25_…`, `Trang_33_…`, `Trang_41_…` và các file trên |
 | Ghi chú + lời thuyết trình | Tạm dừng video: **Alt + P** hoặc bấm vào video (không dùng Space); cập nhật lời các trang 5, 6, 11, 13, 14 | OK | `tai_lieu/Loi_thuyet_trinh.docx` |
 
-## Bản FINAL
-- File: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` (18 trang, ~7,5 MB, gửi email được, có lời thuyết trình trong ghi chú).
+## Bản FINAL (đã chốt 07/11/2026)
+- `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx`: 18 trang, ~4,4 MB, bấm chuột chuyển trang; video tự chạy khi mở trang; lời thuyết trình trong ghi chú.
+- `Quy_trinh_xuat_xe_duong_tai_cau_can_TU_CHAY.pptx`: giống bản final nhưng tự chuyển trang (trang có video: hết video + 3 giây; trang tĩnh: theo số giây trong lời thuyết trình); tổng ~13 phút 30 giây. Phím **S** tạm dừng / chạy tiếp cả bài; **Alt + P** chỉ dừng video.
 - Cách tạo:
   1. `python3 sua_slide/rap_file.py <file_goc.pptx> full_raw.pptx`
-  2. `python3 sua_slide/hoan_thien.py full_raw.pptx Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx <thư mục phông Nunito>`
-- Lời thuyết trình: `tai_lieu/loi_thuyet_trinh.json` → file Word `tai_lieu/Loi_thuyet_trinh.docx` (node tai_lieu/tao_loi_thuyet_trinh.js) và ghi vào đầu ghi chú từng trang (python3 sua_slide/them_loi_vao_ghi_chu.py), chạy sau `hoan_thien.py`.
-- `hoan_thien.py`: đánh lại số trang 03–18 (do bỏ trang 3), đổi "(trang 6)/(trang 7)" thành "(trang 5)/(trang 6)" trong video và ghi chú trang giấy tờ, nén video (H.264, 1280 px) và ảnh.
+  2. `python3 sua_slide/hoan_thien.py full_raw.pptx Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx <thư mục phông Nunito>` (video H.264 crf 36, 1280 px; ảnh JPEG chất lượng 70)
+  3. `python3 sua_slide/them_loi_vao_ghi_chu.py tai_lieu/loi_thuyet_trinh.json <FINAL> <FINAL>`
+  4. Bản tự chạy: `python3 sua_slide/tao_ban_tu_chay.py <FINAL> tai_lieu/loi_thuyet_trinh.json Quy_trinh_xuat_xe_duong_tai_cau_can_TU_CHAY.pptx`
+- Lời thuyết trình: `tai_lieu/loi_thuyet_trinh.json` → file Word `tai_lieu/Loi_thuyet_trinh.docx` (node tai_lieu/tao_loi_thuyet_trinh.js).
+- `hoan_thien.py`: đánh lại số trang 03–18 (do bỏ trang 3), đổi "(trang 6)/(trang 7)" thành "(trang 5)/(trang 6)" trong video và ghi chú trang giấy tờ, nén video và ảnh.
 - Phông Nunito lấy từ gói npm `@fontsource/nunito`, gộp các bộ latin + latin-ext + vietnamese bằng fontTools.
 
 ## Việc chờ làm
-- Khi người dùng **chốt bản final**: làm thêm 1 bản **TỰ CHẠY** (tự chuyển trang: trang có video chuyển sau khi video xong, trang tĩnh chuyển theo thời lượng trong lời thuyết trình). Giữ nguyên bản final bấm chuột để thuyết trình.
+- (không còn)
