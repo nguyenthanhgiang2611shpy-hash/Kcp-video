@@ -81,6 +81,8 @@ Lưu ý: Phần cân (Weigh Bridge Weightment Detail) do cầu cân tự điền
      """Hình động: nhân viên bảo vệ đi từ đuôi xe tới, nhân viên cầu cân đi từ đầu xe tới, cùng giám sát xe trước khi cân.
 
 Trước khi cân xe vào phải có nhân viên phòng bảo vệ và nhân viên cầu cân cùng kiểm tra. Không cân khi bánh xe dính bùn, sàn xe ướt hoặc nước đọng trên bạt trần xe, hoặc xe không đậu giữa cầu cân. Bùn và nước làm sai xác xe, xe lệch làm sai số cân."""),
+    (38, 38, 'Trang38_kiem_tra_xac_nhan.mp4', 20.0,
+     """Đối chiếu dư cân với tờ trình TGĐ ngày 31/01/2012. Ví dụ xe bốc 35.000 kg: cột (2) là 175 kg. Dư không quá cột (2): nhân viên cầu cân làm DC. Dư vượt cột (2): nhân viên cầu cân không được làm DC; gửi email báo Kho và Process để kiểm tra và xác nhận, sau đó lưu số cân và nhờ IT hoặc Kế toán trưởng làm DC (slide sau). Cột (2) luôn bằng 0,5% khối lượng bốc, tức số tấn × 5 kg (cứ thêm 5 tấn thì thêm 25 kg); xe không đúng mốc trong bảng thì tính theo công thức này, ví dụ xe 34 tấn: 170 kg. Cột (3) chỉ để tham khảo: vượt cột (3) cũng xử lý giống vượt cột (2)."""),
     (39, 39, 'Trang39_kho_process_xac_nhan.mp4', 8.0,
      """Khi dư cân vượt cột (2) của tờ trình: nhân viên cầu cân không được làm DC. Gửi email báo Kho và bộ phận Process, ghi số xe và số dư. Kho và Process kiểm tra và xác nhận. Có đủ xác nhận thì lưu số cân và nhờ IT hoặc Kế toán trưởng làm DC. Phiếu này nằm cuối tờ trình ngày 31/01/2012."""),
 ]
@@ -89,19 +91,23 @@ Trước khi cân xe vào phải có nhân viên phòng bảo vệ và nhân vi�
 TOAN_TRANG = {2: 'Trang02_poster.jpg'}
 
 # Ảnh chờ của video (hiện trước khi video chạy): {số slide gốc: ảnh}
-POSTER = {1: 'Trang01_tieu_de.jpg', 39: 'Trang39_poster.jpg'}
+POSTER = {1: 'Trang01_tieu_de.jpg', 38: 'Trang38_poster.jpg', 39: 'Trang39_poster.jpg'}
 
 # Slide giữ chế độ chạy lặp lại như bản gốc (không tắt lặp)
-GIU_LAP = {33, 39}
+GIU_LAP = {33, 38, 39}
 
 # Slide thay bằng ảnh thiết kế mới: {số slide gốc: file ảnh}
 TINH = {}
 
 THAY_ANH = {
+    42: 'Trang42_nen.jpg',  # trang 18 bản final: 'kiểm tra và xác nhận' (bỏ 'ký')
     40: 'Trang40_nen.jpg',  # trang 16 bản final: 4 bước làm DC (double click Truck No, nhập seal, Save rồi in)
     39: 'Trang39_nen.jpg',  # trang 15 bản final: dòng 2 chỉ ghi Kho và Process kiểm tra và xác nhận
     2: 'Trang02_nen.jpg',  # tiêu đề mới, bỏ dòng 'Video không có tiếng'
 }
+
+# Sửa chữ trong ghi chú người trình bày: {số slide gốc: [(chữ cũ, chữ mới)]}
+SUA_GHI_CHU = {42: [('kiểm tra, ký xác nhận', 'kiểm tra và xác nhận')]}
 
 # Slide gốc bỏ hẳn khỏi bộ slide cuối cùng
 BO_SLIDE = [3]
@@ -130,6 +136,12 @@ def main(src, out, chi_giu=None):
         for rid, rel in list(s.part.rels.items()):
             if 'media' in rel.reltype or rel.reltype.endswith('/video'):
                 s.part.drop_rel(rid)
+    for so, pairs in SUA_GHI_CHU.items():
+        tf = slides[so - 1].notes_slide.notes_text_frame
+        txt = tf.text
+        for a, b in pairs:
+            txt = txt.replace(a, b)
+        tf.text = txt
     xoa = []
     for dau, cuoi, video, giay, ghichu in GOP:
         s = slides[dau - 1]

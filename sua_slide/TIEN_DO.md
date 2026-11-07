@@ -26,6 +26,9 @@
 
 | 6–14 (trang 5 final) – sửa bước 4 | Loại xe: danh sách Trailer / Normal Truck, xe ví dụ chọn Normal Truck; dòng giải thích "Container bạt chọn Trailer · 4 chân trở xuống chọn Normal Truck"; ghi chú: chọn Trailer thì nhập thêm Rơ moóc | OK | `Trang_06-14_dang_ky_xe.pptx` |
 
+| 38 (số in "14") | Dòng ② trong video: "Kho + Process kiểm tra và xác nhận" (bỏ "ký"); ghi chú sửa theo | OK | (trong bản FINAL) |
+| 42 (số in "18") | Khung "Dư vượt cột (2)": "→ kiểm tra và xác nhận" (bỏ "ký"); ghi chú sửa theo | OK | (trong bản FINAL) |
+
 ## Bản FINAL
 - File: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` (18 trang, ~7,5 MB, gửi email được, có lời thuyết trình trong ghi chú).
 - Cách tạo:
