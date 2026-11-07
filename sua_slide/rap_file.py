@@ -19,7 +19,7 @@ GOP = [
     (1, 1, 'Trang01_ve_tay_but_nho.mp4', 17.4,
      """[Video vẽ tay tự chạy 1 lần, khoảng 17 giây; vẽ xong thì đứng yên] Quy trình xuất một xe đường tại cầu cân: từ lúc xe đến bãi đậu, đăng ký tài ở cổng bảo vệ, làm phiếu tại cầu cân, cân vào, bốc hàng, cân ra, kiểm tra dư cân, làm chứng từ và cho xe ra cổng."""),
     (2, 2, 'Trang02_toan_bo_quy_trinh_cham.mp4', 65.7,
-     """[Video tự chạy 1 lần, khoảng 1 phút 6 giây, phủ toàn trang; hết video thì đứng yên] Mỗi giai đoạn chỉ một đoạn minh họa, phát chậm 3 lần và dừng khoảng 5 giây. Giai đoạn đang nói được khoanh đỏ trong danh sách bên phải; giai đoạn đã nói vẫn giữ vòng đỏ tới cuối. Bấm vào video (hoặc phím Space) để tạm dừng khi cần giải thích thêm – vòng đỏ dừng theo video.
+     """[Video tự chạy 1 lần, khoảng 1 phút 6 giây, phủ toàn trang; hết video thì đứng yên] Mỗi giai đoạn chỉ một đoạn minh họa, phát chậm 3 lần và dừng khoảng 5 giây. Giai đoạn đang nói được khoanh đỏ trong danh sách bên phải; giai đoạn đã nói vẫn giữ vòng đỏ tới cuối. Bấm vào video (hoặc Alt + P) để tạm dừng khi cần giải thích thêm – vòng đỏ dừng theo video.
 
 Mốc thời gian:
 0:00  Giai đoạn 1 – Trước khi cân: xe đến bãi đậu xe KCP (khoanh đỏ ô 1).
@@ -33,8 +33,8 @@ Các slide sau đi chi tiết từng bước."""),
 0:00 Đăng kiểm xe – 0:06 Cà vẹt xe – 0:11 CCCD – 0:14 Bằng lái (GPLX) – 0:19 hai form nhập TMS, đủ dấu tích ở 0:25.
 
 Tài xế lên cầu cân làm phiếu, mang theo 4 giấy tờ: đăng kiểm xe, cà vẹt xe, CCCD và bằng lái (GPLX). Đăng kiểm và cà vẹt dùng để nhập form Đăng ký xe vận chuyển đường (trang 6). CCCD và bằng lái dùng để nhập form Đăng ký tài xế (trang 7); ảnh chân dung chụp tại cầu cân bằng webcam. Xe hoặc tài xế đã có trên hệ thống thì chỉ cần kiểm tra thông tin còn đúng không. Cà vẹt, CCCD và bằng lái trên slide là bản mẫu."""),
-    (6, 14, 'Dang_ky_xe_9_buoc_cham.mp4', 110.2,
-     """[Video tự chạy – 9 bước trong 1 slide, khoảng 1 phút 50 giây] Video phát chậm, mỗi bước dừng khoảng 4 giây để giải thích. Muốn dừng lâu hơn: bấm vào video (hoặc phím Space) để tạm dừng, bấm lần nữa để chạy tiếp.
+    (6, 14, 'Dang_ky_xe_10_buoc_chuyen_tiep.mp4', 114.6,
+     """[Video tự chạy – 9 bước trong 1 slide, khoảng 1 phút 55 giây] Video phát chậm, mỗi bước dừng khoảng 4 giây để giải thích. Muốn dừng lâu hơn: bấm vào video (hoặc Alt + P) để tạm dừng, bấm lần nữa để chạy tiếp.
 
 Mốc thời gian:
 0:00  Bước 1 – Bấm Thêm mới để mở form đăng ký xe trống.
@@ -46,14 +46,15 @@ Mốc thời gian:
 1:13  Bước 7 – Tải trọng: đổi 16.700 kg ra 16,7 tấn.
 1:26  Bước 8 – Ảnh xe: chỉ nhận JPG, tối đa 5 MB.
 1:38  Bước 9 – Bấm Lưu: xe đã được đăng ký trên TMS.
+1:45  Sau khi Lưu, bấm Chuyển tiếp: gửi người quản lý duyệt xe này.
 
 Lưu ý: Mỗi ô khung đỏ trên TMS lấy từ một dòng trên giấy đăng kiểm. Biển số và thông tin xe đối chiếu thêm với cà vẹt. Khi xe đăng kiểm lại, phải cập nhật số tem và hạn mới."""),
-    (15, 24, 'Dang_ky_tai_xe_10_buoc_cham.mp4', 119.9,
-     """[Video tự chạy – 10 bước trong 1 slide, khoảng 2 phút] Video phát chậm, mỗi bước dừng khoảng 4 giây để giải thích. Muốn dừng lâu hơn: bấm vào video (hoặc phím Space) để tạm dừng, bấm lần nữa để chạy tiếp.
+    (15, 24, 'Dang_ky_tai_xe_ma_tu_dong.mp4', 119.9,
+     """[Video tự chạy – 10 bước trong 1 slide, khoảng 2 phút] Video phát chậm, mỗi bước dừng khoảng 4 giây để giải thích. Muốn dừng lâu hơn: bấm vào video (hoặc Alt + P) để tạm dừng, bấm lần nữa để chạy tiếp.
 
 Mốc thời gian:
 0:00  Bước 1 – Bấm Thêm mới để mở form đăng ký tài xế trống.
-0:09  Bước 2 – Mã tài xế: mã trên hệ thống (dạng DR + số).
+0:09  Bước 2 – Mã tài xế: hệ thống tự cấp khi bấm Thêm mới (dạng DR + số), không cần nhập.
 0:20  Bước 3 – Tên tài xế: họ và tên trên CCCD.
 0:33  Bước 4 – Số CCCD: 12 số trên CCCD.
 0:45  Bước 5 – Số GPLX: số trên giấy phép lái xe.
@@ -65,7 +66,7 @@ Mốc thời gian:
 
 Lưu ý: Ảnh chân dung chụp trực tiếp tại cầu cân bằng webcam, không dùng ảnh tài xế gửi qua điện thoại. Tài xế đã có trên hệ thống thì tìm theo mã hoặc tên và kiểm tra lại thông tin. CCCD và GPLX trên slide là bản mẫu, tên và số là giả."""),
     (26, 32, 'Loading_request_7_buoc_cham.mp4', 91.3,
-     """[Video tự chạy – 7 bước trong 1 slide, khoảng 1 phút 31 giây] Video phát chậm, mỗi bước dừng khoảng 4 giây để giải thích. Muốn dừng lâu hơn: bấm vào video (hoặc phím Space) để tạm dừng, bấm lần nữa để chạy tiếp.
+     """[Video tự chạy – 7 bước trong 1 slide, khoảng 1 phút 31 giây] Video phát chậm, mỗi bước dừng khoảng 4 giây để giải thích. Muốn dừng lâu hơn: bấm vào video (hoặc Alt + P) để tạm dừng, bấm lần nữa để chạy tiếp.
 
 Mốc thời gian:
 0:00  Bước 1 – Mở Loading Request: menu Sales Order and Despatch → Loading Request.
@@ -77,24 +78,34 @@ Mốc thời gian:
 1:18  Bước 7 – Bấm Save. Số Load Req dùng để cân xe vào ở bước sau.
 
 Lưu ý: Phần cân (Weigh Bridge Weightment Detail) do cầu cân tự điền khi cân."""),
-    (33, 33, 'Trang33_kiem_tra_xe_2_nguoi.mp4', 6.8,
-     """Hình động: nhân viên bảo vệ đi từ đuôi xe tới, nhân viên cầu cân đi từ đầu xe tới, cùng giám sát xe trước khi cân.
+    (33, 33, 'Lap2_Trang33.mp4', 13.6,
+     """[Hình động chạy 2 lần rồi dừng, khoảng 14 giây] Hình động: nhân viên bảo vệ đi từ đuôi xe tới, nhân viên cầu cân đi từ đầu xe tới, cùng giám sát xe trước khi cân.
 
 Trước khi cân xe vào phải có nhân viên phòng bảo vệ và nhân viên cầu cân cùng kiểm tra. Không cân khi bánh xe dính bùn, sàn xe ướt hoặc nước đọng trên bạt trần xe, hoặc xe không đậu giữa cầu cân. Bùn và nước làm sai xác xe, xe lệch làm sai số cân."""),
-    (38, 38, 'Trang38_kiem_tra_xac_nhan.mp4', 20.0,
-     """Đối chiếu dư cân với tờ trình TGĐ ngày 31/01/2012. Ví dụ xe bốc 35.000 kg: cột (2) là 175 kg. Dư không quá cột (2): nhân viên cầu cân làm DC. Dư vượt cột (2): nhân viên cầu cân không được làm DC; gửi email báo Kho và Process để kiểm tra và xác nhận, sau đó lưu số cân và nhờ IT hoặc Kế toán trưởng làm DC (slide sau). Cột (2) luôn bằng 0,5% khối lượng bốc, tức số tấn × 5 kg (cứ thêm 5 tấn thì thêm 25 kg); xe không đúng mốc trong bảng thì tính theo công thức này, ví dụ xe 34 tấn: 170 kg. Cột (3) chỉ để tham khảo: vượt cột (3) cũng xử lý giống vượt cột (2)."""),
-    (39, 39, 'Trang39_kho_process_xac_nhan.mp4', 8.0,
-     """Khi dư cân vượt cột (2) của tờ trình: nhân viên cầu cân không được làm DC. Gửi email báo Kho và bộ phận Process, ghi số xe và số dư. Kho và Process kiểm tra và xác nhận. Có đủ xác nhận thì lưu số cân và nhờ IT hoặc Kế toán trưởng làm DC. Phiếu này nằm cuối tờ trình ngày 31/01/2012."""),
+    (38, 38, 'Lap2_Trang38.mp4', 39.6,
+     """[Hình động chạy 2 lần rồi dừng, khoảng 40 giây] Đối chiếu dư cân với tờ trình TGĐ ngày 31/01/2012. Ví dụ xe bốc 35.000 kg: cột (2) là 175 kg. Xe 35 tấn là 700 bao, mỗi bao 0,18 kg: 700 × 0,18 = 126 kg, nên kim báo dư cân chạy từ 126 kg tới 175 kg thì dừng; sau đó kim chạy tiếp tới 210 kg để minh họa trường hợp vượt cột (2). Dư không quá cột (2): nhân viên cầu cân làm DC. Dư vượt cột (2): nhân viên cầu cân không được làm DC; gửi email báo Kho và Process để kiểm tra và xác nhận, sau đó lưu số cân và nhờ IT hoặc Kế toán trưởng làm DC (slide sau). Cột (2) luôn bằng 0,5% khối lượng bốc, tức số tấn × 5 kg (cứ thêm 5 tấn thì thêm 25 kg); xe không đúng mốc trong bảng thì tính theo công thức này, ví dụ xe 34 tấn: 170 kg. Cột (3) chỉ để tham khảo: vượt cột (3) cũng xử lý giống vượt cột (2)."""),
+    (39, 39, 'Lap2_Trang39.mp4', 15.6,
+     """[Hình động chạy 2 lần rồi dừng, khoảng 16 giây] Khi dư cân vượt cột (2) của tờ trình: nhân viên cầu cân không được làm DC. Gửi email báo Kho và bộ phận Process, ghi số xe và số dư. Kho và Process kiểm tra và xác nhận. Có đủ xác nhận thì lưu số cân và nhờ IT hoặc Kế toán trưởng làm DC. Phiếu này nằm cuối tờ trình ngày 31/01/2012; hình trên slide là mẫu phiếu, đã bỏ phần chữ ký tay."""),
 ]
 
 # Slide có video phủ toàn trang: {số slide gốc: ảnh hiện trước khi video chạy}
 TOAN_TRANG = {2: 'Trang02_poster.jpg'}
 
 # Ảnh chờ của video (hiện trước khi video chạy): {số slide gốc: ảnh}
-POSTER = {1: 'Trang01_tieu_de.jpg', 38: 'Trang38_poster.jpg', 39: 'Trang39_poster.jpg'}
+POSTER = {1: 'Trang01_tieu_de.jpg', 38: 'Trang38_poster.jpg', 39: 'Trang39_poster.jpg', 35: 'Trang35_poster.jpg'}
 
-# Slide giữ chế độ chạy lặp lại như bản gốc (không tắt lặp)
-GIU_LAP = {33, 38, 39}
+# Slide giữ chế độ chạy lặp lại như bản gốc (không tắt lặp) – hiện không còn slide nào
+GIU_LAP = set()
+
+# Hình động ngắn: chạy đúng 2 lần rồi dừng (video đã nối sẵn 2 lần, lần 2 cắt trước đoạn mờ cuối)
+# {số slide gốc: (video, thời lượng giây)}; 33, 38, 39 nằm trong GOP ở trên
+LAP_2_LAN = {
+    4: ('Lap2_Trang04.mp4', 14.57),
+    25: ('Lap2_Trang25.mp4', 14.57),
+    35: ('Lap2_Trang35.mp4', 13.43),   # nhãn 'Cân lần đầu 16.900'
+    37: ('Lap2_Trang37.mp4', 17.27),
+    41: ('Lap2_Trang41.mp4', 15.67),
+}
 
 # Slide thay bằng ảnh thiết kế mới: {số slide gốc: file ảnh}
 TINH = {}
@@ -102,12 +113,18 @@ TINH = {}
 THAY_ANH = {
     42: 'Trang42_nen.jpg',  # trang 18 bản final: 'kiểm tra và xác nhận' (bỏ 'ký')
     40: 'Trang40_nen.jpg',  # trang 16 bản final: 4 bước làm DC (double click Truck No, nhập seal, Save rồi in)
-    39: 'Trang39_nen.jpg',  # trang 15 bản final: dòng 2 chỉ ghi Kho và Process kiểm tra và xác nhận
+    39: 'Trang39_nen_khong_chu_ky.jpg',  # trang 15 bản final: Kho và Process kiểm tra và xác nhận; mẫu phiếu bỏ chữ ký tay
+    35: 'Trang35_nen.jpg',  # trang 11 bản final: 'trọng lượng xe cân lần đầu' (thay 'mức cho phép')
+    37: 'Trang37_nen.jpg',  # trang 13 bản final: 'chọn đúng số xe cần cân ra'
     2: 'Trang02_nen.jpg',  # tiêu đề mới, bỏ dòng 'Video không có tiếng'
 }
 
 # Sửa chữ trong ghi chú người trình bày: {số slide gốc: [(chữ cũ, chữ mới)]}
-SUA_GHI_CHU = {42: [('kiểm tra, ký xác nhận', 'kiểm tra và xác nhận')]}
+SUA_GHI_CHU = {
+    42: [('kiểm tra, ký xác nhận', 'kiểm tra và xác nhận')],
+    35: [('mức cho phép của xe 16.900 kg', 'trọng lượng xe cân lần đầu 16.900 kg')],
+    37: [('nên nhân viên cầu cân làm DC.', 'nên nhân viên cầu cân làm DC. Trên phần mềm: chọn đúng số xe cần cân ra, bấm nút cân ra, rồi Save.')],
+}
 
 # Slide gốc bỏ hẳn khỏi bộ slide cuối cùng
 BO_SLIDE = [3]
@@ -169,6 +186,23 @@ def main(src, out, chi_giu=None):
                     rid = blip.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed')
                     s.part.related_part(rid)._blob = open(os.path.join(HERE, TOAN_TRANG[dau]), 'rb').read()
         xoa += ids[dau:cuoi]
+    for so, (video, giay) in LAP_2_LAN.items():
+        s = slides[so - 1]
+        blob = open(os.path.join(HERE, video), 'rb').read()
+        for rel in s.part.rels.values():
+            if 'media' in rel.reltype or rel.reltype.endswith('/video'):
+                rel.target_part._blob = blob
+        for ctn in s._element.iter(NS + 'cTn'):
+            if ctn.get('id') == '4':
+                ctn.set('dur', str(int(giay * 1000)))
+            ctn.attrib.pop('repeatCount', None)
+        tf = s.notes_slide.notes_text_frame
+        tf.text = f'[Hình động chạy 2 lần rồi dừng, khoảng {round(giay)} giây] ' + tf.text
+        if so in POSTER:
+            for sh in s.shapes:
+                if sh.shape_type == 16:
+                    rid = sh._element.find('.//' + A + 'blip').get(R + 'embed')
+                    s.part.related_part(rid)._blob = open(os.path.join(HERE, POSTER[so]), 'rb').read()
     xoa += [ids[so - 1] for so in BO_SLIDE]
     if chi_giu is not None:
         xoa = [sid for i, sid in enumerate(ids) if i != chi_giu - 1]

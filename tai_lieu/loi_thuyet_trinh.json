@@ -2,102 +2,401 @@
  "tieu_de": "Lời thuyết trình – Quy trình xuất một xe đường tại cầu cân",
  "tong_thoi_gian": "khoảng 17–18 phút",
  "trang": [
-  {"so": 1, "ten": "Quy trình xuất một xe đường tại cầu cân", "giay": 30,
+  {
+   "so": 1,
+   "ten": "Quy trình xuất một xe đường tại cầu cân",
+   "giay": 30,
    "thao_tac": "Video vẽ tay tự chạy khoảng 17 giây. Có thể nói ngay trong lúc vẽ.",
-   "loi": [["", "Xin chào các anh chị. Hôm nay tôi hướng dẫn quy trình xuất một xe đường tại cầu cân: từ lúc xe đến bãi đậu cho tới khi xe ra cổng với đủ bộ chứng từ."],
-           ["", "Mục tiêu của buổi này là làm đúng trình tự, nhập đúng số liệu trên phần mềm và không để sai sót về số cân."]]},
-  {"so": 2, "ten": "Toàn cảnh quy trình – 4 giai đoạn", "giay": 80,
+   "loi": [
+    [
+     "",
+     "Xin chào các anh chị. Hôm nay tôi hướng dẫn quy trình xuất một xe đường tại cầu cân: từ lúc xe đến bãi đậu cho tới khi xe ra cổng với đủ bộ chứng từ."
+    ],
+    [
+     "",
+     "Mục tiêu của buổi này là làm đúng trình tự, nhập đúng số liệu trên phần mềm và không để sai sót về số cân."
+    ]
+   ]
+  },
+  {
+   "so": 2,
+   "ten": "Toàn cảnh quy trình – 4 giai đoạn",
+   "giay": 80,
    "thao_tac": "Video khoảng 1 phút 6 giây, vòng đỏ khoanh từng giai đoạn. Nói theo mốc thời gian.",
-   "loi": [["0:00", "Toàn bộ quy trình chia làm 4 giai đoạn. Giai đoạn 1 – Trước khi cân: xe đến bãi đậu, tài xế đăng ký tài, làm phiếu, nhập TMS, bảo vệ mở xe và làm Loading Request."],
-           ["0:18", "Giai đoạn 2 – Cân vào và bốc hàng: kiểm tra xe, cân xác xe, rồi vào kho bốc hàng theo đúng lô."],
-           ["0:34", "Giai đoạn 3 – Cân ra: cân xe đã có hàng. Hệ thống tính hàng thực bằng cân ra trừ cân vào, rồi mình đối chiếu dư cân."],
-           ["0:47", "Giai đoạn 4 – Chứng từ và ra cổng: làm DC, hợp đồng vận chuyển và COA. Đủ bộ chứng từ thì xe mới ra cổng. Bây giờ mình đi chi tiết từng bước."]]},
-  {"so": 3, "ten": "Xe đến bãi đậu, đăng ký tài ở cổng bảo vệ", "giay": 40,
-   "thao_tac": "",
-   "loi": [["", "Xe đến thì đậu tại bãi đậu xe KCP. Tài xế đến cổng bảo vệ đăng ký tài."],
-           ["", "Thứ tự vào cổng tính theo giờ xe đến: xe đến trước vào trước. Giờ trên hình chỉ là ví dụ minh họa."]]},
-  {"so": 4, "ten": "Làm phiếu tại cầu cân: tài xế mang 4 giấy tờ", "giay": 50,
+   "loi": [
+    [
+     "0:00",
+     "Toàn bộ quy trình chia làm 4 giai đoạn. Giai đoạn 1 – Trước khi cân: xe đến bãi đậu, tài xế đăng ký tài, làm phiếu, nhập TMS, bảo vệ mở xe và làm Loading Request."
+    ],
+    [
+     "0:18",
+     "Giai đoạn 2 – Cân vào và bốc hàng: kiểm tra xe, cân xác xe, rồi vào kho bốc hàng theo đúng lô."
+    ],
+    [
+     "0:34",
+     "Giai đoạn 3 – Cân ra: cân xe đã có hàng. Hệ thống tính hàng thực bằng cân ra trừ cân vào, rồi mình đối chiếu dư cân."
+    ],
+    [
+     "0:47",
+     "Giai đoạn 4 – Chứng từ và ra cổng: làm DC, hợp đồng vận chuyển và COA. Đủ bộ chứng từ thì xe mới ra cổng. Bây giờ mình đi chi tiết từng bước."
+    ]
+   ]
+  },
+  {
+   "so": 3,
+   "ten": "Xe đến bãi đậu, đăng ký tài ở cổng bảo vệ",
+   "giay": 40,
+   "thao_tac": "Hình động chạy 2 lần rồi dừng.",
+   "loi": [
+    [
+     "",
+     "Xe đến thì đậu tại bãi đậu xe KCP. Tài xế đến cổng bảo vệ đăng ký tài."
+    ],
+    [
+     "",
+     "Thứ tự vào cổng tính theo giờ xe đến: xe đến trước vào trước. Giờ trên hình chỉ là ví dụ minh họa."
+    ]
+   ]
+  },
+  {
+   "so": 4,
+   "ten": "Làm phiếu tại cầu cân: tài xế mang 4 giấy tờ",
+   "giay": 50,
    "thao_tac": "Video khoảng 27 giây, các giấy tờ hiện lần lượt.",
-   "loi": [["0:00", "Tài xế lên cầu cân làm phiếu, mang theo 4 giấy tờ: đăng kiểm xe,"],
-           ["0:06", "cà vẹt xe,"],
-           ["0:11", "căn cước công dân,"],
-           ["0:14", "và bằng lái xe."],
-           ["0:19", "Đăng kiểm và cà vẹt dùng để nhập form Đăng ký xe ở trang sau. CCCD và bằng lái dùng để nhập form Đăng ký tài xế, kèm ảnh chân dung chụp tại cầu cân. Xe hoặc tài xế đã có trên hệ thống thì chỉ cần kiểm tra thông tin còn đúng không."]]},
-  {"so": 5, "ten": "Đăng ký xe: nhập đúng theo giấy đăng kiểm", "giay": 115,
-   "thao_tac": "Video khoảng 1 phút 50 giây, 9 bước. Cần nói lâu hơn thì bấm Space tạm dừng.",
-   "loi": [["0:00", "Đây là form Đăng ký xe vận chuyển đường trên TMS. Bấm Thêm mới để mở form trống."],
-           ["0:10", "Mã nhà vận chuyển: chọn mã có sẵn trong danh sách."],
-           ["0:21", "Số xe: lấy theo biển số trên đăng kiểm, gõ có dấu cách, ví dụ 78C 03389."],
-           ["0:34", "Loại xe: xe container bạt chọn Trailer và nhập thêm số rơ moóc; xe 4 chân trở xuống chọn Normal Truck. Xe ví dụ này chọn Normal Truck."],
-           ["0:47", "Số đăng kiểm là số seri tem kiểm định."],
-           ["1:00", "Hạn đăng kiểm ghi đúng ngày trên giấy, ở đây là 29/04/2027."],
-           ["1:13", "Tải trọng đổi từ ki-lô-gam ra tấn: 16.700 kg thì ghi 16,7."],
-           ["1:26", "Ảnh xe chỉ nhận file JPG, tối đa 5 MB."],
-           ["1:38", "Bấm Lưu. Nhớ là mỗi ô khung đỏ lấy từ một dòng trên giấy đăng kiểm. Khi xe đăng kiểm lại thì phải cập nhật số tem và hạn mới."]]},
-  {"so": 6, "ten": "Đăng ký tài xế: CCCD và ảnh chụp mặt", "giay": 120,
+   "loi": [
+    [
+     "0:00",
+     "Tài xế lên cầu cân làm phiếu, mang theo 4 giấy tờ: đăng kiểm xe,"
+    ],
+    [
+     "0:06",
+     "cà vẹt xe,"
+    ],
+    [
+     "0:11",
+     "căn cước công dân,"
+    ],
+    [
+     "0:14",
+     "và bằng lái xe."
+    ],
+    [
+     "0:19",
+     "Đăng kiểm và cà vẹt dùng để nhập form Đăng ký xe ở trang sau. CCCD và bằng lái dùng để nhập form Đăng ký tài xế, kèm ảnh chân dung chụp tại cầu cân. Xe hoặc tài xế đã có trên hệ thống thì chỉ cần kiểm tra thông tin còn đúng không."
+    ]
+   ]
+  },
+  {
+   "so": 5,
+   "ten": "Đăng ký xe: nhập đúng theo giấy đăng kiểm",
+   "giay": 120,
+   "thao_tac": "Video khoảng 1 phút 55 giây: 9 bước, sau đó bấm Chuyển tiếp. Cần nói lâu hơn thì bấm Alt + P (hoặc bấm vào video) để tạm dừng.",
+   "loi": [
+    [
+     "0:00",
+     "Đây là form Đăng ký xe vận chuyển đường trên TMS. Bấm Thêm mới để mở form trống."
+    ],
+    [
+     "0:10",
+     "Mã nhà vận chuyển: chọn mã có sẵn trong danh sách."
+    ],
+    [
+     "0:21",
+     "Số xe: lấy theo biển số trên đăng kiểm, gõ có dấu cách, ví dụ 78C 03389."
+    ],
+    [
+     "0:34",
+     "Loại xe: xe container bạt chọn Trailer và nhập thêm số rơ moóc; xe 4 chân trở xuống chọn Normal Truck. Xe ví dụ này chọn Normal Truck."
+    ],
+    [
+     "0:47",
+     "Số đăng kiểm là số seri tem kiểm định."
+    ],
+    [
+     "1:00",
+     "Hạn đăng kiểm ghi đúng ngày trên giấy, ở đây là 29/04/2027."
+    ],
+    [
+     "1:13",
+     "Tải trọng đổi từ ki-lô-gam ra tấn: 16.700 kg thì ghi 16,7."
+    ],
+    [
+     "1:26",
+     "Ảnh xe chỉ nhận file JPG, tối đa 5 MB."
+    ],
+    [
+     "1:38",
+     "Bấm Lưu. Nhớ là mỗi ô khung đỏ lấy từ một dòng trên giấy đăng kiểm. Khi xe đăng kiểm lại thì phải cập nhật số tem và hạn mới."
+    ],
+    [
+     "1:45",
+     "Lưu xong thì bấm Chuyển tiếp để gửi người quản lý duyệt xe này."
+    ]
+   ]
+  },
+  {
+   "so": 6,
+   "ten": "Đăng ký tài xế: CCCD và ảnh chụp mặt",
+   "giay": 120,
    "thao_tac": "Video khoảng 2 phút, 10 bước.",
-   "loi": [["0:00", "Tiếp theo là form Đăng ký tài xế. Bấm Thêm mới."],
-           ["0:09", "Mã tài xế có dạng DR cộng số, do hệ thống quản lý."],
-           ["0:20", "Tên tài xế ghi đúng họ tên trên CCCD."],
-           ["0:33", "Số CCCD gồm 12 số."],
-           ["0:45", "Số GPLX lấy trên giấy phép lái xe."],
-           ["0:59", "Số điện thoại thì hỏi trực tiếp tài xế."],
-           ["1:11", "Tải lên ảnh bằng lái,"],
-           ["1:23", "và ảnh CCCD."],
-           ["1:35", "Ảnh chân dung phải chụp trực tiếp tại cầu cân bằng webcam, không dùng ảnh tài xế gửi qua điện thoại."],
-           ["1:47", "Bấm Lưu. Lần sau tài xế quay lại thì tìm theo mã hoặc tên, và kiểm tra lại thông tin."]]},
-  {"so": 7, "ten": "Bảo vệ mở xe, rồi cầu cân mới làm phiếu", "giay": 40,
-   "thao_tac": "",
-   "loi": [["", "Đăng ký xong, phòng bảo vệ bấm Authorise để mở xe trên hệ thống – trạng thái chuyển từ Chờ mở sang Đã mở."],
-           ["", "Chỉ khi xe đã mở, phòng cầu cân mới làm Loading Request. Xe chưa mở thì chưa làm phiếu."]]},
-  {"so": 8, "ten": "Loading Request: đúng PO, đúng kho, đúng lô", "giay": 95,
+   "loi": [
+    [
+     "0:00",
+     "Tiếp theo là form Đăng ký tài xế. Bấm Thêm mới."
+    ],
+    [
+     "0:09",
+     "Mã tài xế không cần nhập: bấm Thêm mới là hệ thống tự cấp mã, dạng DR cộng số."
+    ],
+    [
+     "0:20",
+     "Tên tài xế ghi đúng họ tên trên CCCD."
+    ],
+    [
+     "0:33",
+     "Số CCCD gồm 12 số."
+    ],
+    [
+     "0:45",
+     "Số GPLX lấy trên giấy phép lái xe."
+    ],
+    [
+     "0:59",
+     "Số điện thoại thì hỏi trực tiếp tài xế."
+    ],
+    [
+     "1:11",
+     "Tải lên ảnh bằng lái,"
+    ],
+    [
+     "1:23",
+     "và ảnh CCCD."
+    ],
+    [
+     "1:35",
+     "Ảnh chân dung phải chụp trực tiếp tại cầu cân bằng webcam, không dùng ảnh tài xế gửi qua điện thoại."
+    ],
+    [
+     "1:47",
+     "Bấm Lưu. Lần sau tài xế quay lại thì tìm theo mã hoặc tên, và kiểm tra lại thông tin."
+    ]
+   ]
+  },
+  {
+   "so": 7,
+   "ten": "Bảo vệ mở xe, rồi cầu cân mới làm phiếu",
+   "giay": 40,
+   "thao_tac": "Hình động chạy 2 lần rồi dừng.",
+   "loi": [
+    [
+     "",
+     "Đăng ký xong, phòng bảo vệ bấm Authorise để mở xe trên hệ thống – trạng thái chuyển từ Chờ mở sang Đã mở."
+    ],
+    [
+     "",
+     "Chỉ khi xe đã mở, phòng cầu cân mới làm Loading Request. Xe chưa mở thì chưa làm phiếu."
+    ]
+   ]
+  },
+  {
+   "so": 8,
+   "ten": "Loading Request: đúng PO, đúng kho, đúng lô",
+   "giay": 95,
    "thao_tac": "Video khoảng 1 phút 31 giây, 7 bước.",
-   "loi": [["0:00", "Vào menu Sales Order and Despatch, chọn Loading Request."],
-           ["0:11", "Order No: chọn đúng số PO nội bộ của KCP và xem dòng Balance còn đủ hàng không."],
-           ["0:25", "Kho xuất: 01 là kho KCP Sơn Hòa; xuất ở kho ngoài thì chọn 48, 49 hoặc 50."],
-           ["0:37", "Chọn đơn vị vận tải, số xe và tài xế. Xe và tài xế phải đã đăng ký TMS như hai trang trước."],
-           ["0:52", "Nhập số lượng và số bao: 17 tấn là 340 bao loại 50 kg."],
-           ["1:03", "Chọn lô theo FIFO – lô nhập trước xuất trước."],
-           ["1:18", "Bấm Save. Số Load Req này dùng để cân xe vào. Phần số cân để trống, cầu cân tự điền khi cân."]]},
-  {"so": 9, "ten": "Kiểm tra xe trước khi cân vào", "giay": 45,
-   "thao_tac": "Hình động chạy lặp lại.",
-   "loi": [["", "Trước khi cân vào, nhân viên bảo vệ và nhân viên cầu cân cùng kiểm tra xe – như trên hình, một người đi từ đuôi xe, một người đi từ đầu xe."],
-           ["", "Không cân khi bánh xe dính bùn, sàn xe ướt hoặc nước đọng trên bạt, hoặc xe không đậu giữa cầu cân. Bùn và nước làm sai xác xe, xe đậu lệch làm sai số cân."]]},
-  {"so": 10, "ten": "Cân xe vào trên phần mềm Weighbridge", "giay": 45,
+   "loi": [
+    [
+     "0:00",
+     "Vào menu Sales Order and Despatch, chọn Loading Request."
+    ],
+    [
+     "0:11",
+     "Order No: chọn đúng số PO nội bộ của KCP và xem dòng Balance còn đủ hàng không."
+    ],
+    [
+     "0:25",
+     "Kho xuất: 01 là kho KCP Sơn Hòa; xuất ở kho ngoài thì chọn 48, 49 hoặc 50."
+    ],
+    [
+     "0:37",
+     "Chọn đơn vị vận tải, số xe và tài xế. Xe và tài xế phải đã đăng ký TMS như hai trang trước."
+    ],
+    [
+     "0:52",
+     "Nhập số lượng và số bao: 17 tấn là 340 bao loại 50 kg."
+    ],
+    [
+     "1:03",
+     "Chọn lô theo FIFO – lô nhập trước xuất trước."
+    ],
+    [
+     "1:18",
+     "Bấm Save. Số Load Req này dùng để cân xe vào. Phần số cân để trống, cầu cân tự điền khi cân."
+    ]
+   ]
+  },
+  {
+   "so": 9,
+   "ten": "Kiểm tra xe trước khi cân vào",
+   "giay": 45,
+   "thao_tac": "Hình động chạy 2 lần rồi dừng.",
+   "loi": [
+    [
+     "",
+     "Trước khi cân vào, nhân viên bảo vệ và nhân viên cầu cân cùng kiểm tra xe – như trên hình, một người đi từ đuôi xe, một người đi từ đầu xe."
+    ],
+    [
+     "",
+     "Không cân khi bánh xe dính bùn, sàn xe ướt hoặc nước đọng trên bạt, hoặc xe không đậu giữa cầu cân. Bùn và nước làm sai xác xe, xe đậu lệch làm sai số cân."
+    ]
+   ]
+  },
+  {
+   "so": 10,
+   "ten": "Cân xe vào trên phần mềm Weighbridge",
+   "giay": 45,
    "thao_tac": "",
-   "loi": [["", "Cân xe vào trên phần mềm Weighbridge: mở phần mềm, chọn ngày, ca và cầu cân 60 tấn hay 100 tấn."],
-           ["", "Chọn đúng dòng theo số Load Req và số xe đang trên cân. Bấm nút cân để lấy trọng lượng cân vào rồi Save. Ví dụ ở đây xe 78H 01082 cân vào 17.180 kg, hệ thống báo lưu thành công."]]},
-  {"so": 11, "ten": "So xác xe với trọng lượng lần cân đầu", "giay": 55,
+   "loi": [
+    [
+     "",
+     "Cân xe vào trên phần mềm Weighbridge: mở phần mềm, chọn ngày, ca và cầu cân 60 tấn hay 100 tấn."
+    ],
+    [
+     "",
+     "Chọn đúng dòng theo số Load Req và số xe đang trên cân. Bấm nút cân để lấy trọng lượng cân vào rồi Save. Ví dụ ở đây xe 78H 01082 cân vào 17.180 kg, hệ thống báo lưu thành công."
+    ]
+   ]
+  },
+  {
+   "so": 11,
+   "ten": "So xác xe với trọng lượng lần cân đầu",
+   "giay": 55,
+   "thao_tac": "Hình động chạy 2 lần rồi dừng.",
+   "loi": [
+    [
+     "",
+     "Cân vào xong, so xác xe với lần cân đầu. Có hai trường hợp. Thứ nhất, bằng lần cân đầu thì cho xe vào kho bốc hàng."
+    ],
+    [
+     "",
+     "Thứ hai, trọng lượng xe thay đổi. Ví dụ xe 78H 02063 cân 17.210 kg, trọng lượng xe cân lần đầu là 16.900 kg, phần mềm báo vượt ngưỡng và yêu cầu lập biên bản. Lúc này dừng lại, chưa bấm Yes. Cho tài xế ký cam kết trước, rồi mới bấm Yes và cho xe vào bốc hàng."
+    ]
+   ]
+  },
+  {
+   "so": 12,
+   "ten": "Giấy cam kết chênh lệch xác xe",
+   "giay": 40,
    "thao_tac": "",
-   "loi": [["", "Cân vào xong, so xác xe với lần cân đầu. Có hai trường hợp. Thứ nhất, bằng lần cân đầu thì cho xe vào kho bốc hàng."],
-           ["", "Thứ hai, trọng lượng xe thay đổi. Ví dụ xe 78H 02063 cân 17.210 kg, mức cho phép 16.900 kg, phần mềm báo vượt ngưỡng và yêu cầu lập biên bản. Lúc này dừng lại, chưa bấm Yes. Cho tài xế ký cam kết trước, rồi mới bấm Yes và cho xe vào bốc hàng."]]},
-  {"so": 12, "ten": "Giấy cam kết chênh lệch xác xe", "giay": 40,
+   "loi": [
+    [
+     "",
+     "Đây là giấy cam kết chênh lệch xác xe. Tài xế điền ngày, tên, số xe, xác xe cũ, xác xe hiện tại, chênh lệch và lý do – lý do phải ghi cụ thể."
+    ],
+    [
+     "",
+     "Ký đủ ba bên: tài xế, giám sát và nhân viên KCP. Thiếu chữ ký nào thì chưa cho xe vào bốc hàng."
+    ]
+   ]
+  },
+  {
+   "so": 13,
+   "ten": "Bốc hàng xong, cân xe ra",
+   "giay": 55,
+   "thao_tac": "Hình động chạy 2 lần rồi dừng.",
+   "loi": [
+    [
+     "",
+     "Bốc hàng xong, xe quay lại cầu cân. Chọn đúng số xe cần cân ra, bấm cân ra rồi Save. Hệ thống tính hàng thực bằng cân ra trừ cân vào."
+    ],
+    [
+     "",
+     "Ví dụ xe 78G 00086: cân ra 50.860, cân vào 16.710, hàng thực 34.150 kg. Lệnh 34 tấn nên dư 150 kg. Mức cho phép của xe 34 tấn là 34 nhân 5, bằng 170 kg. Dư 150 không vượt 170 nên nhân viên cầu cân làm DC."
+    ]
+   ]
+  },
+  {
+   "so": 14,
+   "ten": "Đối chiếu dư cân với tờ duyệt",
+   "giay": 75,
+   "thao_tac": "Hình động chạy 2 lần rồi dừng (khoảng 40 giây).",
+   "loi": [
+    [
+     "",
+     "Mức dư cho phép lấy theo tờ trình Tổng giám đốc ngày 31/01/2012. Cột 2 là mức chuẩn, bằng 0,5% khối lượng bốc – tức số tấn nhân 5 kg. Ví dụ xe 35 tấn thì cột 2 là 175 kg."
+    ],
+    [
+     "",
+     "Trên hình, kim báo dư cân chạy từ 126 kg tới 175 kg thì dừng. Bắt đầu từ 126 kg vì xe 35 tấn là 700 bao, mỗi bao 0,18 kg: 700 nhân 0,18 bằng 126 kg. Sau đó kim chạy tiếp tới 210 kg – trường hợp vượt cột 2."
+    ],
+    [
+     "",
+     "Dư không vượt cột 2 thì nhân viên cầu cân làm DC. Dư vượt cột 2, kể cả vượt cột 3, thì nhân viên cầu cân không được làm DC, phải báo Kho và Process – trang sau nói cách xử lý. Xe không đúng mốc trong bảng thì tính theo công thức số tấn nhân 5."
+    ]
+   ]
+  },
+  {
+   "so": 15,
+   "ten": "Vượt cột (2): báo kho, chờ xác nhận",
+   "giay": 45,
+   "thao_tac": "Hình động chạy 2 lần rồi dừng.",
+   "loi": [
+    [
+     "",
+     "Khi dư vượt cột 2: nhân viên cầu cân gửi email báo Kho và Process, ghi rõ số xe và số dư. Kho và Process kiểm tra và xác nhận."
+    ],
+    [
+     "",
+     "Có đủ xác nhận thì lưu số cân và nhờ IT hoặc Kế toán trưởng làm DC. Nhân viên cầu cân không tự làm DC trong trường hợp này."
+    ]
+   ]
+  },
+  {
+   "so": 16,
+   "ten": "Đúng trọng lượng: nhân viên cầu cân làm DC",
+   "giay": 45,
    "thao_tac": "",
-   "loi": [["", "Đây là giấy cam kết chênh lệch xác xe. Tài xế điền ngày, tên, số xe, xác xe cũ, xác xe hiện tại, chênh lệch và lý do – lý do phải ghi cụ thể."],
-           ["", "Ký đủ ba bên: tài xế, giám sát và nhân viên KCP. Thiếu chữ ký nào thì chưa cho xe vào bốc hàng."]]},
-  {"so": 13, "ten": "Bốc hàng xong, cân xe ra", "giay": 55,
-   "thao_tac": "",
-   "loi": [["", "Bốc hàng xong, xe quay lại cầu cân. Chọn đúng dòng Load Req, bấm cân ra rồi Save. Hệ thống tính hàng thực bằng cân ra trừ cân vào."],
-           ["", "Ví dụ xe 78G 00086: cân ra 50.860, cân vào 16.710, hàng thực 34.150 kg. Lệnh 34 tấn nên dư 150 kg. Mức cho phép của xe 34 tấn là 34 nhân 5, bằng 170 kg. Dư 150 không vượt 170 nên nhân viên cầu cân làm DC."]]},
-  {"so": 14, "ten": "Đối chiếu dư cân với tờ duyệt", "giay": 65,
-   "thao_tac": "Hình động chạy lặp lại.",
-   "loi": [["", "Mức dư cho phép lấy theo tờ trình Tổng giám đốc ngày 31/01/2012. Cột 2 là mức chuẩn, bằng 0,5% khối lượng bốc – tức số tấn nhân 5 kg. Ví dụ xe 35 tấn thì cột 2 là 175 kg."],
-           ["", "Dư không vượt cột 2 thì nhân viên cầu cân làm DC. Dư vượt cột 2, kể cả vượt cột 3, thì nhân viên cầu cân không được làm DC, phải báo Kho và Process – trang sau nói cách xử lý. Xe không đúng mốc trong bảng thì tính theo công thức số tấn nhân 5."]]},
-  {"so": 15, "ten": "Vượt cột (2): báo kho, chờ xác nhận", "giay": 45,
-   "thao_tac": "",
-   "loi": [["", "Khi dư vượt cột 2: nhân viên cầu cân gửi email báo Kho và Process, ghi rõ số xe và số dư. Kho và Process kiểm tra và xác nhận."],
-           ["", "Có đủ xác nhận thì lưu số cân và nhờ IT hoặc Kế toán trưởng làm DC. Nhân viên cầu cân không tự làm DC trong trường hợp này."]]},
-  {"so": 16, "ten": "Đúng trọng lượng: nhân viên cầu cân làm DC", "giay": 45,
-   "thao_tac": "",
-   "loi": [["", "Trường hợp đúng trọng lượng, nhân viên cầu cân làm DC: mở Sales Order and Despatch, vào Delivery Challan, bấm New. Double click vào ô Truck No, chọn đúng xe cần làm DC."],
-           ["", "Nhập số seal From Seal No và To Seal No – đọc số trên seal thật trên xe, không chép từ xe trước, vì đây là chỗ dễ sai nhất. Bấm Save rồi in."]]},
-  {"so": 17, "ten": "Đủ bộ chứng từ xuất hàng mới cho xe ra", "giay": 30,
-   "thao_tac": "Hình động chạy lặp lại.",
-   "loi": [["", "Sau DC là hợp đồng vận chuyển và COA. Đủ ba chứng từ này là đủ bộ chứng từ xuất hàng, xe mới được ra cổng."]]},
-  {"so": 18, "ten": "Những điểm cần lưu ý khi cân xe vào và ra", "giay": 60,
+   "loi": [
+    [
+     "",
+     "Trường hợp đúng trọng lượng, nhân viên cầu cân làm DC: mở Sales Order and Despatch, vào Delivery Challan, bấm New. Double click vào ô Truck No, chọn đúng xe cần làm DC."
+    ],
+    [
+     "",
+     "Nhập số seal From Seal No và To Seal No – đọc số trên seal thật trên xe, không chép từ xe trước, vì đây là chỗ dễ sai nhất. Bấm Save rồi in."
+    ]
+   ]
+  },
+  {
+   "so": 17,
+   "ten": "Đủ bộ chứng từ xuất hàng mới cho xe ra",
+   "giay": 30,
+   "thao_tac": "Hình động chạy 2 lần rồi dừng.",
+   "loi": [
+    [
+     "",
+     "Sau DC là hợp đồng vận chuyển và COA. Đủ ba chứng từ này là đủ bộ chứng từ xuất hàng, xe mới được ra cổng."
+    ]
+   ]
+  },
+  {
+   "so": 18,
+   "ten": "Những điểm cần lưu ý khi cân xe vào và ra",
+   "giay": 60,
    "thao_tac": "Trang kết, mở phần hỏi đáp.",
-   "loi": [["", "Tóm lại, trước khi cân vào: luôn có bảo vệ cùng kiểm tra; xe đậu giữa cầu cân; lốp không dính bùn; thùng xe trống. Xác xe nặng hơn lần cân đầu thì tài xế ký cam kết."],
-           ["", "Khi cân ra: dư không vượt cột 2 thì nhân viên cầu cân làm DC; vượt thì báo Kho và Process kiểm tra, xác nhận, rồi nhờ IT hoặc Kế toán trưởng làm DC."],
-           ["", "Cảm ơn các anh chị đã theo dõi. Anh chị có câu hỏi gì không?"]]}
+   "loi": [
+    [
+     "",
+     "Tóm lại, trước khi cân vào: luôn có bảo vệ cùng kiểm tra; xe đậu giữa cầu cân; lốp không dính bùn; thùng xe trống. Xác xe nặng hơn lần cân đầu thì tài xế ký cam kết."
+    ],
+    [
+     "",
+     "Khi cân ra: dư không vượt cột 2 thì nhân viên cầu cân làm DC; vượt thì báo Kho và Process kiểm tra, xác nhận, rồi nhờ IT hoặc Kế toán trưởng làm DC."
+    ],
+    [
+     "",
+     "Cảm ơn các anh chị đã theo dõi. Anh chị có câu hỏi gì không?"
+    ]
+   ]
+  }
  ]
 }

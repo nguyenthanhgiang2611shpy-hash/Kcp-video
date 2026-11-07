@@ -23,6 +23,8 @@ Nội dung chính: bộ slide đào tạo "Quy trình xuất một xe đường 
 ## Tiêu chuẩn slide
 
 - Video thao tác phần mềm: gộp các slide từng bước thành 1 slide 1 video; chậm 2–3 lần; dừng 4–5 giây mỗi bước, bước cuối 6 giây; chạy 1 lần rồi đứng yên ở khung cuối.
+- Hình động ngắn (trước đây chạy lặp): chạy **đúng 2 lần rồi dừng** (`LAP_2_LAN` trong `rap_file.py`).
+- Phím tạm dừng video khi trình chiếu PowerPoint: **Alt + P** hoặc bấm vào video (phím Space là chuyển trang).
 - Trang tổng quan: mỗi giai đoạn một đoạn minh họa; khoanh đỏ giai đoạn đang nói và giữ tới cuối.
 - Ảnh chờ của video phải có nội dung (không để trang trắng khi mở file).
 - Ít chữ; tên ô và nút phần mềm in đậm (Truck No, Save, Print…).

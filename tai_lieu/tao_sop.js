@@ -60,7 +60,7 @@ const steps = table([900, 2200, 4238, 2300], ['Bước', 'Việc cần làm', 'C
 // ---------- Tiêu chuẩn kỹ thuật ----------
 const stds = table([2700, 6938], ['Hạng mục', 'Tiêu chuẩn'], [
   ['Video thao tác phần mềm', ['Gộp các slide từng bước thành **1 slide 1 video**.', 'Phát **chậm 2–3 lần**, mỗi bước dừng **4–5 giây**, bước cuối dừng **6 giây**.', 'Chạy **1 lần rồi đứng yên ở khung cuối**; không lặp lại.']],
-  ['Hình minh hoạ ngắn', 'Có thể chạy lặp lại (ví dụ: hình kiểm tra xe trước khi cân).'],
+  ['Hình minh hoạ ngắn', 'Chạy **đúng 2 lần rồi dừng** (lần 2 dừng ở khung có nội dung), ví dụ: hình kiểm tra xe trước khi cân.'],
   ['Trang tổng quan', ['Chỉ giữ **mỗi giai đoạn một đoạn minh hoạ**, bỏ phần chi tiết.', 'Khoanh **vòng đỏ** giai đoạn đang nói; giai đoạn đã nói **giữ vòng đỏ tới cuối**.']],
   ['Ảnh chờ của video', 'Phải là khung hình **có nội dung** (ví dụ khung đã vẽ xong). Không để trang trắng khi mở file.'],
   ['Chữ trên slide', ['Ít chữ, câu ngắn, viết theo đúng thứ tự thao tác.', 'Tên ô và nút trên phần mềm **in đậm** (ví dụ: **Truck No**, **Save**, **Print**).', 'Dùng đúng từ của công ty (ví dụ: Kho và Process **kiểm tra và xác nhận**).']],

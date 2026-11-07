@@ -17,7 +17,7 @@ const children = [
   new Paragraph({ children: [t('Quy trình xuất một xe đường tại cầu cân · 18 trang', { size: 24, bold: true })], spacing: { after: 120 } }),
   new Paragraph({ children: [t(`Tổng thời gian dự kiến: ${fmt(total)}. Xưng hô: tôi – các anh chị.`, { color: GREY })], spacing: { after: 60 } }),
   new Paragraph({ children: [t('Cách đọc: ', { bold: true }), t('chữ đậm như '), t('[0:21]', { bold: true, color: 'C0392B' }),
-    t(' là mốc thời gian trong video của trang đó – nói câu đó khi video chạy tới mốc này. Cần nói lâu hơn thì bấm vào video hoặc phím Space để tạm dừng.')], spacing: { after: 200, line: 300 } }),
+    t(' là mốc thời gian trong video của trang đó – nói câu đó khi video chạy tới mốc này. Cần nói lâu hơn thì bấm vào video hoặc Alt + P để tạm dừng (phím Space sẽ chuyển sang trang sau).')], spacing: { after: 200, line: 300 } }),
 ];
 
 data.trang.forEach(p => {
