@@ -17,14 +17,14 @@
 | 15–24 | Gộp 10 bước đăng ký tài xế thành 1 trang; cùng tốc độ chậm (~2 phút) | OK | `Trang_15-24_dang_ky_tai_xe.pptx` |
 | 26–32 | Gộp 7 bước Loading Request thành 1 trang; video chậm 2 lần, dừng ~4 giây mỗi bước (~1 phút 31 giây) | OK | `Trang_26-32_loading_request.pptx` |
 | 33 (số in "10") | Thêm 2 người giám sát: bảo vệ đi từ đuôi xe tới, NV cầu cân đi từ đầu xe tới; giữ chạy lặp như gốc | OK | `Trang_33_kiem_tra_xe.pptx` |
-| 2 | Tiêu đề đổi thành "Quy trình xuất một xe đường tại cầu cân", bỏ dòng "Video không có tiếng…"; video chậm 3 lần, dừng 5 giây mỗi bước (~3 phút 41 giây), phủ toàn trang; khoanh đỏ giai đoạn đang nói, giữ tới cuối; chạy 1 lần rồi dừng ; bước 3 thêm thẻ 'Bằng lái' và chữ ', bằng lái' | OK | `Trang_02_toan_bo_quy_trinh.pptx` |
+| 2 | Tiêu đề "Quy trình xuất một xe đường tại cầu cân", bỏ dòng "Video không có tiếng…"; video rút gọn còn 4 đoạn minh họa cho 4 giai đoạn (xe đến bãi đậu · vào kho bốc hàng · cân xe ra · đủ bộ chứng từ), chậm 3 lần, dừng 5 giây, ~1 phút 6 giây; khoanh đỏ giai đoạn đang nói, giữ tới cuối; chạy 1 lần rồi dừng | Chờ duyệt | `Trang_02_toan_bo_quy_trinh.pptx` |
 | 1 | Ảnh tĩnh tiêu đề đã vẽ xong, bỏ video vẽ bằng bút (trước đây trang trống tới khi bấm, cuối video còn lật sang trang 2 bản cũ) | OK | (trong bản FINAL) |
 | 39 (số in "15") | Dòng 2 chỉ ghi "Kho và Process kiểm tra và xác nhận."; nhãn trong video đổi thành "Kho xác nhận", "Process xác nhận"; ghi chú cập nhật | OK | (trong bản FINAL) |
 
 | 40 (số in "16") | 4 bước làm DC: (1) Mở Sales Order and Despatch → Delivery Challan, bấm New; (2) Double click vào ô Truck No, chọn đúng xe cần làm DC; (3) Nhập số seal From Seal No và To Seal No; (4) Bấm Save, rồi in (Print). Bỏ ví dụ LR | OK | (trong bản FINAL) |
 
 ## Bản FINAL
-- File: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` (18 trang, ~9 MB, gửi email được).
+- File: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` (18 trang, ~8,2 MB, gửi email được).
 - Cách tạo:
   1. `python3 sua_slide/rap_file.py <file_goc.pptx> full_raw.pptx`
   2. `python3 sua_slide/hoan_thien.py full_raw.pptx Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx <thư mục phông Nunito>`

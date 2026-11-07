@@ -16,18 +16,14 @@ R = '{http://schemas.openxmlformats.org/officeDocument/2006/relationships}'
 # (slide đầu, slide cuối, video ghép, thời lượng giây, ghi chú người trình bày)
 # slide đầu = slide cuối: chỉ thay video của 1 slide, không gộp.
 GOP = [
-    (2, 2, 'Trang02_toan_bo_quy_trinh_cham.mp4', 220.8,
-     """[Video tự chạy 1 lần, khoảng 3 phút 41 giây, phủ toàn trang; hết video thì đứng yên] Video phát chậm 3 lần, mỗi bước dừng khoảng 5 giây. Giai đoạn đang nói được khoanh đỏ trong danh sách bên phải; giai đoạn đã nói vẫn giữ vòng đỏ tới cuối. Bấm vào video (hoặc phím Space) để tạm dừng khi cần giải thích thêm – vòng đỏ dừng theo video.
+    (2, 2, 'Trang02_toan_bo_quy_trinh_cham.mp4', 65.7,
+     """[Video tự chạy 1 lần, khoảng 1 phút 6 giây, phủ toàn trang; hết video thì đứng yên] Mỗi giai đoạn chỉ một đoạn minh họa, phát chậm 3 lần và dừng khoảng 5 giây. Giai đoạn đang nói được khoanh đỏ trong danh sách bên phải; giai đoạn đã nói vẫn giữ vòng đỏ tới cuối. Bấm vào video (hoặc phím Space) để tạm dừng khi cần giải thích thêm – vòng đỏ dừng theo video.
 
 Mốc thời gian:
-0:00  Giai đoạn 1 – Trước khi cân (khoanh đỏ ô 1)
-      0:00 Bước 1 Xe đến bãi đậu xe KCP · 0:19 Bước 2 Đăng ký tài ở cổng bảo vệ · 0:40 Bước 3 Làm phiếu tại cầu cân · 1:05 Bước 4 Nhập thông tin lên TMS · 1:25 Bước 5 Bảo vệ mở xe trên hệ thống
-1:46  Giai đoạn 2 – Cân vào và bốc hàng (khoanh thêm ô 2)
-      1:46 Bước 6 Kiểm tra trước khi cân xe vào · 2:10 Bước 7 Cân xe vào, so với lần cân đầu · 2:35 Bước 8 Vào kho bốc hàng
-2:53  Giai đoạn 3 – Cân ra (khoanh thêm ô 3)
-      2:53 Bước 9 Cân xe ra: Net = Gross – Tare, đối chiếu tờ duyệt dư cân
-3:20  Giai đoạn 4 – Chứng từ và ra cổng (khoanh thêm ô 4)
-      3:20 Bước 10 Đủ bộ chứng từ xuất hàng: DC → hợp đồng vận chuyển → COA
+0:00  Giai đoạn 1 – Trước khi cân: xe đến bãi đậu xe KCP (khoanh đỏ ô 1).
+0:18  Giai đoạn 2 – Cân vào và bốc hàng: xe vào kho bốc hàng (khoanh thêm ô 2).
+0:34  Giai đoạn 3 – Cân ra: cân xe ra, Net = Gross – Tare (khoanh thêm ô 3).
+0:47  Giai đoạn 4 – Chứng từ và ra cổng: đủ bộ chứng từ xuất hàng – DC, hợp đồng vận chuyển, COA (khoanh thêm ô 4).
 
 Các slide sau đi chi tiết từng bước."""),
     (5, 5, 'Trang05_giay_to_cham.mp4', 27.3,
