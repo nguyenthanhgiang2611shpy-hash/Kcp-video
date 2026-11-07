@@ -40,7 +40,7 @@ Mốc thời gian:
 0:00  Bước 1 – Bấm Thêm mới để mở form đăng ký xe trống.
 0:10  Bước 2 – Mã nhà vận chuyển: chọn mã có sẵn trong danh sách.
 0:21  Bước 3 – Số xe: biển số 78C-033.89 gõ có dấu cách 78C 03389.
-0:34  Bước 4 – Loại xe: chọn Ô tô tải có mui (theo Loại phương tiện trên đăng kiểm).
+0:34  Bước 4 – Loại xe: mở danh sách, xe container bạt chọn Trailer (nhập thêm số rơ moóc vào ô Rơ moóc); xe 4 chân trở xuống chọn Normal Truck. Xe ví dụ 78C-033.89 chọn Normal Truck.
 0:47  Bước 5 – Số đăng kiểm: số seri tem KĐ VB 3813018.
 1:00  Bước 6 – Hạn đăng kiểm: 29/04/2027.
 1:13  Bước 7 – Tải trọng: đổi 16.700 kg ra 16,7 tấn.

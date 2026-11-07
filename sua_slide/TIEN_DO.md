@@ -24,6 +24,8 @@
 
 | 40 (số in "16") | 4 bước làm DC: (1) Mở Sales Order and Despatch → Delivery Challan, bấm New; (2) Double click vào ô Truck No, chọn đúng xe cần làm DC; (3) Nhập số seal From Seal No và To Seal No; (4) Bấm Save, rồi in (Print). Bỏ ví dụ LR | OK | (trong bản FINAL) |
 
+| 6–14 (trang 5 final) – sửa bước 4 | Loại xe: danh sách Trailer / Normal Truck, xe ví dụ chọn Normal Truck; dòng giải thích "Container bạt chọn Trailer · 4 chân trở xuống chọn Normal Truck"; ghi chú: chọn Trailer thì nhập thêm Rơ moóc | Chờ duyệt | `Trang_06-14_dang_ky_xe.pptx` |
+
 ## Bản FINAL
 - File: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` (18 trang, ~8,4 MB, gửi email được).
 - Cách tạo:
