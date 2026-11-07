@@ -102,6 +102,7 @@ TINH = {
 }
 
 THAY_ANH = {
+    40: 'Trang40_nen.jpg',  # trang 16 bản final: 4 bước làm DC (double click Truck No, nhập seal, Save rồi in)
     39: 'Trang39_nen.jpg',  # trang 15 bản final: dòng 2 chỉ ghi Kho và Process kiểm tra và xác nhận
     2: 'Trang02_nen.jpg',  # tiêu đề mới, bỏ dòng 'Video không có tiếng'
 }

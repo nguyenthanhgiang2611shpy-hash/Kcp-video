@@ -21,6 +21,8 @@
 | 1 | Ảnh tĩnh tiêu đề đã vẽ xong, bỏ video vẽ bằng bút (trước đây trang trống tới khi bấm, cuối video còn lật sang trang 2 bản cũ) | OK | (trong bản FINAL) |
 | 39 (số in "15") | Dòng 2 chỉ ghi "Kho và Process kiểm tra và xác nhận."; nhãn trong video đổi thành "Kho xác nhận", "Process xác nhận"; ghi chú cập nhật | OK | (trong bản FINAL) |
 
+| 40 (số in "16") | 4 bước làm DC: (1) Mở Sales Order and Despatch → Delivery Challan, bấm New; (2) Double click vào ô Truck No, chọn đúng xe cần làm DC; (3) Nhập số seal From Seal No và To Seal No; (4) Bấm Save, rồi in (Print). Bỏ ví dụ LR | Chờ duyệt | (trong bản FINAL) |
+
 ## Bản FINAL
 - File: `Quy_trinh_xuat_xe_duong_tai_cau_can_FINAL.pptx` (18 trang, ~9 MB, gửi email được).
 - Cách tạo:
