@@ -16,6 +16,8 @@ R = '{http://schemas.openxmlformats.org/officeDocument/2006/relationships}'
 # (slide đầu, slide cuối, video ghép, thời lượng giây, ghi chú người trình bày)
 # slide đầu = slide cuối: chỉ thay video của 1 slide, không gộp.
 GOP = [
+    (1, 1, 'Trang01_ve_tay_but_nho.mp4', 17.4,
+     """[Video vẽ tay tự chạy 1 lần, khoảng 17 giây; vẽ xong thì đứng yên] Quy trình xuất một xe đường tại cầu cân: từ lúc xe đến bãi đậu, đăng ký tài ở cổng bảo vệ, làm phiếu tại cầu cân, cân vào, bốc hàng, cân ra, kiểm tra dư cân, làm chứng từ và cho xe ra cổng."""),
     (2, 2, 'Trang02_toan_bo_quy_trinh_cham.mp4', 65.7,
      """[Video tự chạy 1 lần, khoảng 1 phút 6 giây, phủ toàn trang; hết video thì đứng yên] Mỗi giai đoạn chỉ một đoạn minh họa, phát chậm 3 lần và dừng khoảng 5 giây. Giai đoạn đang nói được khoanh đỏ trong danh sách bên phải; giai đoạn đã nói vẫn giữ vòng đỏ tới cuối. Bấm vào video (hoặc phím Space) để tạm dừng khi cần giải thích thêm – vòng đỏ dừng theo video.
 
@@ -87,15 +89,13 @@ Trước khi cân xe vào phải có nhân viên phòng bảo vệ và nhân vi�
 TOAN_TRANG = {2: 'Trang02_poster.jpg'}
 
 # Ảnh chờ của video (hiện trước khi video chạy): {số slide gốc: ảnh}
-POSTER = {39: 'Trang39_poster.jpg'}
+POSTER = {1: 'Trang01_tieu_de.jpg', 39: 'Trang39_poster.jpg'}
 
 # Slide giữ chế độ chạy lặp lại như bản gốc (không tắt lặp)
 GIU_LAP = {33, 39}
 
 # Slide thay bằng ảnh thiết kế mới: {số slide gốc: file ảnh}
-TINH = {
-    1: 'Trang01_tieu_de.jpg',  # trang 1: ảnh tĩnh tiêu đề đã vẽ xong, bỏ video (hiện chữ ngay)
-}
+TINH = {}
 
 THAY_ANH = {
     40: 'Trang40_nen.jpg',  # trang 16 bản final: 4 bước làm DC (double click Truck No, nhập seal, Save rồi in)
