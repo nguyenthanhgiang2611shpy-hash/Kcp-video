@@ -5,6 +5,7 @@
 - Cách làm:
   - Người dùng gọi trang nào thì chỉ sửa đúng trang đó, chỉ gửi đúng trang đó.
   - Người dùng nói "ok" thì lưu riêng **một trang đó** thành file `Trang_<số>_....pptx` (file chỉ có 1 trang).
+  - Mỗi lần sửa xong: đưa bản xem trước hiện thẳng trong khung chat (ảnh / ảnh động GIF), không chỉ gửi file hay link.
   - **Không** ráp cả bộ, **không** gửi cả bộ slide, trừ khi người dùng yêu cầu ráp.
 - Lưu 1 trang: `python3 sua_slide/rap_file.py <file_goc.pptx> <file_ra.pptx> <số slide gốc>`
 - Ráp cả bộ (chỉ khi được yêu cầu): `python3 sua_slide/rap_file.py <file_goc.pptx> <file_ra.pptx>`
